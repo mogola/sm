@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-unfetch'
 import {useRouter} from 'next/router'
 import baseUrl from '../../helpers/baseUrl'
-import { getPost } from '../api/home'
+import { getPost, getOnePost } from '../api/home'
 import {useRef,useEffect,useState} from 'react'
 
 const Post = ({post})=>{
@@ -53,15 +53,7 @@ const Post = ({post})=>{
 
 export async function getStaticProps({params:{id}}) {
     try{
-        const res = await fetch(`${baseUrl}/api/posts/${id}`, {
-            method: "GET",
-            headers:{
-                'Content-Type':'application/json'
-            }
-        })
-
-        const data = await res.json()
-
+        const data = await getOnePost(id)
         return {
             props: {
                 post:JSON.parse(JSON.stringify(data))
