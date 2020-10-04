@@ -1,5 +1,5 @@
-import Homepage from '../../../models/Homepage'
-import initDB from '../../../helpers/initDB'
+import Homepage from '../../models/Homepage'
+import initDB from '../../helpers/initDB'
 
 initDB()
 
