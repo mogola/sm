@@ -27,7 +27,10 @@ const Post = ({post})=>{
            <ul>
 
                    {post.linkImage &&
-                   <li><img src={post.linkImage} width={200} /></li>}
+                   <li>
+                       <img src={post.linkImage} width={200} />
+                    </li>
+                }
                 <li>
                     {post._id}
                 </li>
@@ -67,20 +70,8 @@ export async function getStaticProps({params:{id}}) {
     catch(err){
         console.log(err)
     }
-  }
+}
 
-//   export async function getStaticPaths() {
-//     return {
-//       paths: [
-//         { params:
-//             {
-//                 id:"5f68a704d2014b50d4784893"
-//             }
-//         }
-//       ],
-//       fallback: true
-//   }
-// }
 // This function gets called at build time
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
