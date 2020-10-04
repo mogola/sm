@@ -4,8 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 9000",
-"devhy": "next dev -p 9000",
-"export": "next export",
     "build": "next build",
     "start": "next start"
   },
