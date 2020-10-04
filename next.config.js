@@ -38,4 +38,11 @@ module.exports = {
         }
       ]
     },
+    async rewrites() {
+      return [
+        // Advanced rewrite
+        // Query object shape: { id: string } (in addition to dynamic route param)
+        { source: "/posts/:id", destination: "/posts/:id" }
+      ];
+    }
   }
