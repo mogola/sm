@@ -4,7 +4,7 @@ import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 import { getSortedPostsData, getPostFromDataBase} from '../lib/posts'
-import { getPost } from '../pages/api/home'
+import { getPost } from '../api/home'
 
 
 export async function getStaticProps() {
