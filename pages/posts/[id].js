@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-unfetch'
 import {useRouter} from 'next/router'
 import baseUrl from '../../helpers/baseUrl'
-import { getPost, getOnePost } from '../api/home'
+import { getPost } from '../api/home'
 import {useRef,useEffect,useState} from 'react'
 
 const Post = ({post})=>{
@@ -53,7 +53,15 @@ const Post = ({post})=>{
 
 export async function getStaticProps({params:{id}}) {
     try{
-        const data = await getOnePost(id)
+        const res = await fetch(`${baseUrl}/api/posts/${id}`, {
+            method: "GET",
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+
+        const data = await res.json()
+
         return {
             props: {
                 post:JSON.parse(JSON.stringify(data))
@@ -69,8 +77,8 @@ export async function getStaticProps({params:{id}}) {
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
     try{
-      const res = await getPost()
-      const posts = JSON.parse(JSON.stringify(res))
+      const post = await getPost()
+      const posts = JSON.parse(JSON.stringify(post))
       // Get the paths we want to pre-render based on posts
       const paths = posts.map((post) => ({
         params: { id: post._id },
@@ -78,7 +86,7 @@ export async function getStaticPaths() {
 
       // We'll pre-render only these paths at build time.
       // { fallback: false } means other routes should 404.
-      return { paths, fallback: true }
+      return { paths, fallback: false }
     }
     catch(err){
       console.log(err)

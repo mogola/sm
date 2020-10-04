@@ -12,14 +12,3 @@ export async function getPost() {
 
     return posts
 }
-
-
-export async function getOnePost(id) {
-  const { db } = await connectToDatabase();
-
-  const posts = await db
-    .collection("newhomepages")
-    .findOne({_id:id})
-
-  return posts
-}
