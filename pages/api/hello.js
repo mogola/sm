@@ -1,12 +1,6 @@
-export default hello = async (req, res) => {
-
-try{
-    res.status(200).json({
-        "message" : "hello",
-        "success" : "ok"
-    })
-}
-catch(err){
-console.log("aucune donéée a été remontée")
-}
+exports.handler = function(event, context, callback) {
+    callback(null, {
+    statusCode: 200,
+    body: "Hello, World"
+    });
 }
