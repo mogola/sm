@@ -42,7 +42,7 @@ module.exports = {
       return [
         // Advanced rewrite
         // Query object shape: { id: string } (in addition to dynamic route param)
-        { source: "/posts/:id", destination: "/api/posts/:id" }
+        { source: "/posts/api/:id", destination: "/posts/:id" }
       ];
     }
   }
