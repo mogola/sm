@@ -27,3 +27,9 @@ const deletePost = async (req,res)=>{
     await Product.findByIdAndDelete({_id:pid})
     res.status(200).json({})
 }
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}
