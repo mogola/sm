@@ -53,18 +53,13 @@ const Post = ({post})=>{
 
 export async function getStaticProps({params:{id}}) {
     try{
-        const res = await fetch(`${baseUrl}/api/posts/${id}`, {
-            method: "GET",
-            headers:{
-                'Content-Type':'application/json'
-            }
-        })
-
-        const data = await res.json()
-
+        const postData = await getPost()
+      const posts = JSON.parse(JSON.stringify(postData))
+        const getPostData = posts.find(post => post._id == id)
+console.log('data', getPostData)
         return {
             props: {
-                post:JSON.parse(JSON.stringify(data))
+                post:JSON.parse(JSON.stringify(getPostData))
             }
         }
     }
