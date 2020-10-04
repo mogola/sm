@@ -78,8 +78,7 @@ export async function getStaticPaths() {
     // Call an external API endpoint to get posts
     try{
       const res = await getPost()
-      const posts = await res.json()
-
+      const posts = JSON.parse(JSON.stringify(res))
       // Get the paths we want to pre-render based on posts
       const paths = posts.map((post) => ({
         params: { id: post._id },
