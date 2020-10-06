@@ -6,7 +6,8 @@
     "dev": "next dev -p 9000",
     "build": "next build",
     "start": "next start",
-    "postbuild": "next-on-netlify"
+    "postbuild": "next-on-netlify",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "aws-sdk": "^2.764.0",
