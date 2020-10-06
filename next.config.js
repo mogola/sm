@@ -1,6 +1,9 @@
 module.exports = {
   // Target must be serverless
     target: 'serverless',
+    env: {
+      test: 'http',
+    },
     webpack: (config, { isServer }) => {
       // Fixes npm packages that depend on `fs` module
       if (!isServer) {
