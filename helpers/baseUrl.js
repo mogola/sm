@@ -1,3 +1,4 @@
-const baseUrl = process.env.NODE_ENV === 'production' ? process.env.URL_PRODUCTION : "http://localhost:9000"
-console.log("baseUrl", process.env.URL_PRODUCTION)
+const getUrlProduction = process.env.URL_PRODUCTION
+const baseUrl = process.env.NODE_ENV === 'production' ? getUrlProduction : "http://localhost:9000"
+console.log("baseUrl", getUrlProduction)
 export default baseUrl
