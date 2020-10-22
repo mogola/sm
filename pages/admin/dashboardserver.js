@@ -26,7 +26,10 @@ export default function DashboardServer() {
         {
           data.map((home, i) => (
             <>
-              <div key={i}> hello {home.title}!</div>
+              <div key={i}> hello {home.title}!
+              <img src={home.urlImage} width={300} />
+              </div>
+
               <br />
             </>
           ))

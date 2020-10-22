@@ -33,3 +33,33 @@ img {
   display: flex;
   align-items: flex-start;
 }
+
+.field {
+  label{
+    display: block;
+    &.label-field {
+      font-weight: bold;
+    }
+  }
+
+  input {
+    display:block;
+    height: 45px;
+    line-height: 45px;
+    margin-bottom:10px;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+}
+
+.field-flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  div {
+    + div {
+      padding-left: 20px;
+    }
+  }
+}
