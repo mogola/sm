@@ -28,7 +28,7 @@ const getAllConfig = async (req,res)=>{
         const posts =  await Homeconfig
         .find({})
 
-        res.status(200).json(posts[0])
+        res.status(200).json(posts)
   }
   catch(err){
     console.log(err)

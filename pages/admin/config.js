@@ -16,7 +16,7 @@ export async function getStaticProps() {
   console.log('config', data)
   return {
     props: {
-      config: JSON.parse(JSON.stringify(data))
+      config: JSON.parse(JSON.stringify(data[0]))
     }
   }
 }
