@@ -26,7 +26,8 @@ export default async (req,res)=>{
 const getAllConfig = async (req,res)=>{
     try{
         const posts =  await Homeconfig
-        .find({})
+        .find()
+        .sort({"_id": "ASC"})
 
         if(posts){
             res.json(posts)
