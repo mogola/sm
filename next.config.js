@@ -31,6 +31,15 @@ module.exports = {
           ],
         },
         {
+          source: '/admin/config',
+          headers: [
+            {
+              key: 'Access-Control-Allow-Origin',
+              value: '*',
+            }
+          ],
+        },
+        {
           source: '/',
           headers: [
             {
