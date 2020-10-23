@@ -29,7 +29,7 @@ const getAllConfig = async (req,res)=>{
         .find({})
 
         if(posts){
-            res.status(200).json(posts)
+            res.json(posts)
         }else{
             res.status(200).json([])
         }
