@@ -9,21 +9,13 @@ import utilStyles from '../../styles/utils.module.css'
 import styles from '../../components/layout.module.css'
 import Input from '../../components/Input'
 import UploadFile from './../../helpers/upload'
-
+import { getPostConfig } from '../api/home'
 export async function getStaticProps() {
-  const config = await fetch(`${baseUrl}/api/homeconfig`, {
-    method: 'GET',
-    headers:{
-      'Content-Type':'application/json'
-    }
-  })
+  const config = await getPostConfig()
 
-  let data = await config.json()
-
-  console.log('config', data)
   return {
     props: {
-      config: data
+      config: JSON.parse(JSON.stringify(config[0]))
     }
   }
 }
@@ -58,13 +50,13 @@ const addConfig = async (config) => {
 }
 
 export default function config({config}) {
+  console.log(config)
   const [labelInputItem, setInputItemLabel] = useState(Object.keys(config))
   const [dataConfig, setDataConfig] = useState(config)
   const [inputSocial, setInputSocial] = useState(config["socialLink"])
   const refInput = Object.keys(dataConfig).map(x => useRef(null));
 
   useEffect(() => {
-    console.log(labelInputItem)
     localStorage.setItem("formData", config)
   }, [dataConfig])
 
@@ -95,7 +87,6 @@ export default function config({config}) {
     setDataConfig(cloneArray)
     console.log("currentValue", cloneArray)
   }
-
 
   const handleChange = (i, refInput) => {
     const cloneArray = {...dataConfig}

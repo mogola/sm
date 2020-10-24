@@ -27,7 +27,7 @@ const getAllConfig = async (req,res)=>{
     try{
         const posts = await Homeconfig
         .find()
-        .sort({"_id": "ASC"})
+        .sort({"_id": 1})
 
         if(posts){
             res.json(JSON.stringify(posts[0]))
