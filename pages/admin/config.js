@@ -11,12 +11,19 @@ import Input from '../../components/Input'
 import UploadFile from './../../helpers/upload'
 
 export async function getStaticProps() {
-  const config = await fetch(`${baseUrl}/api/homeconfig`, {method:"GET"})
+  const config = await fetch(`${baseUrl}/api/homeconfig`, {
+    method: 'GET',
+    headers:{
+      'Content-Type':'application/json'
+    }
+  })
+
   let data = await config.json()
+
   console.log('config', data)
   return {
     props: {
-      config: JSON.parse(data)
+      config: data
     }
   }
 }
