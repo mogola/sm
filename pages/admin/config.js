@@ -12,11 +12,11 @@ import UploadFile from './../../helpers/upload'
 
 export async function getStaticProps() {
   const config = await fetch(`${baseUrl}/api/homeconfig`, {method:"GET"})
-  const data = await config.json()
+  let data = await config.json()
   console.log('config', data)
   return {
     props: {
-      config: JSON.parse(JSON.stringify(data))
+      config: JSON.parse(data)
     }
   }
 }
