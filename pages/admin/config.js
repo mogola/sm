@@ -166,12 +166,13 @@ export default function config({config}) {
     setDataConfig(cloneArray)
   }
 
-  const updateImageLogo = (classInputFile) => {
+  const updateImageLogo = (classInputFile, name) => {
     let updateArray = {...dataConfig}
+    console.log("name", classInputFile)
     let getEl = document.getElementsByClassName(`${classInputFile}`)[0]
     let getValue = getEl.getAttribute("value")
     let urlLogo = getValue
-    updateArray = {...updateArray, logoSiteUrl: urlLogo}
+    updateArray = {...updateArray, [classInputFile]: urlLogo}
     setDataConfig(updateArray)
   }
 
@@ -202,7 +203,8 @@ export default function config({config}) {
           {labelInputItem.map((inputConfig, i) => (
             <div key={i}>
               <label htmlFor={inputConfig}>{inputConfig}</label>
-              {inputConfig === "logoSiteUrl" &&
+              {(inputConfig === "logoSiteUrl" ||
+              inputConfig === "logoSiteImageUrl") &&
                 <div>
                   <button onClick={(e) => {
                     e.preventDefault()
@@ -212,7 +214,7 @@ export default function config({config}) {
                     nameFile={inputConfig}
                     callBack={notifySuccess}
                     onGet={dataConfig[inputConfig]}
-                    getUrlImage={() => {
+                    getUrlImage={(e) => {
                       updateImageLogo(inputConfig)
                     }}/>
                 </div>

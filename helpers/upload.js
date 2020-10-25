@@ -157,7 +157,7 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
             if (file) {
               // Set the image once loaded into file reader
               reader.onload = function(e) {
-                  let img = document.getElementsByClassName('preview')[0]
+                  let img = document.getElementsByName(`preview${nameFile}`)[0]
                   img.src = e.target.result;
                   console.log(e.target)
 
@@ -189,7 +189,7 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
                   ctx.drawImage(img, 0, 0, width, height);
 
                   dataurl = canvas.toDataURL(img, file.type);
-                  document.getElementById('output').setAttribute("src",dataurl)
+                  document.getElementsByName(`previewDone${nameFile}`)[0].setAttribute("src",dataurl)
                   setSaveTmpFile(dataurl)
               }
               reader.readAsDataURL(file);
@@ -214,16 +214,17 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
         <div className="resizePreview">
           <img
             src=""
-            id="output"
-            className="previewDone"
+            className={`previewDone${nameFile}`}
+            name={`previewDone${nameFile}`}
             alt=""
           />
         </div>
     }
     <div>
-      <img src={tmpFile}
+      <img src={onGet}
         width="200"
-        className="preview"
+        className={`preview${nameFile}`}
+        name={`preview${nameFile}`}
         alt=""
       />
       {loading && imgDownloaded &&
