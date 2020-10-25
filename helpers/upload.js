@@ -4,8 +4,9 @@ import Link from 'next/link'
 import baseUrl from '../helpers/baseUrl'
 import { uploadTempFile } from '../utils/uploads'
 import { useRouter } from 'next/router'
+
 /* component Loader File */
-const UploadFile = ({nameFile}) => {
+const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
     // define router
     const router = useRouter()
     // ref input
@@ -54,6 +55,8 @@ const UploadFile = ({nameFile}) => {
                 setLoading(result.success)
                 setOnLoading(false)
                 console.log(result)
+                callBack()
+                getUrlImage()
               })
               console.log("data resfont", data.url)
               console.log('upload image', data)
@@ -105,6 +108,7 @@ const UploadFile = ({nameFile}) => {
                 console.log(" ---------------- File Content ----------------: ");
                 setSaveTmpFile(stringData)
                 console.log("stringData", stringData);
+                resizeImage(nameFile, stringData);
             }
 
             fileReader.onloadend = function(progressEvent) {
@@ -113,7 +117,6 @@ const UploadFile = ({nameFile}) => {
                 console.log("readyState = " + fileReader.readyState);
                 setTimeout(() => {
                   console.log('end of downloaded image');
-                  resizeImage();
                   console.log("saveTmpFile", saveTmpFile)
                 }, 1500)
             }
@@ -135,15 +138,23 @@ const UploadFile = ({nameFile}) => {
         }
       }
 
-      const resizeImage = () => {
+      const resizeImage = (tagNameFile, stringData) => {
         if (window.File && window.FileReader && window.FileList && window.Blob) {
-            let filesToUploads = document.getElementById('file').files;
+          console.log(document.getElementsByName(`${tagNameFile}File`)[0])
+            let filesToUploads = document.getElementsByName(`${tagNameFile}File`)[0].files;
             let file = filesToUploads[0];
             let dataurl;
             console.log(file)
-            if (file) {
 
-              let reader = new FileReader();
+            const img = stringData;
+            const buffer = Buffer.from(img.substring(img.indexOf(',') + 1));
+            const sizeImg = buffer.length / 1e+6
+            console.log("Byte length: " + buffer.length);
+            console.log("MB: " + sizeImg);
+
+            let reader = new FileReader();
+
+            if (file) {
               // Set the image once loaded into file reader
               reader.onload = function(e) {
                   let img = document.getElementsByClassName('preview')[0]
@@ -158,17 +169,19 @@ const UploadFile = ({nameFile}) => {
                   let height = img.height;
 
                   console.log('height', height, 'width', width)
-
-                  if (width > height) {
-                      if (width > MAX_WIDTH) {
-                          height *= MAX_WIDTH / width;
-                          width = MAX_WIDTH;
-                      }
-                  } else {
-                      if (height > MAX_HEIGHT) {
-                          width *= MAX_HEIGHT / height;
-                          height = MAX_HEIGHT;
-                      }
+                  if(sizeImg > 1){
+                    console.log('trop grand')
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
                   }
                   canvas.width = width;
                   canvas.height = height;
@@ -192,52 +205,57 @@ const UploadFile = ({nameFile}) => {
     return (<div>
     <div>
         <h3>Preview Logo</h3>
+        <img src={onGet} width="250" style={{marginBottom: 30}}/>
         {onLoading &&
           <p>...en cours de telechargement</p>
         }
       </div>
-
-    {loading && imgDownloaded &&
-        <div>
-        <img src={imgDownloaded} width={200} />
-        <div><span>Url :</span><span style={{fontWeight:"bold"}}>{imgDownloaded}</span></div>
-        <p>Image téléchargé</p>
-        </div>
-    }
-
-    <div className="resizePreview">
-    <img
-      src=""
-      id="output"
-      className="previewDone"
-      alt=""
-    />
-    <button onClick={(e) => {
-      e.preventDefault()
-      resizeImage(e.target)
-    }}></button>
-    </div>
-    <Link href="/">
-        <a>
-          <img src={tmpFile}
-            width="200"
-            className="preview"
+    {!imgDownloaded &&
+        <div className="resizePreview">
+          <img
+            src=""
+            id="output"
+            className="previewDone"
             alt=""
           />
-        </a>
-      </Link>
-      <div className="upload_p">
+        </div>
+    }
+    <div>
+      <img src={tmpFile}
+        width="200"
+        className="preview"
+        alt=""
+      />
+      {loading && imgDownloaded &&
+            <div>
+            <div><span>Url :</span><span style={{fontWeight:"bold"}}>{imgDownloaded}</span></div>
+            <p>Image téléchargé</p>
+            </div>
+        }
+      </div>
+      <div className="upload_p" style={{display: "flex", marginBottom:15}}>
         <div>
           <input onChange={() => {
               uploadFileImage(uploadRef)
-          }} name="file"id="file" type="file" ref={uploadRef} accept=".jpg, .jpeg, .png" />
+          }}
+          name={`${nameFile}File`} id="file" type="file" ref={uploadRef} accept=".jpg, .jpeg, .png" />
         </div>
-        <button
-            className="buttonSubmit"
-             onClick={(e) => {
-            e.preventDefault()
-            uploadImage(uploadRef.current.files[0], tmpFile)
-        }}>Ajouter l'image</button>
+        <div>
+          <input className={nameFile} value={imgDownloaded} />
+        </div>
+        <div>
+          <button
+              className="buttonSubmit"
+              onClick={(e) => {
+              e.preventDefault()
+              uploadImage(uploadRef.current.files[0], tmpFile)
+          }}>Ajouter l'image</button>
+        </div>
+      </div>
+      <div style={{display: "flex", marginBottom:30}}>
+          <div style={{display: "block", width: "100%"}}>
+            <input disabled={true} style={{width: "100%", height: 48, fontWeight: "bold"}} defaultValue={onGet} name={nameFile} />
+          </div>
       </div>
       </div>)
 }

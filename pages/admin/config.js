@@ -10,6 +10,10 @@ import styles from '../../components/layout.module.css'
 import Input from '../../components/Input'
 import UploadFile from './../../helpers/upload'
 import { getPostConfig } from '../api/home'
+import {themeContext, getUrlSaved} from './../../context/context'
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+
 export async function getStaticProps() {
   const config = await getPostConfig()
 
@@ -110,6 +114,7 @@ export default function config({config}) {
       .then((res) => {
         console.log("updating", dataConfig)
         setDataConfig(dataConfig)
+        notifySuccess()
         })
         .catch((err) => {
           console.log("error during udpdating",err)
@@ -161,11 +166,37 @@ export default function config({config}) {
     setDataConfig(cloneArray)
   }
 
+  const updateImageLogo = (classInputFile) => {
+    let updateArray = {...dataConfig}
+    let getEl = document.getElementsByClassName(`${classInputFile}`)[0]
+    let getValue = getEl.getAttribute("value")
+    let urlLogo = getValue
+    updateArray = {...updateArray, logoSiteUrl: urlLogo}
+    setDataConfig(updateArray)
+  }
+
+  const notifySuccess = () => {
+    toast.success("success", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    })
+}
   return (
+    <themeContext.Provider value={{
+      onUrl: getUrlSaved
+    }}>
+      <themeContext.Consumer>
+            {({ onUrl }) => (
     <Layout dashboard>
       <Head>
         <title>{siteTitle}</title>
       </Head>
+      <ToastContainer />
       <div className="dash_container">
         <form>
           {labelInputItem.map((inputConfig, i) => (
@@ -173,10 +204,17 @@ export default function config({config}) {
               <label htmlFor={inputConfig}>{inputConfig}</label>
               {inputConfig === "logoSiteUrl" &&
                 <div>
-                    <UploadFile nameFile={dataConfig[inputConfig]} />
-                    <div>
-                      <input defaultValue={dataConfig[inputConfig]} name={inputConfig} />
-                  </div>
+                  <button onClick={(e) => {
+                    e.preventDefault()
+                    onUrl(dataConfig)
+                  }}>ThemeContext</button>
+                    <UploadFile
+                    nameFile={inputConfig}
+                    callBack={notifySuccess}
+                    onGet={dataConfig[inputConfig]}
+                    getUrlImage={() => {
+                      updateImageLogo(inputConfig)
+                    }}/>
                 </div>
               }
               {inputConfig === "socialLink" &&
@@ -223,6 +261,8 @@ export default function config({config}) {
           <button onClick={(event)=> {updateConfig(event)}}>Update</button>
         </form>
       </div>
-    </Layout>
+    </Layout>)}
+      </themeContext.Consumer>
+    </themeContext.Provider>
   )
 }
