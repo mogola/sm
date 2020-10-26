@@ -20,7 +20,8 @@ export async function getStaticProps() {
   return {
     props: {
       config: JSON.parse(JSON.stringify(config[0]))
-    }
+    },
+    revalidate: 1, // In secondes
   }
 }
 
