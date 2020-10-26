@@ -18,11 +18,12 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
     const [filename, setFileName] = useState()
     const [saveTmpFile, setSaveTmpFile] = useState()
     const [loading, setLoading] = useState(false)
+    const [overSize, setOverSize] = useState(false)
     /*end state */
     /* useEffect*/
     useEffect(()=> {
       console.log("useEffect Operation")
-    },[saveTmpFile])
+    },[])
     // const upload file
     const tmpFileUpload = (tmp) => {
         uploadTempFile(tmp)
@@ -31,20 +32,41 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
     const uploadImage = async(fileName) => {
         try{
           if(fileName !== undefined){
-            setOnLoading(true)
-            const getFile = fileName.name.split('.')
-            const nameFile = getFile[0]
-            const typeFile = getFile[1].toLowerCase()
+            getBase64Verification(fileName).then(result => {
+              console.log("base64", result)
 
-            console.log(getFile, nameFile, typeFile, saveTmpFile)
+              const imgData = result;
+              const buffer = Buffer.from(imgData.substring(imgData.indexOf(',') + 1));
+              const sizeImg = buffer.length / 1e+6
+              console.log("sizeImg", typeof(sizeImg))
+              // Read file asynchronously.
+              //if(sizeImg > 1){
+              setOverSize(true)
+              console.log("overSize", nameFile, overSize, sizeImg)
+              let nameSrc = nameFile
+              resizeImage(nameFile, result, sizeImg).then(result => {
+                setSaveTmpFile(result)
+                console.log("after click", nameFile, document.getElementsByName(`previewDone${nameSrc}`)[0])
+                if(sizeImg > 1){
+                  document.getElementsByName(`previewDone${nameSrc}`)[0].setAttribute("src",result)
+                }else {
+                  document.getElementsByName(`previewDone${nameSrc}`)[0].setAttribute("src",result)
+                }
 
-            const res = await fetch(`${baseUrl}/api/upload`,{
+                setOnLoading(true)
+                const getFile = fileName.name.split('.')
+                const nameFile = getFile[0]
+                const typeFile = getFile[1].toLowerCase()
+
+                console.log(getFile, nameFile, typeFile, saveTmpFile)
+
+            const res = fetch(`${baseUrl}/api/upload`,{
               method:"POST",
               headers:{
               'Content-Type':'application/json'
               },
               body:JSON.stringify({
-                file : saveTmpFile,
+                file : result,
                 name : nameFile,
                 type: typeFile
               })
@@ -64,6 +86,11 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
               .catch((err) => {
                 console.log("error during udpdating",err)
               });
+
+              });
+
+            })
+
           }
           else
           {
@@ -77,6 +104,7 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
     /* uploadFileImage */
     const uploadFileImage = (refLoad) => {
         const { current } = refLoad
+
         if(current.files[0] !== undefined){
             setTmpFile(URL.createObjectURL(current.files[0]))
             path.dirname(current.files[0].name)
@@ -89,117 +117,162 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
               let getFileParams = urlParams.get("file")
             }
 
-            // init new fileReader for get file
-            let fileReader = new FileReader()
-            let file = current.files[0]
-
-            fileReader.onloadstart = function(progressEvent) {
-                console.log("onloadstart!");
-                var msg = "File Name: " + file.name + "<br>" +
-                    "File Size: " + file.size + "<br>" +
-                    "File Type: " + file.type;
-
-                console.log(msg);
-            }
-
-            fileReader.onload = function(progressEvent) {
-                setOnLoading(false)
-                var stringData = fileReader.result;
-                console.log(" ---------------- File Content ----------------: ");
-                setSaveTmpFile(stringData)
-                console.log("stringData", stringData);
-                resizeImage(nameFile, stringData);
-            }
-
-            fileReader.onloadend = function(progressEvent) {
-                console.log("onloadend!");
-                // FileReader.EMPTY, FileReader.LOADING, FileReader.DONE
-                console.log("readyState = " + fileReader.readyState);
-                setTimeout(() => {
-                  console.log('end of downloaded image');
-                  console.log("saveTmpFile", saveTmpFile)
-                }, 1500)
-            }
-
-            fileReader.onerror = function(progressEvent) {
-                console.log("onerror!");
-            }
-
-            // Read file asynchronously.
-            fileReader.readAsDataURL(current.files[0], "UTF-8"); // fileReader.result -> String.
-            // router.push({
-            //   pathname : router.pathname,
-            //   query : {
-            //     file : URL.createObjectURL(current.files[0])
-            //   }
-            // },
-            // undefined,
-            // { shallow: true })
+            fileReaderImage(current.files[0])
         }
       }
 
-      const resizeImage = (tagNameFile, stringData) => {
-        if (window.File && window.FileReader && window.FileList && window.Blob) {
-          console.log(document.getElementsByName(`${tagNameFile}File`)[0])
-            let filesToUploads = document.getElementsByName(`${tagNameFile}File`)[0].files;
-            let file = filesToUploads[0];
-            let dataurl;
-            console.log(file)
+      const fileReaderImage = (currentFile) => {
+        // init new fileReader for get file
+        let fileReader = new FileReader()
+        let file = currentFile
 
-            const img = stringData;
-            const buffer = Buffer.from(img.substring(img.indexOf(',') + 1));
-            const sizeImg = buffer.length / 1e+6
-            console.log("Byte length: " + buffer.length);
-            console.log("MB: " + sizeImg);
+        fileReader.onloadstart = function(progressEvent) {
+            console.log("onloadstart!");
+            var msg = "File Name: " + file.name + "<br>" +
+                "File Size: " + file.size + "<br>" +
+                "File Type: " + file.type;
 
-            let reader = new FileReader();
-
-            if (file) {
-              // Set the image once loaded into file reader
-              reader.onload = function(e) {
-                  let img = document.getElementsByName(`preview${nameFile}`)[0]
-                  img.src = e.target.result;
-                  console.log(e.target)
-
-                  let canvas = document.createElement("canvas");
-
-                  let MAX_WIDTH = 600;
-                  let MAX_HEIGHT = 600;
-                  let width = img.width;
-                  let height = img.height;
-
-                  console.log('height', height, 'width', width)
-                  if(sizeImg > 1){
-                    console.log('trop grand')
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-                  }
-                  canvas.width = width;
-                  canvas.height = height;
-                  var ctx = canvas.getContext("2d");
-                  ctx.drawImage(img, 0, 0, width, height);
-
-                  dataurl = canvas.toDataURL(img, file.type);
-                  document.getElementsByName(`previewDone${nameFile}`)[0].setAttribute("src",dataurl)
-                  setSaveTmpFile(dataurl)
-              }
-              reader.readAsDataURL(file);
-            }else {
-              console.log('no image downloaded')
-            }
-
-        } else {
-            alert('The File APIs are not fully supported in this browser.');
+            console.log(msg);
         }
+
+        fileReader.onload = function(progressEvent) {
+            setOnLoading(false)
+            var stringData = fileReader.result;
+            //console.log(" ---------------- File Content ----------------: ");
+            setSaveTmpFile(stringData)
+            //console.log("stringData", stringData);
+           // resizeImage(nameFile, stringData);
+        }
+
+        fileReader.onloadend = function(progressEvent) {
+            console.log("onloadend!");
+            // FileReader.EMPTY, FileReader.LOADING, FileReader.DONE
+            console.log("readyState = " + fileReader.readyState);
+          // setTimeout(() => {
+            const imgData = fileReader.result;
+           console.log(imgData)
+           const buffer = Buffer.from(imgData.substring(imgData.indexOf(',') + 1));
+           const sizeImg = buffer.length / 1e+6
+           console.log("sizeImg", typeof(sizeImg))
+           // Read file asynchronously.
+           if(sizeImg > 1){
+            setOverSize(true)
+            console.log("overSize", overSize, saveTmpFile)
+           }
+          // }, 2000)
+
+        }
+
+        fileReader.onerror = function(progressEvent) {
+            console.log("onerror!");
+        }
+
+        console.log('overSize',overSize)
+        // Read file asynchronously.
+        if(overSize){
+          console.log("over size")
+        }
+
+        fileReader.readAsDataURL(currentFile, "UTF-8"); // fileReader.result -> String.
+        // router.push({
+        //   pathname : router.pathname,
+        //   query : {
+        //     file : URL.createObjectURL(current.files[0])
+        //   }
+        // },
+        // undefined,
+        // { shallow: true })
+      }
+
+      const getBase64Verification = (currentFile) => {
+          return new Promise(resolve => {
+            // Check for the File API support.
+            // init new fileReader for get file
+          let fileReader = new FileReader()
+          let file = currentFile
+
+          fileReader.onload = function(progressEvent) {
+              setOnLoading(false)
+              var stringData = fileReader.result;
+              resolve(stringData)
+              setSaveTmpFile(stringData)
+          }
+
+          fileReader.onloadend = function(progressEvent) {
+            console.log("readyState = " + fileReader.readyState);
+          }
+
+          fileReader.onerror = function(progressEvent) {
+              console.log("onerror!");
+          }
+
+          fileReader.readAsDataURL(currentFile, "UTF-8"); // fileReader.result -> String.
+        })
+      }
+
+      const resizeImage = (tagNameFile, stringData, sizeControl, nameSrc) => {
+        return new Promise((resolve) => {
+          if (window.File && window.FileReader && window.FileList && window.Blob) {
+            console.log(document.getElementsByName(`${tagNameFile}File`)[0])
+              let filesToUploads = document.getElementsByName(`${tagNameFile}File`)[0].files;
+              let file = filesToUploads[0];
+              let dataurl;
+              let reader = new FileReader();
+
+              if (file) {
+                // Set the image once loaded into file reader
+                reader.onload = function(e) {
+                    let img = document.getElementsByName(`preview${nameFile}`)[0]
+                    img.src = e.target.result;
+                    let canvas = document.createElement("canvas");
+                    let MAX_WIDTH = 600;
+                    let MAX_HEIGHT = 600;
+                    let width = img.width;
+                    let height = img.height;
+
+                    let ctx = canvas.getContext("2d");
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    console.log("sizeControl", sizeControl)
+                    if(sizeControl < 1){
+                      resolve(e.target.result)
+                    }
+
+                    if(sizeControl > 1) {
+                      if (width > height) {
+                          if (width > MAX_WIDTH) {
+                              height *= MAX_WIDTH / width;
+                              width = MAX_WIDTH;
+                          }
+                      } else {
+                          if (height > MAX_HEIGHT) {
+                              width *= MAX_HEIGHT / height;
+                              height = MAX_HEIGHT;
+                          }
+                      }
+
+                      canvas.width = width;
+                      canvas.height = height;
+                      ctx = canvas.getContext("2d");
+                      ctx.drawImage(img, 0, 0, width, height);
+                    }
+
+                    dataurl = canvas.toDataURL(img, file.type);
+                    if(sizeControl > 1) {
+                      resolve(dataurl)
+                    }
+                }
+                reader.readAsDataURL(file);
+              }else {
+                console.log('no image downloaded')
+              }
+
+          } else {
+              alert('The File APIs are not fully supported in this browser.');
+          }
+        })
     }
 
     return (<div>

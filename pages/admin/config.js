@@ -206,10 +206,6 @@ export default function config({config}) {
               {(inputConfig === "logoSiteUrl" ||
               inputConfig === "logoSiteImageUrl") &&
                 <div>
-                  <button onClick={(e) => {
-                    e.preventDefault()
-                    onUrl(dataConfig)
-                  }}>ThemeContext</button>
                     <UploadFile
                     nameFile={inputConfig}
                     callBack={notifySuccess}
@@ -247,6 +243,7 @@ export default function config({config}) {
               }
               {inputConfig !== "socialLink" &&
               inputConfig !== "logoSiteUrl" &&
+              inputConfig !== "logoSiteImageUrl" &&
               <input
                   name={inputConfig}
                   ref={refInput[i]}
