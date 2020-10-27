@@ -1,4 +1,3 @@
-import fs, { fstat, promises } from 'fs'
 import path from 'path'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -18,7 +17,8 @@ export async function getStaticProps() {
   return {
     props: {
       homes: JSON.parse(JSON.stringify(post))
-    }
+    },
+    revalidate: 1, // In secondes
   }
 }
 
