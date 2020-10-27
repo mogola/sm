@@ -12,7 +12,9 @@
   "dependencies": {
     "aws-sdk": "^2.764.0",
     "aws4": "^1.10.1",
+    "bcrypt": "^5.0.0",
     "classnames": "^2.2.6",
+    "crypto-js": "^4.0.0",
     "encoding": "^0.1.13",
     "file-system": "^2.2.2",
     "fs": "0.0.1-security",
@@ -27,6 +29,7 @@
     "postcss-flexbugs-fixes": "^4.2.1",
     "postcss-preset-env": "^6.7.0",
     "react": "16.13.1",
+    "react-bulma-components": "^3.4.0",
     "react-dom": "16.13.1",
     "react-toastify": "^6.0.9",
     "saslprep": "^1.0.3",
