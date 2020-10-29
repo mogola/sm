@@ -9,7 +9,6 @@ import {awsUpload, uploadFile, uploadTempFile} from '../../utils/uploads'
 import Layout, { siteTitle } from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from '../../components/layout.module.css'
-import { set } from 'mongoose'
 
 export async function getStaticProps() {
   const post = await getPost()

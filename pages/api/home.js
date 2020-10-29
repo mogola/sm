@@ -26,3 +26,17 @@ export async function getPostConfig() {
 
   return posts
 }
+
+
+export async function getAllUserList() {
+  const { db } = await connectToDatabase();
+
+  const user = await db
+  .collection("accounts")
+  .find({})
+  .sort({ "_id":-1 })
+  .limit(40)
+  .toArray();
+
+  return user
+}

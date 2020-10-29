@@ -9,6 +9,10 @@ import utilStyles from '../styles/utils.module.css'
 import { Form } from 'react-bulma-components';
 
 var CryptoJS = require("crypto-js");
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+const {sign, verify, decode } = require('../helpers/jwt')
+
 
 export async function getStaticProps() {
   return {
@@ -27,14 +31,33 @@ const [validator, setValidator] = useState(true)
 const [validatorPwd, setValidatorPwd] = useState(true)
 const [errorMessage, setErrorMessage] = useState(false)
 const [matchPwd, setMatchPwd] = useState(false)
+const [emailExisting, setEmailExisting] = useState(false)
 
     const submitForm = async (e) => {
         e.preventDefault();
         try {
             let body = formVerify()
-            const cryptoPassword = CryptoJS.AES.encrypt(body.password, 'secret key 123').toString()
+            let privateKey = 'secret key 123'
+            const cryptoPassword = CryptoJS.AES.encrypt(body.password, privateKey).toString()
             body = {...body, password: cryptoPassword, newpassword: cryptoPassword }
 
+        //  console.log(verify(sign({email: body.email}, body), body))
+        //  console.log(decode(sign({email: body.email}, body)))
+        //     let i  = 'Mogola sangare';          // Issuer
+        //     let s  = 'mogola.sangare@gmail.com';        // Subject
+        //     let a  = cryptoPassword; // Audience
+
+        //     let verifyOptions = {
+        //         issuer:  i,
+        //         subject:  s,
+        //         audience:  a,
+        //         expiresIn:  "12h"
+        //     };
+
+        //    // let token = jwt.sign({email: body.email}, privateKey, verifyOptions);
+        //     let legit = jwt.verify({email: body.email}, privateKey, verifyOptions);
+        //     console.log("\nJWT verification result: " + JSON.stringify(legit))
+        //     console.log(token)
             // var bytes  = CryptoJS.AES.decrypt(cryptoPassword, 'secret key 123');
             // var originalText = bytes.toString(CryptoJS.enc.Utf8);
 
@@ -53,6 +76,26 @@ const [matchPwd, setMatchPwd] = useState(false)
             'Content-Type':'application/json'
             },
             body:JSON.stringify(contentBody)
+        })
+        .then(userInfo => {
+            const result = userInfo.json()
+            result.then(data => {
+                console.log("user", data)
+                if(data.success === true){
+                    notifySuccess()
+                    localStorage.setItem('token', data.token);
+                }
+                // code mongodb if email existing
+                if(data.code === 11000){
+                    setEmailExisting(true)
+                    setValidator(false)
+                }else{
+                    setEmailExisting(false)
+                }
+            })
+        })
+        .catch(err => {
+            console.log("error", err)
         })
     }
 
@@ -112,9 +155,19 @@ const [matchPwd, setMatchPwd] = useState(false)
         setMatchPwd(false)
     }
 
-    console.log("password :",password, "newpassword : ", newpassword)
-    console.log(addObj)
     setObj(addObj)
+}
+
+const notifySuccess = () => {
+    toast.success("Votre compte à été crée", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    })
 }
 
   return (
@@ -122,7 +175,10 @@ const [matchPwd, setMatchPwd] = useState(false)
       <Head>
         <title>{siteTitle}</title>
       </Head>
+      <ToastContainer />
       <form>
+      {emailExisting &&
+      <Field kind="group"><Help style={{fontSize: "19px", fontWeight: "bold"}} className={"is-danger"}>Email déjà utilisé</Help></Field>}
           <InputField
             onChange={onChange}
             labelName="email"

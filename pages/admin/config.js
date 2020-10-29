@@ -13,6 +13,7 @@ import { getPostConfig } from '../api/home'
 import {themeContext, getUrlSaved} from './../../context/context'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
+import { themeContextUser } from './../../context/contextUser'
 
 export async function getStaticProps() {
   const config = await getPostConfig()
@@ -62,7 +63,7 @@ export default function config({config}) {
   const refInput = Object.keys(dataConfig).map(x => useRef(null));
 
   useEffect(() => {
-    localStorage.setItem("formData", config)
+    localStorage.setItem("formData", dataConfig)
   }, [dataConfig])
 
 
@@ -189,80 +190,86 @@ export default function config({config}) {
     })
 }
   return (
-    <themeContext.Provider value={{
-      onUrl: getUrlSaved
-    }}>
-      <themeContext.Consumer>
-            {({ onUrl }) => (
-    <Layout dashboard>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      <ToastContainer />
-      <div className="dash_container">
-        <form>
-          {labelInputItem.map((inputConfig, i) => (
-            <div key={i}>
-              <label htmlFor={inputConfig}>{inputConfig}</label>
-              {(inputConfig === "logoSiteUrl" ||
-              inputConfig === "logoSiteImageUrl") &&
-                <div>
-                    <UploadFile
-                    nameFile={inputConfig}
-                    callBack={notifySuccess}
-                    onGet={dataConfig[inputConfig]}
-                    getUrlImage={(e) => {
-                      updateImageLogo(inputConfig)
-                    }}/>
+    <themeContextUser.Consumer>
+      {({ userConnected }) => (
+      <themeContext.Provider value={{
+        onUrl: getUrlSaved
+      }}>
+        <themeContext.Consumer>
+              {({ onUrl }) => (
+          <Layout dashboard>
+          <Head>
+            <title>{siteTitle}</title>
+          </Head>
+          <ToastContainer />
+          {userConnected() &&
+          <div className="dash_container">
+            <form>
+              {labelInputItem.map((inputConfig, i) => (
+                <div key={i}>
+                  <label htmlFor={inputConfig}>{inputConfig}</label>
+                  {(inputConfig === "logoSiteUrl" ||
+                  inputConfig === "logoSiteImageUrl") &&
+                    <div>
+                        <UploadFile
+                        nameFile={inputConfig}
+                        callBack={notifySuccess}
+                        onGet={dataConfig[inputConfig]}
+                        getUrlImage={(e) => {
+                          updateImageLogo(inputConfig)
+                        }}/>
+                    </div>
+                  }
+                  {inputConfig === "socialLink" &&
+                  <>
+                  <div className="listChild">
+                    {inputSocial.map((item, i) => (
+                      <Input
+                        key={i}
+                        value={item.name}
+                        url={item.url}
+                        i_name="true"
+                        i_url="true"
+                        onClick={() => {deleteItem(i)}}
+                        onChange={(e) => {handleChangeSocial(i, e.target)}}
+                        />
+                    ))}
+                  </div>
+                    <button
+                    onClick={(e) => {
+                      insertInputFile(e)
+                    }}>Add field</button>
+                    <button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      saveList()
+                    }}>save</button>
+                  </>
+                  }
+                  {inputConfig !== "socialLink" &&
+                  inputConfig !== "logoSiteUrl" &&
+                  inputConfig !== "logoSiteImageUrl" &&
+                  <input
+                      name={inputConfig}
+                      ref={refInput[i]}
+                      value={dataConfig[inputConfig]}
+                      onChange={() => {
+                        handleChange(i, refInput[i].current)
+                      }}
+                      type="text"
+                  />
+                    }
                 </div>
-              }
-              {inputConfig === "socialLink" &&
-              <>
-              <div className="listChild">
-                {inputSocial.map((item, i) => (
-                  <Input
-                    key={i}
-                    value={item.name}
-                    url={item.url}
-                    i_name="true"
-                    i_url="true"
-                    onClick={() => {deleteItem(i)}}
-                    onChange={(e) => {handleChangeSocial(i, e.target)}}
-                    />
-                ))}
-              </div>
-                <button
-                onClick={(e) => {
-                  insertInputFile(e)
-                }}>Add field</button>
-                <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  saveList()
-                }}>save</button>
-              </>
-              }
-              {inputConfig !== "socialLink" &&
-              inputConfig !== "logoSiteUrl" &&
-              inputConfig !== "logoSiteImageUrl" &&
-              <input
-                  name={inputConfig}
-                  ref={refInput[i]}
-                  value={dataConfig[inputConfig]}
-                  onChange={() => {
-                    handleChange(i, refInput[i].current)
-                  }}
-                  type="text"
-              />
-                }
-            </div>
-          ))}
-          <button onClick={(event)=> {submitForm(event)}}>Sauvegarder</button>
-          <button onClick={(event)=> {updateConfig(event)}}>Update</button>
-        </form>
-      </div>
-    </Layout>)}
-      </themeContext.Consumer>
-    </themeContext.Provider>
+              ))}
+              <button onClick={(event)=> {submitForm(event)}}>Sauvegarder</button>
+              <button onClick={(event)=> {updateConfig(event)}}>Update</button>
+            </form>
+          </div>}
+          {!userConnected() && (<div><p>Not authorized</p></div>)}
+        </Layout>)}
+        </themeContext.Consumer>
+      </themeContext.Provider>
+     )}
+    </themeContextUser.Consumer>
   )
 }

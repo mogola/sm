@@ -1,8 +1,14 @@
+const fs = require('fs')
+const privateKEY = fs.readFileSync('private.key', 'utf8');
+const publicKEY = fs.readFileSync('public.key', 'utf8');
+console.log(privateKEY, publicKEY)
 module.exports = {
   // Target must be serverless
     target: 'serverless',
     env: {
       production: process.env.NEXT_PUBLIC_URL_PRODUCTION,
+      keyPrivate: privateKEY,
+      keyPublic: publicKEY
     },
     webpack: (config, { isServer }) => {
       // Fixes npm packages that depend on `fs` module
