@@ -5,9 +5,8 @@ const {sign, verify, decode } = require('../helpers/jwt')
 export function connected(){
     const ISSERVER = typeof window === "undefined";
     if(!ISSERVER) {
-        console.log('ready')
-        if(localStorage.getItem('userIsConnected') === null &&
-        localStorage.getItem('userIsConnected') !== 'true'){
+        console.log('ready', localStorage.getItem('userIsConnected'))
+        if(localStorage.getItem('userIsConnected') === null){
             return false
         }else {
             // console.log(decode(localStorage.getItem('token')))

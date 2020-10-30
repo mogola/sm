@@ -191,6 +191,8 @@ export default function config({config, connect}) {
         progress: undefined,
     })
 }
+
+console.log(isUserAdmin)
   return (
     <themeContextUser.Consumer>
       {({ userConnected }) => (

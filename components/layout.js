@@ -6,7 +6,7 @@ import Link from 'next/link'
 const name = 'Your Name'
 export const siteTitle = 'Next.js Sample Website'
 
-export default function Layout({ children, home }) {
+export default function Layout({ children, home, portfolio }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -33,6 +33,14 @@ export default function Layout({ children, home }) {
               alt={name}
             />
             <h1 className={utilStyles.heading2Xl}>{name}</h1>
+          </>
+        ) : portfolio ? (
+          <>
+            <h2 className={utilStyles.headingLg}>
+              <Link href="/">
+                <a className={utilStyles.colorInherit}>{name}</a>
+              </Link>
+            </h2>
           </>
         ) : (
           <>

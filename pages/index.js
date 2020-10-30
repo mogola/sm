@@ -60,7 +60,7 @@ export default function Home({ allPostsData, homes }) {
   }
 
   return (
-    <Layout home>
+    <Layout portfolio>
       <Head>
         <title>{siteTitle}</title>
       </Head>
