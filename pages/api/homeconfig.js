@@ -1,6 +1,8 @@
 import initDB from '../../helpers/initDB'
 import Homeconfig from '../../models/Homeconfig'
+import RegisterModel from '../../models/RegisterModel'
 import mongoose from 'mongoose'
+const { decode } = require('../../helpers/jwt')
 
 initDB()
 
@@ -25,15 +27,35 @@ export default async (req,res)=>{
 
 const getAllConfig = async (req,res)=>{
     try{
-        const posts = await Homeconfig
-        .find()
-        .sort({"_id": 1})
 
-        if(posts){
-            res.json(JSON.stringify(posts[0]))
-        }else{
-            res.status(200).json([])
-        }
+        let getTokenUser = req.headers['cookie'].split('token=')[1]
+
+        console.log(decode(getTokenUser))
+        if(getTokenUser !== undefined || decode(getTokenUser) !== null){
+            let {payload} = decode(getTokenUser)
+        console.log('get req-header-x-auth', decode(getTokenUser))
+
+        await RegisterModel.findOne({email: payload.email})
+        .then(async (account) => {
+            if(account.role !== "admin"){
+                console.log('role :', account.role)
+                res.status(300).json({"message": "not authorized"})
+            }else {
+                console.log(account)
+                const posts = await Homeconfig
+                .find()
+                .sort({"_id": 1})
+
+                if(posts){
+                    res.json(JSON.stringify(posts[0]))
+                }else{
+                    res.status(200).json([])
+                }
+            }
+        })
+    }else{
+        res.status(300).json({"message": "not authorized"})
+    }
   }
   catch(err){
     console.log(err)

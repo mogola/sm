@@ -55,15 +55,17 @@ const addConfig = async (config) => {
     }
 }
 
-export default function config({config}) {
+export default function config({config, connect}) {
   console.log(config)
   const [labelInputItem, setInputItemLabel] = useState(Object.keys(config))
   const [dataConfig, setDataConfig] = useState(config)
   const [inputSocial, setInputSocial] = useState(config["socialLink"])
   const refInput = Object.keys(dataConfig).map(x => useRef(null));
+  const [isUserAdmin, setIsUserAdmin] = useState()
 
   useEffect(() => {
     localStorage.setItem("formData", dataConfig)
+    setIsUserAdmin(connect)
   }, [dataConfig])
 
 
@@ -202,7 +204,7 @@ export default function config({config}) {
             <title>{siteTitle}</title>
           </Head>
           <ToastContainer />
-          {userConnected() &&
+          {isUserAdmin &&
           <div className="dash_container">
             <form>
               {labelInputItem.map((inputConfig, i) => (
@@ -265,7 +267,7 @@ export default function config({config}) {
               <button onClick={(event)=> {updateConfig(event)}}>Update</button>
             </form>
           </div>}
-          {!userConnected() && (<div><p>Not authorized</p></div>)}
+          {!isUserAdmin && (<div><p>Not authorized</p></div>)}
         </Layout>)}
         </themeContext.Consumer>
       </themeContext.Provider>

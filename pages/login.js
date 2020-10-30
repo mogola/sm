@@ -6,6 +6,7 @@ import Layout, { siteTitle } from '../components/layout'
 import baseUrl from '../helpers/baseUrl'
 import { themeContextUser } from './../context/contextUser'
 import { useRouter } from 'next/router'
+import cookies from 'next-cookies'
 
 import { Form } from 'react-bulma-components';
 
@@ -21,7 +22,7 @@ export async function getStaticProps() {
   }
 }
 
-export default function Login({}) {
+export default function Login({connect}) {
 const router = useRouter()
 const {Field, Control, Label, Help } = Form;
 const [emailValue, setEmailValue] = useState();
@@ -39,6 +40,7 @@ const [userIsConnected, setUserIsConnected] = useState(false)
 
     useEffect(() => {
         console.log('test')
+        setUserIsConnected(connect)
     }, [])
 
     const submitForm = async (e, callback) => {
@@ -59,7 +61,8 @@ const [userIsConnected, setUserIsConnected] = useState(false)
         fetch(url,{
             method:method,
             headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
+            'x-auth-token' : tokenUser
             },
             body:JSON.stringify(contentBody)
         })
@@ -92,6 +95,8 @@ const [userIsConnected, setUserIsConnected] = useState(false)
                         notifySuccess()
                         setUserIsConnected(true)
                         localStorage.setItem('userIsConnected', true)
+                        document.cookie = `name=; path=/`;
+                        document.cookie = `token=${localStorage.getItem('token')}; path=/`;
                         router.push(`/admin/config`)
                     }else{
                         localStorage.removeItem("token")
@@ -174,14 +179,14 @@ const notifyEchec = () => {
 
   return (
     <themeContextUser.Consumer>
-        {({ getToken, userIsConnected, userConnected }) => (
+        {({ getToken, userIsConnected }) => (
         <Layout home>
         <Head>
             <title>{siteTitle}</title>
         </Head>
         <ToastContainer />
-        {userConnected() && <div>Vous êtes bien connecté</div>}
-        {!userConnected() && <div>Vous n'êtes pas connecté</div>}
+        {userIsConnected && <div>Vous êtes bien connecté</div>}
+        {!userIsConnected && <div>Vous n'êtes pas connecté</div>}
         <form onSubmit={(e) => {
             let compareToken = getToken(localStorage.getItem('token'), tokenUser, userBody)
             submitForm(e, compareToken)

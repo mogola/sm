@@ -26,12 +26,13 @@ return {
   }
 }
 
-export default function Adminuser({users}) {
+export default function Adminuser({users, connect}) {
 const [getAllUser, setGetAllUser] = useState(users)
 const [userToUpdate, setUserToUpdate] = useState({})
 const [listRole, setListRole] = useState(['visitor', 'superadmin', 'admin', 'moderator', 'user', ])
-
+const [isUserAdmin, setIsUserAdmin] = useState()
 useEffect(() => {
+  setIsUserAdmin(connect)
 }, [])
   const submitForm = async (e) => {
     e.preventDefault()
@@ -42,6 +43,11 @@ useEffect(() => {
           'Content-Type':'application/json'
           },
           body:JSON.stringify(userToUpdate)
+      }).then(result => {
+         let data = result.json()
+         data.then(dataUser => {
+           console.log(dataUser)
+         })
       })
     }
     catch(err){
@@ -63,26 +69,30 @@ useEffect(() => {
     console.log(userToUpdate)
     //setGetAllUser(user)
   }
-
+  console.log(isUserAdmin)
   return (
     <Layout home>
       <Head>
         <title>{siteTitle}</title>
       </Head>
       <div>
-      {getAllUser.map((user, i) => (
-        <div key={i}>
-          <div>{user.email}</div>
-          <div>Role : <b>{user.role}</b></div>
-          <SelectRole role={listRole} key={i} onChange={(e) => {
-            onChange(i, e.target)
-          }} />
-          <button onClick={(e) => {
-            submitForm(e)
-            console.log('update user')
-          }}>Save</button>
-        </div>
-      ))}
+        <div>value: {isUserAdmin}</div>
+        {isUserAdmin && <div>
+          {getAllUser.map((user, i) => (
+          <div key={i}>
+            <div>{user.email}</div>
+            <div>Role : <b>{user.role}</b></div>
+            <SelectRole role={listRole} key={i} onChange={(e) => {
+              onChange(i, e.target)
+            }} />
+            <button onClick={(e) => {
+              submitForm(e)
+              console.log('update user')
+            }}>Save</button>
+          </div>
+        ))}
+        </div>}
+        {!isUserAdmin && <div>not Authorized</div>}
       </div>
       <form onSubmit={submitForm}>
       </form>

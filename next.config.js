@@ -42,6 +42,10 @@ module.exports = {
             {
               key: 'Access-Control-Allow-Origin',
               value: '*',
+            },
+            {
+              key: 'auth-bearer',
+              value: 'test',
             }
           ],
         },

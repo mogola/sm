@@ -22,6 +22,7 @@ let RegisterModel = new Schema({
         type: String,
         default: "user"
     },
+    config : { type: mongoose.Schema.Types.ObjectId, ref: 'homeconfig' },
     date : {
         type: Date,
         default: Date.now

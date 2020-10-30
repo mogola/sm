@@ -6,10 +6,12 @@ export function connected(){
     const ISSERVER = typeof window === "undefined";
     if(!ISSERVER) {
         console.log('ready')
-        if(localStorage.getItem('userIsConnected') !== undefined){
-            return localStorage.getItem('userIsConnected')
-        }else {
+        if(localStorage.getItem('userIsConnected') === null &&
+        localStorage.getItem('userIsConnected') !== 'true'){
             return false
+        }else {
+            // console.log(decode(localStorage.getItem('token')))
+            return true
         }
     }
 }

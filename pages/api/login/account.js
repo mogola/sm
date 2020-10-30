@@ -19,7 +19,6 @@ const loginUser = async (req, res) => {
             return res.status(422).json({error:"Please add all the fields"})
         }
 
-
         const token = sign({email: user.email}, user)
 
         // const createUser = await new RegisterModel({
@@ -29,9 +28,11 @@ const loginUser = async (req, res) => {
         //     newpassword: user.newpassword
         // }).save()
 
+        console.log(token)
         await RegisterModel.findOne({email: user.email})
         .then(account => {
             if(account !== null){
+                res.setHeader('x-auth-token', token)
                 res.status(200).json({
                     "message" : "user exist",
                     "account" : account,
