@@ -1,15 +1,17 @@
 /* global localStorage */
 import React from 'react'
-const {sign, verify, decode } = require('../helpers/jwt')
+const { sign, verify, decode } = require('../helpers/jwt')
 
-export function connected(){
+export function connected() {
     const ISSERVER = typeof window === "undefined";
-    if(!ISSERVER) {
-        console.log('ready', localStorage.getItem('userIsConnected'))
-        if(localStorage.getItem('userIsConnected') === null){
+    if (!ISSERVER) {
+        console.log('ready', typeof (localStorage.getItem('userIsConnected')))
+        if (localStorage.getItem('userIsConnected') === null) {
+            console.log('user not connect')
             return false
-        }else {
+        } else {
             // console.log(decode(localStorage.getItem('token')))
+            console.log('user connect')
             return true
         }
     }
@@ -22,7 +24,7 @@ export function getUrlSaved(url) {
 
 export function tokenStorage(getLocalStorage, userTokenStorage) {
 
-    if(userTokenStorage === undefined){
+    if (userTokenStorage === undefined) {
         userTokenStorage = localStorage.getItem('token');
     }
 
@@ -30,13 +32,13 @@ export function tokenStorage(getLocalStorage, userTokenStorage) {
     return new Promise((resolve) => {
         resolve(userTokenStorage)
     })
-    .catch(err => {
-        console.log('error', err)
-    })
+        .catch(err => {
+            console.log('error', err)
+        })
 }
 
-export function userIsConnected(userIsConnect){
-    if(userIsConnect)
+export function userIsConnected(userIsConnect) {
+    if (userIsConnect)
         return true
     else
         return false
@@ -44,7 +46,7 @@ export function userIsConnected(userIsConnect){
 
 export const themeContextUser = React.createContext({
     getToken: tokenStorage,
-    isConnected : userIsConnected,
+    isConnected: userIsConnected,
     userConnected: connected,
     toggleTheme: () => {
         console.log('default click')
