@@ -32,6 +32,10 @@ img {
 .dash_container {
   display: flex;
   align-items: flex-start;
+  label{
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 }
 
 .field {

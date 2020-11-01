@@ -4,9 +4,11 @@ import Link from 'next/link'
 import baseUrl from '../helpers/baseUrl'
 import { uploadTempFile } from '../utils/uploads'
 import { useRouter } from 'next/router'
+import { Button, Image, Heading, Box, Loader, Tag, Form, Column } from 'react-bulma-components';
+const {Field, InputFile, Control} = Form
 
 /* component Loader File */
-const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
+const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
     // define router
     const router = useRouter()
     // ref input
@@ -23,12 +25,18 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
     /* useEffect*/
     useEffect(()=> {
       console.log("useEffect Operation")
+      console.log('imageExist', imageExist)
     },[])
     // const upload file
     const tmpFileUpload = (tmp) => {
         uploadTempFile(tmp)
       }
     /* upload function Js */
+    const resetImage = () => {
+      let nameSrc = nameFile
+      document.getElementsByName(`mainLogo${nameSrc}`)[0].setAttribute("src"," ")
+      getUrlImage()
+    }
     const uploadImage = async(fileName) => {
         try{
           if(fileName !== undefined){
@@ -277,13 +285,13 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
 
     return (<div>
     <div>
-        <h3>Preview Logo</h3>
-        <img src={onGet} width="250" style={{marginBottom: 30}}/>
+        <h3>Main Logo</h3>
+        <img name={`mainLogo${nameFile}`} src={onGet} width="250" style={{marginBottom: 30}}/>
         {onLoading &&
           <p>...en cours de telechargement</p>
         }
       </div>
-    {!imgDownloaded &&
+    {!imgDownloaded && !imageExist &&
         <div className="resizePreview">
           <img
             src=""
@@ -294,12 +302,14 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
         </div>
     }
     <div>
+    {!imageExist &&
       <img src={onGet}
         width="200"
         className={`preview${nameFile}`}
         name={`preview${nameFile}`}
         alt=""
       />
+      }
       {loading && imgDownloaded &&
             <div>
             <div><span>Url :</span><span style={{fontWeight:"bold"}}>{imgDownloaded}</span></div>
@@ -314,16 +324,26 @@ const UploadFile = ({nameFile , onGet, callBack, getUrlImage}) => {
           }}
           name={`${nameFile}File`} id="file" type="file" ref={uploadRef} accept=".jpg, .jpeg, .png" />
         </div>
+        <Field>
+          <Control>
+            <input className={`input ${nameFile}`} value={imgDownloaded} />
+          </Control>
+        </Field>
         <div>
-          <input className={nameFile} value={imgDownloaded} />
-        </div>
-        <div>
-          <button
+          <Button
+              color="info"
               className="buttonSubmit"
               onClick={(e) => {
               e.preventDefault()
               uploadImage(uploadRef.current.files[0], tmpFile)
-          }}>Ajouter l'image</button>
+          }}>Ajouter l'image</Button>
+          <Button
+              color="danger"
+              className="buttonSubmit"
+              onClick={(e) => {
+              e.preventDefault()
+              resetImage(e)
+          }}>supprimer</Button>
         </div>
       </div>
       <div style={{display: "flex", marginBottom:30}}>

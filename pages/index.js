@@ -1,28 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 import { getSortedPostsData, getPostFromDataBase} from '../lib/posts'
-import { getPost } from '../pages/api/home'
-
+import { getPostConfig } from './api/home'
+import baseUrl from '../helpers/baseUrl'
+import fetch from 'node-fetch'
 
 export async function getStaticProps() {
-  const allPostsData = getSortedPostsData()
-  const post = await getPost()
+  const config = await getPostConfig()
 
+  console.log(config)
   return {
     props: {
-      allPostsData,
-      homes: JSON.parse(JSON.stringify(post))
-    }
+      config: JSON.parse(JSON.stringify(config[0]))
+    },
+    revalidate: 1, // In secondes
   }
 }
 
 
-export default function Home({ allPostsData, homes }) {
+export default function Home({ config }) {
   const [title, setTitle] = useState();
   const [urlImage, setUrlImage] = useState();
+
+  useEffect(() => {
+    console.log('config Home', config)
+  }, [])
 
   const submitForm = async () => {
     event.preventDefault();
@@ -91,14 +96,14 @@ export default function Home({ allPostsData, homes }) {
         </div>
       <button>Ajouter du contenu</button>
       </form>
-      <ul>
+      {/* <ul>
         {homes.map((post, i) => (
           <li key={i}>
             <h2>{post.title}</h2>
             <h3>{post.urlImage}</h3>
           </li>
         ))}
-      </ul>
+      </ul> */}
       <section className={utilStyles.headingMd}>
         <p>Captain Tsubasa</p>
         <p><Link href="/posts/first-post"><a>Go to post</a></Link></p>
@@ -107,7 +112,7 @@ export default function Home({ allPostsData, homes }) {
           <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
         </p>
       </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+      {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
           {allPostsData.map(({ id, date, title }) => (
@@ -120,7 +125,7 @@ export default function Home({ allPostsData, homes }) {
             </li>
           ))}
         </ul>
-      </section>
+      </section> */}
     </Layout>
   )
 }

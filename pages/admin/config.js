@@ -8,13 +8,16 @@ import Layout, { siteTitle } from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from '../../components/layout.module.css'
 import Input from '../../components/Input'
+import InputConfig from '../../components/InputConfig'
 import UploadFile from './../../helpers/upload'
 import { getPostConfig } from '../api/home'
 import {themeContext, getUrlSaved} from './../../context/context'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import { themeContextUser } from './../../context/contextUser'
+import { Button, Heading, Box, Loader, Tag, Form, Column } from 'react-bulma-components';
 
+const {Field, InputFile, Control} = Form
 export async function getStaticProps() {
   const config = await getPostConfig()
 
@@ -96,10 +99,10 @@ export default function config({config, connect}) {
     console.log("currentValue", cloneArray)
   }
 
-  const handleChange = (i, refInput) => {
+  const handleChange = (i, target) => {
     const cloneArray = {...dataConfig}
-    console.log(refInput.name)
-    cloneArray[refInput.name] = refInput.value
+    console.log(target.name)
+    cloneArray[target.name] = target.value
 
     setDataConfig(cloneArray)
     console.log(dataConfig)
@@ -211,11 +214,11 @@ console.log(isUserAdmin)
             <form>
               {labelInputItem.map((inputConfig, i) => (
                 <div key={i}>
-                  <label htmlFor={inputConfig}>{inputConfig}</label>
                   {(inputConfig === "logoSiteUrl" ||
                   inputConfig === "logoSiteImageUrl") &&
                     <div>
                         <UploadFile
+                        imageExist={dataConfig[inputConfig] ? true : false}
                         nameFile={inputConfig}
                         callBack={notifySuccess}
                         onGet={dataConfig[inputConfig]}
@@ -239,34 +242,59 @@ console.log(isUserAdmin)
                         />
                     ))}
                   </div>
-                    <button
+                  <Button.Group
+                    hasAddons= {false}
+                    position='centered'
+                    size='medium'
+                    style={{width: '100%', paddingTop: "15px"}}
+                  >
+                    <Button
+                    color="info"
                     onClick={(e) => {
                       insertInputFile(e)
-                    }}>Add field</button>
-                    <button
+                    }}>Add field</Button>
+                    <Button
+                    color="success"
+                    style={{marginRight:"15px"}}
                     onClick={(e) => {
                       e.preventDefault()
                       saveList()
-                    }}>save</button>
+                    }}>save</Button>
+                  </Button.Group>
                   </>
                   }
                   {inputConfig !== "socialLink" &&
                   inputConfig !== "logoSiteUrl" &&
                   inputConfig !== "logoSiteImageUrl" &&
-                  <input
+                  <InputConfig
                       name={inputConfig}
-                      ref={refInput[i]}
-                      value={dataConfig[inputConfig]}
-                      onChange={() => {
-                        handleChange(i, refInput[i].current)
+                      defaultValue={dataConfig[inputConfig]}
+                      onChange={(e) => {
+                        handleChange(i, e.target)
                       }}
                       type="text"
                   />
                     }
                 </div>
               ))}
-              <button onClick={(event)=> {submitForm(event)}}>Sauvegarder</button>
-              <button onClick={(event)=> {updateConfig(event)}}>Update</button>
+              <Field style={{
+                position: 'fixed',
+                bottom: '0',
+                left: '0',
+                width: '100%',
+                padding: '15px',
+                background: '#fff'
+              }} kind="group">
+                <Button.Group
+                  hasAddons={false}
+                  position='centered'
+                  size='medium'
+                  style={{width: '100%'}}
+                >
+                  <Button color="success" style={{marginRight:"15px"}} onClick={(event)=> {submitForm(event)}}>Sauvegarder</Button>
+                  <Button color="info" onClick={(event)=> {updateConfig(event)}}>Update</Button>
+                </Button.Group>
+              </Field>
             </form>
           </div>}
           {!isUserAdmin && (<div><p>Not authorized</p></div>)}

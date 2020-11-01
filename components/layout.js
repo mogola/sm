@@ -1,14 +1,40 @@
+import React, {useState, useEffect} from 'react'
 import Head from 'next/head'
 import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
+import { themeContextUser } from 'context/contextUser'
+import baseUrl from '../helpers/baseUrl'
+import fetch from 'node-fetch'
 
 const name = 'Your Name'
 export const siteTitle = 'Next.js Sample Website'
 
-export default function Layout({ children, home, portfolio }) {
+export default function Layout({ children, home, portfolio}) {
+  const [dataConfigs, setDataConfig] = useState()
+  const [naming, setNaming] = useState()
+  const getData = async () => {
+    const getData =await fetch(`${baseUrl}/api/homeconfig`)
+    const data = await getData.json()
+
+    new Promise((resolve) => {
+      resolve(data)
+    }).then(result => {
+      console.log(result, result.nameSite)
+      setNaming(result.nameSite)
+      setDataConfig(data)
+    })
+  }
+
+  useEffect(() => {
+    getData()
+    console.log("get data", dataConfigs)
+  }, [])
+
   return (
-    <div className={styles.container}>
+    <themeContextUser.Consumer>
+    {({dataConfig}) => (
+    <div data={naming} className={portfolio ? "config.nameSite" : styles.container}>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta
@@ -38,7 +64,7 @@ export default function Layout({ children, home, portfolio }) {
           <>
             <h2 className={utilStyles.headingLg}>
               <Link href="/">
-                <a className={utilStyles.colorInherit}>{name}</a>
+                <a className={utilStyles.colorInherit}>{naming}</a>
               </Link>
             </h2>
           </>
@@ -61,5 +87,7 @@ export default function Layout({ children, home, portfolio }) {
         </div>
       )}
     </div>
+    )}
+    </themeContextUser.Consumer>
   )
 }

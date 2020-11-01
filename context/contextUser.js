@@ -2,6 +2,9 @@
 import React from 'react'
 const { sign, verify, decode } = require('../helpers/jwt')
 
+export function config(data){
+    return data
+}
 export function connected() {
     const ISSERVER = typeof window === "undefined";
     if (!ISSERVER) {
@@ -48,6 +51,7 @@ export const themeContextUser = React.createContext({
     getToken: tokenStorage,
     isConnected: userIsConnected,
     userConnected: connected,
+    dataConfig: config,
     toggleTheme: () => {
         console.log('default click')
     }

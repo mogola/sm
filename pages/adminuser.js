@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import InputField from '../components/InputField'
@@ -12,7 +12,7 @@ import { Form } from 'react-bulma-components';
 import SelectRole from '../components/SelectRole'
 
 const { Control, Field, Label } = Form;
-import { Button, Heading, Box } from 'react-bulma-components';
+import { Button, Heading, Box, Loader, Tag } from 'react-bulma-components';
 
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
@@ -38,12 +38,26 @@ export default function Adminuser({ users, connect }) {
   const [listRole, setListRole] = useState(['visitor', 'superadmin', 'admin', 'moderator', 'user'])
   const [isUserAdmin, setIsUserAdmin] = useState()
   let refSelect = getAllUser.map(x => useRef(null));
-
+  const [refButton, setRefButton] = useState(React.createRef())
+  const [onLoading, setOnLoading] = useState(false)
+  const [indexUser, setIndexUser] = useState()
+  const styleLoader = {
+    width: 30,
+    height: 30,
+    border: '4px solid #3298dc',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    position: 'absolute',
+    top: 15,
+    right: 15
+  }
   useEffect(() => {
     setIsUserAdmin(connect)
   }, [])
+
   const submitForm = async (e) => {
     e.preventDefault()
+    setOnLoading(true)
     try {
       await fetch(`${baseUrl}/api/login/admin`, {
         method: 'POST',
@@ -89,6 +103,10 @@ export default function Adminuser({ users, connect }) {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
+      onOpen: () => {
+        setOnLoading(false)
+        console.log("success")
+      }
     })
   }
 
@@ -101,7 +119,21 @@ export default function Adminuser({ users, connect }) {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
+      onOpen: () => {
+        console.log("error")
+        setOnLoading(false)
+      }
     })
+  }
+
+  const ButtonSave = ({ target }) => {
+    return (
+    <Button className="button is-success" onClick={(e) => {
+      submitForm(e)
+      console.log('update user', target)
+      setIndexUser(target)
+    }}>Save</Button>
+    )
   }
 
   console.log(isUserAdmin)
@@ -117,9 +149,13 @@ export default function Adminuser({ users, connect }) {
           <Control>
             {getAllUser.map((user, i) => (
               <div key={i}>
-                <Box style={{ marginTop: 10, marginBottom: 10 }} >
+                <Box style={{ position: "relative", marginTop: 10, marginBottom: 10 }} >
+                  {onLoading && i === indexUser && <Loader style={styleLoader} />}
                   <Heading>{user.email}</Heading>
-                  <Label htmlFor={user.role}>Role : <b>{user.role}</b></Label>
+                  <Label htmlFor={user.role}>
+            {user.role && user.role !== "admin" && <>Role : <Tag color="info">{user.role}</Tag></>}
+            {user.role === "admin" && <>Role : <Tag color="warning">{user.role}</Tag></>}
+            </Label>
                   <Field kind="group">
                     <Control>
                       <div className="select is-primary">
@@ -135,10 +171,7 @@ export default function Adminuser({ users, connect }) {
                       </div>
                     </Control>
                     <Control>
-                      <Button className="button" onClick={(e) => {
-                        submitForm(e)
-                        console.log('update user')
-                      }}>Save</Button>
+                   <ButtonSave target={i}/>
                     </Control>
                   </Field>
                 </Box>
