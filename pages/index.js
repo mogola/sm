@@ -4,14 +4,14 @@ import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 import { getSortedPostsData, getPostFromDataBase} from '../lib/posts'
-import { getPostConfig } from './api/home'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
+
+import { getPostConfig } from './api/home'
 
 export async function getStaticProps() {
   const config = await getPostConfig()
 
-  console.log(config)
   return {
     props: {
       config: JSON.parse(JSON.stringify(config[0]))
@@ -20,15 +20,10 @@ export async function getStaticProps() {
   }
 }
 
-
-export default function Home({ config }) {
+export default function Home({config}) {
   const [title, setTitle] = useState();
   const [urlImage, setUrlImage] = useState();
-
-  useEffect(() => {
-    console.log('config Home', config)
-  }, [])
-
+  const [configs, setConfigs] = useState(config)
   const submitForm = async () => {
     event.preventDefault();
 
@@ -69,6 +64,15 @@ export default function Home({ config }) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width:"100%",
+        zIndex: -1
+      }} className="homeImage">
+        <img src={configs['logoSiteUrl']} width="100%" height="auto"/>
+      </div>
       <Link href="/admin/dashboard">
         <a>Go to Dashboard</a></Link>
       <form onSubmit={submitForm}>

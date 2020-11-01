@@ -62,7 +62,7 @@ export default function config({config, connect}) {
   console.log(config)
   const [labelInputItem, setInputItemLabel] = useState(Object.keys(config))
   const [dataConfig, setDataConfig] = useState(config)
-  const [inputSocial, setInputSocial] = useState(config["socialLink"])
+  const [inputSocial, setInputSocial] = useState(config)
   const refInput = Object.keys(dataConfig).map(x => useRef(null));
   const [isUserAdmin, setIsUserAdmin] = useState()
 
@@ -74,17 +74,18 @@ export default function config({config, connect}) {
 
   const submitForm = async (event) => {
     event.preventDefault();
+
     try {
-      await addConfig(config)
+      await addConfig(dataConfig)
     }
     catch(err){
       console.log(err)
     }
   }
 
-  const handleChangeSocial = (i, refInput) => {
+  const handleChangeSocial = (i, name ,refInput) => {
     const cloneArray = {...dataConfig}
-    console.log(cloneArray["socialLink"][i].name)
+    console.log(cloneArray[name][i].name)
     console.log("get current value", document.querySelectorAll("[i_name]")[i].value)
     let refInputName, refInputUrl;
 
@@ -92,8 +93,8 @@ export default function config({config, connect}) {
     refInputUrl = document.querySelectorAll("[i_url]")[i].value
 
     console.log(refInputName, refInputUrl)
-    cloneArray["socialLink"][i].name = refInputName
-    cloneArray["socialLink"][i].url = refInputUrl
+    cloneArray[name][i].name = refInputName
+    cloneArray[name][i].url = refInputUrl
 
     setDataConfig(cloneArray)
     console.log("currentValue", cloneArray)
@@ -109,6 +110,7 @@ export default function config({config, connect}) {
   }
   const updateConfig = async (e) => {
     e.preventDefault()
+    console.log('nameCategory',dataConfig["menuCategoryLink"])
 
     try{
       const res =  await fetch(`${baseUrl}/api/homeconfig`,{
@@ -131,31 +133,33 @@ export default function config({config, connect}) {
         console.log(err)
       }
   }
-  const deleteItem = (i) => {
+  const deleteItem = (i, name) => {
       let updateArray = {...dataConfig}
-      const arrayToDelete = [...inputSocial]
+      const arrayToDelete = [...inputSocial[name]]
+      console.log(arrayToDelete)
       let newArrayDeleted = arrayToDelete.filter((value, index, arr) => {
         return index !== i
       })
 
-      updateArray = {...updateArray, socialLink: newArrayDeleted}
-      setInputSocial(newArrayDeleted)
+      console.log(newArrayDeleted)
+      updateArray = {...updateArray, [name]: newArrayDeleted}
+      setInputSocial(updateArray)
       setDataConfig(updateArray)
   }
 
-  const insertInputFile = (e) => {
+  const insertInputFile = (e, name) => {
     e.preventDefault()
     let updateArray = {...dataConfig}
-    console.log(updateArray.socialLink)
-    updateArray.socialLink.push({
+    console.log(updateArray[name])
+    updateArray[name].push({
       "name":"new",
       "url":"http://www.example.com"
     })
 
-    let newList = updateArray.socialLink
+    let newList = updateArray[name]
     console.log('newList', newList)
-    updateArray = {...updateArray, socialLink: newList}
-    console.log('updateArray', updateArray, updateArray["socialLink"])
+    updateArray = {...updateArray, [name]: newList}
+    console.log('updateArray', updateArray, updateArray[name])
     setDataConfig(updateArray)
     console.log("update social", inputSocial)
   }
@@ -227,18 +231,21 @@ console.log(isUserAdmin)
                         }}/>
                     </div>
                   }
-                  {inputConfig === "socialLink" &&
+                  {(inputConfig === "socialLink" ||
+                  inputConfig === "menuCategoryLink") &&
                   <>
                   <div className="listChild">
-                    {inputSocial.map((item, i) => (
+                    {dataConfig[inputConfig].map((item, i) => (
                       <Input
                         key={i}
                         value={item.name}
                         url={item.url}
                         i_name="true"
                         i_url="true"
-                        onClick={() => {deleteItem(i)}}
-                        onChange={(e) => {handleChangeSocial(i, e.target)}}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          deleteItem(i, inputConfig)}}
+                        onChange={(e) => {handleChangeSocial(i, inputConfig)}}
                         />
                     ))}
                   </div>
@@ -251,7 +258,7 @@ console.log(isUserAdmin)
                     <Button
                     color="info"
                     onClick={(e) => {
-                      insertInputFile(e)
+                      insertInputFile(e, inputConfig)
                     }}>Add field</Button>
                     <Button
                     color="success"
@@ -263,7 +270,9 @@ console.log(isUserAdmin)
                   </Button.Group>
                   </>
                   }
+
                   {inputConfig !== "socialLink" &&
+                  inputConfig !== "menuCategoryLink" &&
                   inputConfig !== "logoSiteUrl" &&
                   inputConfig !== "logoSiteImageUrl" &&
                   <InputConfig

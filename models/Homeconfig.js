@@ -76,6 +76,10 @@ let HomeConfigSchema = new Schema({
         type: Array,
         default: []
     },
+    menuCategoryLink:{
+        type: Array,
+        default: []
+    },
     textMentionLegale:{
         type: String,
         default: "default text"
@@ -112,6 +116,7 @@ let HomeConfigSchema = new Schema({
         type: String,
         default: "default text"
     },
+    owner: { type: Schema.Types.ObjectId, ref: 'Account' },
     date : {
         type: Date,
         default: Date.now

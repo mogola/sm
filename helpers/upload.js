@@ -291,7 +291,7 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
           <p>...en cours de telechargement</p>
         }
       </div>
-    {!imgDownloaded && !imageExist &&
+    {!imgDownloaded &&
         <div className="resizePreview">
           <img
             src=""
@@ -302,7 +302,7 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
         </div>
     }
     <div>
-    {!imageExist &&
+    {imageExist &&
       <img src={onGet}
         width="200"
         className={`preview${nameFile}`}

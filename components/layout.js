@@ -62,11 +62,13 @@ export default function Layout({ children, home, portfolio}) {
           </>
         ) : portfolio ? (
           <>
+          <div className="mainHeader">
             <h2 className={utilStyles.headingLg}>
               <Link href="/">
-                <a className={utilStyles.colorInherit}>{naming}</a>
+                <a className={`txtLogo ${utilStyles.colorInherit}`}>{naming}</a>
               </Link>
             </h2>
+          </div>
           </>
         ) : (
           <>
