@@ -44,7 +44,8 @@ export default function App({ Component, pageProps, config }) {
         <themeContextUser.Provider value={{
             getToken: tokenStorage,
             userIsConnected: userIsConnected,
-            userConnected: connected
+            userConnected: connected,
+            dataConfig: dataConfigs
         }}>
             <themeContextUser.Consumer>
                 {({userConnected}) => (

@@ -8,6 +8,8 @@
 
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Overpass:wght@900&display=swap');
+
 @import "layout.scss";
 
 html,
@@ -108,7 +110,7 @@ img {
     text-align: center;
 }
 
-// menu 
+// menu
 
 .mainMenu {
   width: 70%;
@@ -133,5 +135,29 @@ img {
     &:hover{
       text-decoration: none;
     }
+  }
+}
+
+// titleMainBlock
+.homeWrapper {
+  position: relative;
+  > div {
+    height: 100%;
+  }
+}
+.titleBlockHome {
+  padding:29px 104px;
+  position:absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  h3{
+    color: #FAFAFA;
+    font-family: 'Overpass', sans-serif;
+    font-size: 96px;
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 112px;
   }
 }

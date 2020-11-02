@@ -63,15 +63,6 @@ export default function Home({config}) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width:"100%",
-        zIndex: -1
-      }} className="homeImage">
-        <img src={configs['logoSiteUrl']} width="100%" height="auto"/>
-      </div>
       <Link href="/admin/dashboard">
         <a>Go to Dashboard</a></Link>
       <form onSubmit={submitForm}>
