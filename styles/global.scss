@@ -1,3 +1,13 @@
+
+@font-face {
+  font-family: 'brotherhoodregular';
+  src: url('../fonts/brotherhood-webfont.woff2') format('woff2'),
+       url('../fonts/brotherhood-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
 @import "layout.scss";
 
 html,
@@ -72,9 +82,55 @@ img {
 // manage header
 .mainHeader {
   padding:29px 104px;
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  align-items: center;
+
+  .divHeader {
+    width:30%;
+  }
   .txtLogo {
+    font-family: 'brotherhoodregular';
     &:hover {
       color: #fff;
+      text-decoration: none;
+    }
+  }
+}
+
+.txtLogo {
+    color: #FAFAFA;
+    font-family: 'brotherhoodregular';
+    font-size: 32px;
+    letter-spacing: 1.07px;
+    line-height: 45px;
+    text-align: center;
+}
+
+// menu 
+
+.mainMenu {
+  width: 70%;
+  align-items: center;
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    li {
+      padding: 0 20px;
+      a {
+        cursor: pointer;
+      }
+    }
+  }
+  .menuLink {
+      color: #FAFAFA;
+      font-size: 16px;
+      letter-spacing: 0;
+      line-height: 24px;
+    &:hover{
       text-decoration: none;
     }
   }

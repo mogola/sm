@@ -11,13 +11,13 @@ import Input from '../../components/Input'
 import InputConfig from '../../components/InputConfig'
 import UploadFile from './../../helpers/upload'
 import { getPostConfig } from '../api/home'
-import {themeContext, getUrlSaved} from './../../context/context'
+import { themeContext, getUrlSaved } from './../../context/context'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import { themeContextUser } from './../../context/contextUser'
 import { Button, Heading, Box, Loader, Tag, Form, Column } from 'react-bulma-components';
 
-const {Field, InputFile, Control} = Form
+const { Field, InputFile, Control } = Form
 export async function getStaticProps() {
   const config = await getPostConfig()
 
@@ -30,35 +30,35 @@ export async function getStaticProps() {
 }
 
 const addConfig = async (config) => {
-  try{
-    const res =  await fetch(`${baseUrl}/api/homeconfig`,{
-        method:"POST",
-        headers:{
-        'Content-Type':'application/json'
-        },
-        body:JSON.stringify({config:config})
-      })
+  try {
+    const res = await fetch(`${baseUrl}/api/homeconfig`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ config: config })
+    })
       .then((res) => {
-          console.log('post is added')
-          const data = res.json()
-          data.then(() => {
-            if(data.success){
-              // call function
-              return ""
-            }
-          })
-
+        console.log('post is added')
+        const data = res.json()
+        data.then(() => {
+          if (data.success) {
+            // call function
+            return ""
+          }
         })
-        .catch((err) => {
-          console.log("error during udpdating",err)
-        });
-    }
-    catch(err){
-      console.log(err)
-    }
+
+      })
+      .catch((err) => {
+        console.log("error during udpdating", err)
+      });
+  }
+  catch (err) {
+    console.log(err)
+  }
 }
 
-export default function config({config, connect}) {
+export default function config({ config, connect }) {
   console.log(config)
   const [labelInputItem, setInputItemLabel] = useState(Object.keys(config))
   const [dataConfig, setDataConfig] = useState(config)
@@ -78,30 +78,33 @@ export default function config({config, connect}) {
     try {
       await addConfig(dataConfig)
     }
-    catch(err){
+    catch (err) {
       console.log(err)
     }
   }
 
-  const handleChangeSocial = (i, name ,refInput) => {
-    const cloneArray = {...dataConfig}
+  const handleChangeSocial = (i, name, target) => {
+    const cloneArray = { ...dataConfig }
     console.log(cloneArray[name][i].name)
-    console.log("get current value", document.querySelectorAll("[i_name]")[i].value)
+    console.log("get current value", target.getAttributeNode("i_name"))
     let refInputName, refInputUrl;
-
-    refInputName = document.querySelectorAll("[i_name]")[i].value
-    refInputUrl = document.querySelectorAll("[i_url]")[i].value
-
-    console.log(refInputName, refInputUrl)
-    cloneArray[name][i].name = refInputName
-    cloneArray[name][i].url = refInputUrl
+    if (target.hasAttribute("i_name")) {
+      refInputName = target.value
+      cloneArray[name][i].name = refInputName
+      console.log(refInputName)
+    }
+    if (target.hasAttribute("i_url")) {
+      refInputUrl = target.value
+      cloneArray[name][i].url = refInputUrl
+      console.log(refInputUrl)
+    }
 
     setDataConfig(cloneArray)
     console.log("currentValue", cloneArray)
   }
 
   const handleChange = (i, target) => {
-    const cloneArray = {...dataConfig}
+    const cloneArray = { ...dataConfig }
     console.log(target.name)
     cloneArray[target.name] = target.value
 
@@ -110,55 +113,65 @@ export default function config({config, connect}) {
   }
   const updateConfig = async (e) => {
     e.preventDefault()
-    console.log('nameCategory',dataConfig["menuCategoryLink"])
+    console.log('nameCategory', dataConfig["menuCategoryLink"])
 
-    try{
-      const res =  await fetch(`${baseUrl}/api/homeconfig`,{
-        method:"PUT",
-        headers:{
-        'Content-Type':'application/json'
+    let menuCategoryExist;
+
+    if (dataConfig["menuCategoryLink"] === undefined) {
+      menuCategoryExist = { ...dataConfig, menuCategoryLink: [{ name: "test", url: "example of url" }] }
+    } else {
+      menuCategoryExist = { ...dataConfig }
+    }
+
+    console.log("update menucategoryLink", menuCategoryExist)
+
+    try {
+      const res = await fetch(`${baseUrl}/api/homeconfig`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json'
         },
-        body:JSON.stringify({"config":dataConfig})
+        body: JSON.stringify({ "config": menuCategoryExist })
       })
-      .then((res) => {
-        console.log("updating", dataConfig)
-        setDataConfig(dataConfig)
-        notifySuccess()
+        .then((res) => {
+          console.log("updating", menuCategoryExist)
+          setDataConfig(dataConfig)
+          notifySuccess()
         })
         .catch((err) => {
-          console.log("error during udpdating",err)
+          console.log("error during udpdating", err)
         });
-      }
-      catch(err){
-        console.log(err)
-      }
+    }
+    catch (err) {
+      console.log(err)
+    }
   }
   const deleteItem = (i, name) => {
-      let updateArray = {...dataConfig}
-      const arrayToDelete = [...inputSocial[name]]
-      console.log(arrayToDelete)
-      let newArrayDeleted = arrayToDelete.filter((value, index, arr) => {
-        return index !== i
-      })
+    let updateArray = { ...dataConfig }
+    const arrayToDelete = [...inputSocial[name]]
+    console.log(arrayToDelete)
+    let newArrayDeleted = arrayToDelete.filter((value, index, arr) => {
+      return index !== i
+    })
 
-      console.log(newArrayDeleted)
-      updateArray = {...updateArray, [name]: newArrayDeleted}
-      setInputSocial(updateArray)
-      setDataConfig(updateArray)
+    console.log(newArrayDeleted)
+    updateArray = { ...updateArray, [name]: newArrayDeleted }
+    setInputSocial(updateArray)
+    setDataConfig(updateArray)
   }
 
   const insertInputFile = (e, name) => {
     e.preventDefault()
-    let updateArray = {...dataConfig}
+    let updateArray = { ...dataConfig }
     console.log(updateArray[name])
     updateArray[name].push({
-      "name":"new",
-      "url":"http://www.example.com"
+      "name": "new",
+      "url": "http://www.example.com"
     })
 
     let newList = updateArray[name]
     console.log('newList', newList)
-    updateArray = {...updateArray, [name]: newList}
+    updateArray = { ...updateArray, [name]: newList }
     console.log('updateArray', updateArray, updateArray[name])
     setDataConfig(updateArray)
     console.log("update social", inputSocial)
@@ -168,149 +181,150 @@ export default function config({config, connect}) {
     let inputField = document.createElement('input')
     let list = document.getElementsByClassName("listChild")[0]
     console.log("input", inputField)
-    const insertFieldAbove = list.insertBefore(inputField,list.childNodes[0])
+    const insertFieldAbove = list.insertBefore(inputField, list.childNodes[0])
     return insertFieldAbove
   }
 
-  const saveList = () =>{
-    const cloneArray = {...dataConfig}
+  const saveList = () => {
+    const cloneArray = { ...dataConfig }
     setDataConfig(cloneArray)
   }
 
   const updateImageLogo = (classInputFile, name) => {
-    let updateArray = {...dataConfig}
+    let updateArray = { ...dataConfig }
     console.log("name", classInputFile)
     let getEl = document.getElementsByClassName(`${classInputFile}`)[0]
     let getValue = getEl.getAttribute("value")
     let urlLogo = getValue
-    updateArray = {...updateArray, [classInputFile]: urlLogo}
+    updateArray = { ...updateArray, [classInputFile]: urlLogo }
     setDataConfig(updateArray)
   }
 
   const notifySuccess = () => {
     toast.success("success", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     })
-}
+  }
 
-console.log(isUserAdmin)
+  console.log(isUserAdmin)
   return (
     <themeContextUser.Consumer>
       {({ userConnected }) => (
-      <themeContext.Provider value={{
-        onUrl: getUrlSaved
-      }}>
-        <themeContext.Consumer>
-              {({ onUrl }) => (
-          <Layout dashboard>
-          <Head>
-            <title>{siteTitle}</title>
-          </Head>
-          <ToastContainer />
-          {isUserAdmin &&
-          <div className="dash_container">
-            <form>
-              {labelInputItem.map((inputConfig, i) => (
-                <div key={i}>
-                  {(inputConfig === "logoSiteUrl" ||
-                  inputConfig === "logoSiteImageUrl") &&
-                    <div>
-                        <UploadFile
-                        imageExist={dataConfig[inputConfig] ? true : false}
-                        nameFile={inputConfig}
-                        callBack={notifySuccess}
-                        onGet={dataConfig[inputConfig]}
-                        getUrlImage={(e) => {
-                          updateImageLogo(inputConfig)
-                        }}/>
-                    </div>
-                  }
-                  {(inputConfig === "socialLink" ||
-                  inputConfig === "menuCategoryLink") &&
-                  <>
-                  <div className="listChild">
-                    {dataConfig[inputConfig].map((item, i) => (
-                      <Input
-                        key={i}
-                        value={item.name}
-                        url={item.url}
-                        i_name="true"
-                        i_url="true"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          deleteItem(i, inputConfig)}}
-                        onChange={(e) => {handleChangeSocial(i, inputConfig)}}
-                        />
-                    ))}
-                  </div>
-                  <Button.Group
-                    hasAddons= {false}
-                    position='centered'
-                    size='medium'
-                    style={{width: '100%', paddingTop: "15px"}}
-                  >
-                    <Button
-                    color="info"
-                    onClick={(e) => {
-                      insertInputFile(e, inputConfig)
-                    }}>Add field</Button>
-                    <Button
-                    color="success"
-                    style={{marginRight:"15px"}}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      saveList()
-                    }}>save</Button>
-                  </Button.Group>
-                  </>
-                  }
+        <themeContext.Provider value={{
+          onUrl: getUrlSaved
+        }}>
+          <themeContext.Consumer>
+            {({ onUrl }) => (
+              <Layout dashboard>
+                <Head>
+                  <title>{siteTitle}</title>
+                </Head>
+                <ToastContainer />
+                {isUserAdmin &&
+                  <div className="dash_container">
+                    <form>
+                      {labelInputItem.map((inputConfig, i) => (
+                        <div key={i}>
+                          {(inputConfig === "logoSiteUrl" ||
+                            inputConfig === "logoSiteImageUrl") &&
+                            <div>
+                              <UploadFile
+                                imageExist={dataConfig[inputConfig] ? true : false}
+                                nameFile={inputConfig}
+                                callBack={notifySuccess}
+                                onGet={dataConfig[inputConfig]}
+                                getUrlImage={(e) => {
+                                  updateImageLogo(inputConfig)
+                                }} />
+                            </div>
+                          }
+                          {(inputConfig === "socialLink" ||
+                            inputConfig === "menuCategoryLink") &&
+                            <>
+                              <div className="listChild">
+                                {dataConfig[inputConfig].map((item, i) => (
+                                  <Input
+                                    key={i}
+                                    value={item.name}
+                                    url={item.url}
+                                    i_name={dataConfig[inputConfig][i].name}
+                                    i_url={dataConfig[inputConfig][i].url}
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      deleteItem(i, inputConfig)
+                                    }}
+                                    onChange={(e) => { handleChangeSocial(i, inputConfig, e.target) }}
+                                  />
+                                ))}
+                              </div>
+                              <Button.Group
+                                hasAddons={false}
+                                position='centered'
+                                size='medium'
+                                style={{ width: '100%', paddingTop: "15px" }}
+                              >
+                                <Button
+                                  color="info"
+                                  onClick={(e) => {
+                                    insertInputFile(e, inputConfig)
+                                  }}>Add field</Button>
+                                <Button
+                                  color="success"
+                                  style={{ marginRight: "15px" }}
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    saveList()
+                                  }}>save</Button>
+                              </Button.Group>
+                            </>
+                          }
 
-                  {inputConfig !== "socialLink" &&
-                  inputConfig !== "menuCategoryLink" &&
-                  inputConfig !== "logoSiteUrl" &&
-                  inputConfig !== "logoSiteImageUrl" &&
-                  <InputConfig
-                      name={inputConfig}
-                      defaultValue={dataConfig[inputConfig]}
-                      onChange={(e) => {
-                        handleChange(i, e.target)
-                      }}
-                      type="text"
-                  />
-                    }
-                </div>
-              ))}
-              <Field style={{
-                position: 'fixed',
-                bottom: '0',
-                left: '0',
-                width: '100%',
-                padding: '15px',
-                background: '#fff'
-              }} kind="group">
-                <Button.Group
-                  hasAddons={false}
-                  position='centered'
-                  size='medium'
-                  style={{width: '100%'}}
-                >
-                  <Button color="success" style={{marginRight:"15px"}} onClick={(event)=> {submitForm(event)}}>Sauvegarder</Button>
-                  <Button color="info" onClick={(event)=> {updateConfig(event)}}>Update</Button>
-                </Button.Group>
-              </Field>
-            </form>
-          </div>}
-          {!isUserAdmin && (<div><p>Not authorized</p></div>)}
-        </Layout>)}
-        </themeContext.Consumer>
-      </themeContext.Provider>
-     )}
+                          {inputConfig !== "socialLink" &&
+                            inputConfig !== "menuCategoryLink" &&
+                            inputConfig !== "logoSiteUrl" &&
+                            inputConfig !== "logoSiteImageUrl" &&
+                            <InputConfig
+                              name={inputConfig}
+                              defaultValue={dataConfig[inputConfig]}
+                              onChange={(e) => {
+                                handleChange(i, e.target)
+                              }}
+                              type="text"
+                            />
+                          }
+                        </div>
+                      ))}
+                      <Field style={{
+                        position: 'fixed',
+                        bottom: '0',
+                        left: '0',
+                        width: '100%',
+                        padding: '15px',
+                        background: '#fff'
+                      }} kind="group">
+                        <Button.Group
+                          hasAddons={false}
+                          position='centered'
+                          size='medium'
+                          style={{ width: '100%' }}
+                        >
+                          <Button color="success" style={{ marginRight: "15px" }} onClick={(event) => { submitForm(event) }}>Sauvegarder</Button>
+                          <Button color="info" onClick={(event) => { updateConfig(event) }}>Update</Button>
+                        </Button.Group>
+                      </Field>
+                    </form>
+                  </div>}
+                {!isUserAdmin && (<div><p>Not authorized</p></div>)}
+              </Layout>)}
+          </themeContext.Consumer>
+        </themeContext.Provider>
+      )}
     </themeContextUser.Consumer>
   )
 }
