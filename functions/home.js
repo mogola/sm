@@ -12,3 +12,30 @@ export async function getPost() {
 
     return posts
 }
+
+export async function getPostConfig() {
+  const { db } = await connectToDatabase();
+
+  const posts = await db
+  .collection("homeconfigs")
+  .find({})
+  .sort({ "_id":1 })
+  .limit(20)
+  .toArray();
+
+  return posts
+}
+
+
+export async function getAllUserList() {
+  const { db } = await connectToDatabase();
+
+  const user = await db
+  .collection("accounts")
+  .find({})
+  .sort({ "_id":-1 })
+  .limit(40)
+  .toArray();
+
+  return user
+}
