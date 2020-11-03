@@ -11,13 +11,15 @@ const name = 'Your Name'
 export const siteTitle = 'Next.js Sample Website'
 
 export default function Layout({ children, home, portfolio }) {
-  const [dataConfigs, setDataConfig] = useState()
+  const [dataConfigs, setDataConfig] = useState([])
   const [naming, setNaming] = useState()
   const [menu, setMenu] = useState()
   const [imageHomeMain, setImageHomeMain] = useState()
   const [titleMain, setTitleMain] = useState()
   const [subTitleImage, setSubTitleImage] = useState()
-
+  const [textScrollTop, setTextScrollTop] = useState()
+  const [state, changeState] = useState({});
+  const [textAvailable, setTextAvailable] = useState([])
   let compareStorage = (initialStorage, newStorage) => {
     if(initialStorage === JSON.stringify(newStorage))
     return true
@@ -40,11 +42,49 @@ export default function Layout({ children, home, portfolio }) {
         resolve(dataStorage(data))
     }).then(result => {
       console.log(result)
-      setNaming(result.nameSite, result.menuCategoryLink)
-      setMenu(result.menuCategoryLink)
-      setImageHomeMain(result.logoSiteUrl)
-      setTitleMain(result.titleMain)
-      setSubTitleImage(result.subTitleImage)
+      const {
+        menuCategoryLink,
+      } = result
+
+      setMenu(menuCategoryLink)
+      setTextScrollTop(textScrollTop)
+      let dataCfs = Object.entries(result)
+      console.log(dataCfs)
+
+      let obj = [];
+      dataCfs.forEach(([key, value]) => {
+        console.log(key); // 'one'
+        console.log(value); // 1
+
+       obj.push({[key] : value})
+      });
+
+      const available = result.textAvailable.split(' ')
+      let arrayAvailable = []
+      let arrayConcat = [];
+      available.forEach(key => {
+        let keyLetter = key.split('')
+        keyLetter.push(' ')
+        arrayAvailable.push(keyLetter)
+      })
+
+      arrayAvailable.map((item, i) => {
+        console.log('item' ,item)
+        let accItem = item
+        arrayConcat = [...arrayConcat, ...accItem]
+      })
+
+      setTextAvailable(arrayConcat)
+
+      console.log('availableArray', arrayAvailable, arrayConcat)
+      console.log('available', available)
+      dataCfs.forEach(([key, value])=> changeState(prevState => ({...prevState, [key]: value })));
+      console.log(obj)
+      console.log(Object.fromEntries(Object.entries(dataCfs[0])))
+      console.log("dataConfigs",dataConfigs)
+
+      setDataConfig(obj)
+
       console.log(compareStorage(localStorage.getItem("info"),result))
       if(compareStorage(localStorage.getItem("info"),result)){
         console.log(true)
@@ -87,12 +127,13 @@ export default function Layout({ children, home, portfolio }) {
                   src="/images/profile.png"
                   className={`${styles.headerHomeImage} ${utilStyles.borderCircle}`}
                   alt={name}
+                  rel="preload"
                 />
-                <h1 className={utilStyles.heading2Xl}>{name}</h1>
+                <h1 className={utilStyles.heading2Xl}>{state.name}</h1>
               </>
             ) : portfolio ? (
               <>
-              <div class="homeWrapper">
+              <div className="homeWrapper">
                 <div style={{
                   position: 'absolute',
                   top: 0,
@@ -103,7 +144,7 @@ export default function Layout({ children, home, portfolio }) {
                     <div className="divHeader">
                       <h2 className={utilStyles.headingLg}>
                         <Link href="/">
-                          <a className={`txtLogo ${utilStyles.colorInherit}`}>{naming}</a>
+                          <a className={`txtLogo ${utilStyles.colorInherit}`}>{state.nameSite}</a>
                         </Link>
                       </h2>
                     </div>
@@ -123,12 +164,27 @@ export default function Layout({ children, home, portfolio }) {
                   </div>
                   <div className="titleBlockHome">
                     <h3>
-                      {titleMain}
+                      {state.titleMain}
                     </h3>
                     <h3>
-                      {subTitleImage}
+                      {state.subTitleImage}
                     </h3>
+                    <span className="categoryTextHome">Portfolio</span>
                   </div>
+                  <div className="infoContact">
+                    <span className="emailUser">{state.email}</span>
+                    <span className="contactUser">{state.textLocalisation}</span>
+                  </div>
+                  <div>
+                  <div className="pastilleAvailable">
+                    {textAvailable.map((letter, i) => (
+                      <span key={i} className={`char${i + 1}`}>
+                        {letter}
+                      </span>
+                    ))}
+                  </div>
+                  </div>
+                  <a className="scrollTopLink">{state.textScrollTop}</a>
                   </div>
                 <div style={{
                   position: 'relative',
@@ -137,7 +193,7 @@ export default function Layout({ children, home, portfolio }) {
                   width:"100%",
                   zIndex: -1
                 }} className="homeImage">
-                  <img src={imageHomeMain} width="100%" height="auto"/>
+                  <img data-img={state.menuCategoryLink} rel="preload" src={state.logoSiteUrl} width="100%" height="auto"/>
                 </div>
               </div>
               </>

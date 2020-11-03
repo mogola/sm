@@ -4,6 +4,7 @@ import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 import { getSortedPostsData, getPostFromDataBase} from '../lib/posts'
+import Sections from './../components/home/Section'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 
@@ -33,29 +34,6 @@ export default function Home({config}) {
       "urlImage" : urlImage});
 
      return addingPost
-
-
-    // const res = await fetch('api/addpost',
-    // {
-    //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    //   mode: 'cors', // no-cors, *cors, same-origin
-    //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    //   credentials: 'same-origin', // include, *same-origin, omit
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //   },
-    //   redirect: 'follow', // manual, *follow, error
-    //   referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    //   body: JSON.stringify({
-    //     "title" : title,
-    //     "urlImage" : urlImage
-    //   }) // body data type must match "Content-Type" header
-    // })
-
-    // return res.json()
-
-    //addingPost.then((data) => console.log(data))
   }
 
   return (
@@ -63,6 +41,7 @@ export default function Home({config}) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
+      <Sections title={configs.titleCategoryRecent}/>
       <Link href="/admin/dashboard">
         <a>Go to Dashboard</a></Link>
       <form onSubmit={submitForm}>
