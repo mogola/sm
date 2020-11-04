@@ -27,10 +27,15 @@ export default async (req,res)=>{
 
 const getAllConfig = async (req,res)=>{
     try{
+        let {headers} = req
+        console.log("cookie headers", headers['cookie'])
+        let getTokenUser;
 
-        let getTokenUser = req.headers['cookie'].split('token=')[1]
+        if(headers['cookie'] !== undefined){
+            getTokenUser = req.headers['cookie'].split('token=')[1]
+            console.log(decode(getTokenUser))
+        }
 
-        console.log(decode(getTokenUser))
         if(getTokenUser !== undefined || decode(getTokenUser) !== null){
             let {payload} = decode(getTokenUser)
         console.log('get req-header-x-auth', decode(getTokenUser))

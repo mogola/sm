@@ -34,7 +34,7 @@ const Sections = ({title = "", list = []}) => {
                             Digital painting
                         </Tag>
                     </Tag.Group>
-                    <Heading subTitle className="subTitleProjects">
+                    <Heading subtitle className="subTitleProjects">
                         Nom du projet
                     </Heading>
                     <Content className="contentText">

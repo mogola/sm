@@ -41,27 +41,25 @@ export default function Layout({ children, home, portfolio }) {
     await new Promise((resolve) => {
         resolve(dataStorage(data))
     }).then(result => {
-      console.log(result)
       const {
         menuCategoryLink,
       } = result
 
       setMenu(menuCategoryLink)
       setTextScrollTop(textScrollTop)
+
       let dataCfs = Object.entries(result)
       console.log(dataCfs)
 
       let obj = [];
       dataCfs.forEach(([key, value]) => {
-        console.log(key); // 'one'
-        console.log(value); // 1
-
        obj.push({[key] : value})
       });
 
       const available = result.textAvailable.split(' ')
       let arrayAvailable = []
       let arrayConcat = [];
+
       available.forEach(key => {
         let keyLetter = key.split('')
         keyLetter.push(' ')
@@ -69,28 +67,19 @@ export default function Layout({ children, home, portfolio }) {
       })
 
       arrayAvailable.map((item, i) => {
-        console.log('item' ,item)
         let accItem = item
         arrayConcat = [...arrayConcat, ...accItem]
       })
 
       setTextAvailable(arrayConcat)
 
-      console.log('availableArray', arrayAvailable, arrayConcat)
-      console.log('available', available)
       dataCfs.forEach(([key, value])=> changeState(prevState => ({...prevState, [key]: value })));
-      console.log(obj)
-      console.log(Object.fromEntries(Object.entries(dataCfs[0])))
-      console.log("dataConfigs",dataConfigs)
 
+      console.log(dataCfs)
       setDataConfig(obj)
-
-      console.log(compareStorage(localStorage.getItem("info"),result))
       if(compareStorage(localStorage.getItem("info"),result)){
-        console.log(true)
         setDataConfig(localStorage.getItem("info"))
       }else{
-        console.log(false)
         localStorage.setItem("info", JSON.stringify(result))
         setDataConfig(JSON.stringify(result))
       }
@@ -133,7 +122,7 @@ export default function Layout({ children, home, portfolio }) {
               </>
             ) : portfolio ? (
               <>
-              <div className="homeWrapper">
+              <div  className="homeWrapper">
                 <div style={{
                   position: 'absolute',
                   top: 0,

@@ -348,3 +348,15 @@ html .homeCategory {
     padding-bottom: 46px;
   }
 }
+
+//uploading
+
+.image-item {
+  display: flex;
+  margin: 10px 0;
+}
+.image-item__btn-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}

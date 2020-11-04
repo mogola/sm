@@ -9,10 +9,12 @@ export const projectConfig = [
     },
     {
         "name": "listCategory",
+        "option":["portfolio", "prestations", "services"],
         "type": "select"
     },
     {
         "name": "idCategory",
+        "option":["portfolio", "prestations", "services"],
         "type": "select"
     },
     {
