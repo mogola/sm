@@ -1,5 +1,4 @@
 import { Form, Box, Button, Icon } from 'react-bulma-components';
-import Icons from '../components/Icon'
 const {Field, Control, Label, Help, InputFile } = Form;
 
 const Files = ({name, value, onChange, ...rest}) => {
@@ -13,6 +12,7 @@ const Files = ({name, value, onChange, ...rest}) => {
                 boxed
                 name={name}
                 onChange={onChange}
+                color="info"
                 {...rest}
             />
         </Control>

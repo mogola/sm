@@ -11,6 +11,12 @@ import UploadFile from './../../helpers/upload'
 import { Button, Heading, Box, Loader, Tag, Form, Column } from 'react-bulma-components';
 import Files from './../../components/File'
 import ImageUploads from './../../components/ImageUpload'
+import baseUrl from '../../helpers/baseUrl'
+
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+
+
 console.log(projectConfig)
 
 export async function getStaticProps() {
@@ -23,6 +29,8 @@ export default function Default({dataProjects = projectConfig}) {
   const [configProject, setConfigProject] = useState(projectConfig)
   const [state, changeState] = useState({});
   const [value, setValue] = useState('');
+  const [imageDownloaded, setImageDownloaded] = useState();
+  const [onLoading, setOnLoading] = useState(false)
 
   const onChange = ({target}) => {
     // state$
@@ -32,24 +40,87 @@ export default function Default({dataProjects = projectConfig}) {
   }
 
   const onChangeState = (data) => {
-    console.log("data from child", data)
-    setValue(data)
-    changeState({...state, "arrayImage": data})
-    console.log("Form>", state);
+      console.log("data from child", data)
+      setValue(data)
+      changeState({...state, "arrayImage": data})
+      console.log("Form>", state);
+  }
+
+  const saveAllImage= () => {
+    console.log("imagesArrayState", state.arrayImage)
+    let imagesDetails = new Array()
+   let images = state.arrayImage
+
+   setOnLoading(true)
+   images.map((image, i) => {
+     imagesDetails.push({
+       data_url: image.data_url,
+       filename: image.file.name,
+       type: image.file.type.replace("image/", "")
+      })
+   })
+
+   console.log(imagesDetails)
+    fetch(`${baseUrl}/api/upload`,{
+      method:"POST",
+      headers:{
+      'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        images:imagesDetails,
+        multiple: true,
+      })
+    }).then(result => {
+      let resultData = result.json()
+      resultData.then(dataProject => {
+        console.log(dataProject)
+        console.log("resulting images", dataProject.urlDataList)
+        setImageDownloaded(dataProject.urlDataList)
+        notifySuccess()
+        setOnLoading(false)
+
+        setTimeout(() => {
+          setImageDownloaded([])
+        }, 4000)
+      })
+    })
+}
+
+const notifySuccess = () => {
+  toast.success("Save", {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    onOpen: () => {
+      setOnLoading(false)
+      console.log("success")
+    }
+  })
 }
   const submitForm = async () => {
   }
 
   useEffect(() => {
-    console.log("update state", state)
-  }, [state])
+    console.log("update state", state, imageDownloaded)
+  }, [state, imageDownloaded])
 
   return (
-    <Layout home>
+    <Layout dashboard>
       <Head>
         <title>New project</title>
       </Head>
+      <ToastContainer />
+      {onLoading && <Loader className="loadDiv" />}
       <form onSubmit={submitForm}>
+        {imageDownloaded && <div style={{position:"fixed", top:"50px", right:"50px"}}>
+          {imageDownloaded.map((image, i) => (
+              <img width={200} key={i} src={image} />
+          ))}
+          </div>}
           {dataProjects.map((item, i) => (
               <div key={`${item["name"]}${i}`}>
                   {item.type === "select" &&
@@ -82,6 +153,7 @@ export default function Default({dataProjects = projectConfig}) {
                     state={state}
                     name={item["name"]}
                     onChange={(e) => {onChangeState(e)}}
+                    onSaveImages={saveAllImage}
                   />
                 }
                 {
@@ -96,6 +168,15 @@ export default function Default({dataProjects = projectConfig}) {
                 }
               </div>
           ))}
+           <Button.Group
+              hasAddons={false}
+              position='centered'
+              size='medium'
+              style={{ width: '100%', padding:'20px' }}
+            >
+              <Button color="success" style={{marginRight:"15px"}} onClick={(event) => { submitForm(event) }}>Sauvegarder</Button>
+              <Button color="info" onClick={(event) => { updateConfig(event) }}>Update</Button>
+            </Button.Group>
       </form>
     </Layout>
   )

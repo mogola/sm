@@ -19,11 +19,20 @@ const ImageUploads = (props, {name = "", state}) => {
     setImages(imageList);
   };
 
+  const onImageSave = (event) => {
+    event.preventDefault();
+    let dataImageFromProject = props.onSaveImages();
+    console.log("images", dataImageFromProject)
+    return dataImageFromProject
+  }
+
   return (
+    <Box>
       <ImageUploading
         multiple
         value={images}
         onChange={handleChange}
+        onSaveImages={onImageSave}
         maxNumber={maxNumber}
         dataURLKey="data_url"
       >
@@ -41,7 +50,7 @@ const ImageUploads = (props, {name = "", state}) => {
             <Button
                 color="info"
                 name={name}
-              style={isDragging ? { color: "red" } : null}
+              style={isDragging ? { color: "red" } : null, {marginRight:"15px"}}
               onClick={(e) => {
                   e.preventDefault()
                   onImageUpload()
@@ -52,32 +61,41 @@ const ImageUploads = (props, {name = "", state}) => {
             </Button>
             &nbsp;
             <Button
+            style={{marginRight:"15px"}}
             color="danger"
-            onClick={() => {
-                onImageRemoveAll()
+            onClick={(e) => {
+              e.preventDefaut()
+                onImageRemoveAll(e)
             }}>Remove all images</Button>
             {imageList.map((image, index) => (
               <Control key={index} className="image-item">
-                <img style={{maxWidth:"200px"}} src={image.data_url} alt="" width="100%" max-width="150" height="auto" />
-                <div className="image-item__btn-wrapper">
-                  <Button
-                    color="info"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      onImageUpdate(index)
-                    }}>Update</Button>
-                  <Button
-                    color="danger"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      onImageRemove(index)}
-                    }>Remove</Button>
-                </div>
+                <Box style={{width: "100%", display: "flex"}}>
+                  <img style={{maxWidth:"200px"}} src={image.data_url} alt="" width="100%" max-width="150" height="auto" />
+                  <div className="image-item__btn-wrapper">
+                    <Button
+                      color="info"
+                      style={{marginBottom: '15px'}}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        onImageUpdate(index)
+                      }}>Update</Button>
+                    <Button
+                      color="danger"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        onImageRemove(index)}
+                      }>Remove</Button>
+                  </div>
+                </Box>
               </Control>
             ))}
+            <Button
+            color="success"
+            onClick={onImageSave}>Sauvegarder</Button>
           </Field>
         )}
       </ImageUploading>
+      </Box>
   );
 }
 

@@ -10,7 +10,7 @@ import fetch from 'node-fetch'
 const name = 'Your Name'
 export const siteTitle = 'Next.js Sample Website'
 
-export default function Layout({ children, home, portfolio }) {
+export default function Layout({ children, home, portfolio, dashboard }) {
   const [dataConfigs, setDataConfig] = useState([])
   const [naming, setNaming] = useState()
   const [menu, setMenu] = useState()
@@ -118,10 +118,22 @@ export default function Layout({ children, home, portfolio }) {
                   alt={name}
                   rel="preload"
                 />
-                <h1 className={utilStyles.heading2Xl}>{state.name}</h1>
+                <h1 className={utilStyles.heading2Xl}>{state.nameSite}</h1>
               </>
-            ) : portfolio ? (
+            ) : dashboard ? (
               <>
+                <h1 className={utilStyles.heading2Xl}>
+                  <span className={utilStyles.nameSite}>
+                    {state.nameSite}</span><span>Créer un projet</span>
+                </h1>
+              </>
+            )
+            : portfolio ? (
+              <>
+              <a className="menuB">
+                <span className="mTop"></span>
+                <span className="mBottom"></span>
+              </a>
               <div  className="homeWrapper">
                 <div style={{
                   position: 'absolute',
@@ -175,13 +187,7 @@ export default function Layout({ children, home, portfolio }) {
                   </div>
                   <a className="scrollTopLink">{state.textScrollTop}</a>
                   </div>
-                <div style={{
-                  position: 'relative',
-                  top: 0,
-                  left: 0,
-                  width:"100%",
-                  zIndex: -1
-                }} className="homeImage">
+                <div className="homeImage">
                   <img data-img={state.menuCategoryLink} rel="preload" src={state.logoSiteUrl} width="100%" height="auto"/>
                 </div>
               </div>
@@ -200,7 +206,7 @@ export default function Layout({ children, home, portfolio }) {
           {!home && (
             <div className={styles.backToHome}>
               <Link href="/">
-                <a>← Back to home</a>
+                <a className={utilStyles.linkInherit}>← Back to home</a>
               </Link>
             </div>
           )}
