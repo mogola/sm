@@ -40,3 +40,16 @@ export async function getAllUserList() {
 
   return user
 }
+
+export async function getAllPosts() {
+  const { db } = await connectToDatabase();
+
+  const posts = await db
+  .collection("projects")
+  .find({})
+  .sort({ "_id":-1 })
+  .limit(40)
+  .toArray();
+
+  return posts
+}

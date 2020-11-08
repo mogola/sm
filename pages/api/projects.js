@@ -3,6 +3,7 @@ import ProjectsSchema from '../../models/Projects'
 import RegisterModel from '../../models/RegisterModel'
 import Homeconfig from '../../models/Homeconfig'
 import mongoose from 'mongoose'
+import { projectConfig } from 'services/jsonProjects'
 const { decode } = require('../../helpers/jwt')
 
 initDB()
@@ -66,15 +67,23 @@ const getAllProjects = async (req,res)=>{
 
 const saveProjects = async (req,res)=>{
   const {projects} =  req.body
-  console.log(projects)
+  console.log("projects", projects)
   try{
         if(!projects){
             return res.status(422).json({error:"Please add all the fields"})
         }
    const getProjects = await new ProjectsSchema({
      _id: new mongoose.Types.ObjectId(),
-     projects
+     title: projects.title,
+     description:projects.description,
+     listCategory:projects.listCategory,
+     idCategory:projects.idCategory,
+     imageMainPrincipal:projects.mainImage,
+     imageArray:projects.arrayImage,
+     subTextDescription:projects.subTextDescription,
+     LinkNextProjectId:""
    }).save()
+
    res
    .status(201)
    .json(getProjects, {"success": true})

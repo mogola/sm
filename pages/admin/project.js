@@ -12,6 +12,7 @@ import { Button, Heading, Box, Loader, Tag, Form, Column } from 'react-bulma-com
 import Files from './../../components/File'
 import ImageUploads from './../../components/ImageUpload'
 import baseUrl from '../../helpers/baseUrl'
+import { getAllPosts } from '../api/home'
 
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
@@ -20,12 +21,18 @@ import { toast } from 'react-toastify';
 console.log(projectConfig)
 
 export async function getStaticProps() {
+  const posts = await getAllPosts()
+  console.log("data", posts)
+
   return {
-    props: {}
+    props: {
+      posts: JSON.parse(JSON.stringify(posts))
+    },
+    revalidate: 1, // In secondes
   }
 }
 
-export default function Default({dataProjects = projectConfig}) {
+export default function Default({dataProjects = projectConfig, posts}) {
   const [configProject, setConfigProject] = useState(projectConfig)
   const [state, changeState] = useState({});
   const [value, setValue] = useState('');
@@ -36,7 +43,14 @@ export default function Default({dataProjects = projectConfig}) {
     // state$
 
     console.log(target.name, target.value)
-    changeState({...state, [target.name]: target.value})
+
+    if(target.name === "listCategory"){
+      let pushCategory = new Array()
+      pushCategory.push(target.value)
+      changeState({...state, [target.name]: pushCategory})
+    }else{
+      changeState({...state, [target.name]: target.value})
+    }
   }
 
   const onChangeState = (data) => {
@@ -45,6 +59,13 @@ export default function Default({dataProjects = projectConfig}) {
       changeState({...state, "arrayImage": data})
       console.log("Form>", state);
   }
+
+  const onChangeStateMain = (data) => {
+    console.log("data from child", data)
+    setValue(data)
+    changeState({...state, "mainImage": data})
+    console.log("Form>", state);
+}
 
   const saveAllImage= () => {
     console.log("imagesArrayState", state.arrayImage)
@@ -61,6 +82,7 @@ export default function Default({dataProjects = projectConfig}) {
    })
 
    console.log(imagesDetails)
+
     fetch(`${baseUrl}/api/upload`,{
       method:"POST",
       headers:{
@@ -76,6 +98,7 @@ export default function Default({dataProjects = projectConfig}) {
         console.log(dataProject)
         console.log("resulting images", dataProject.urlDataList)
         setImageDownloaded(dataProject.urlDataList)
+        changeState({...state, "arrayImage": dataProject.urlDataList})
         notifySuccess()
         setOnLoading(false)
 
@@ -84,6 +107,43 @@ export default function Default({dataProjects = projectConfig}) {
         }, 4000)
       })
     })
+}
+
+const onSaveMainImage = () => {
+ setOnLoading(true)
+
+    let imagesDetails = new Array()
+   let images = state.mainImage
+
+   setOnLoading(true)
+   images.map((image, i) => {
+     imagesDetails.push({
+       data_url: image.data_url,
+       filename: image.file.name,
+       type: image.file.type.replace("image/", "")
+      })
+   })
+
+  fetch(`${baseUrl}/api/upload`,{
+    method:"POST",
+    headers:{
+    'Content-Type':'application/json'
+    },
+    body:JSON.stringify({
+      images:imagesDetails,
+      multiple: false,
+      mainImage: true,
+    })
+  }).then(result => {
+    let resultData = result.json()
+    resultData.then(dataProject => {
+      console.log(dataProject)
+      console.log("resulting images", dataProject.urlDataList)
+      changeState({...state, "mainImage": dataProject.urlDataList})
+      notifySuccess()
+      setOnLoading(false)
+    })
+  })
 }
 
 const notifySuccess = () => {
@@ -101,7 +161,27 @@ const notifySuccess = () => {
     }
   })
 }
-  const submitForm = async () => {
+  const submitForm = async (e) => {
+    e.preventDefault()
+    setOnLoading(true)
+    console.log("update effect", state)
+
+    fetch(`${baseUrl}/api/projects`,{
+      method:"POST",
+      headers:{
+      'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        projects:state,
+      })
+    }).then(result => {
+      let resultData = result.json()
+      resultData.then(dataProject => {
+        console.log("resulting post", dataProject)
+        notifySuccess()
+        setOnLoading(false)
+      })
+    })
   }
 
   useEffect(() => {
@@ -129,7 +209,7 @@ const notifySuccess = () => {
                     onChange={onChange}
                     name={item["name"]}
                     list={item["option"]}
-                    value={state[item.name]}
+                    value={state[item.name[0]]}
                   />
                 }
                 {item.type === "textarea" &&
@@ -142,10 +222,13 @@ const notifySuccess = () => {
                 {item.type === "file" &&
                 item.name !== "imageArray" &&
                 <>
-                <Files
-                  onChange={onChange}
-                  name={item["name"]}
-                />
+                <ImageUploads
+                    state={state}
+                    name={item["name"]}
+                    onChange={(e) => {onChangeStateMain(e)}}
+                    onSaveImages={onSaveMainImage}
+                    numbers={1}
+                  />
                 </>
                 }
                 {item.name === "imageArray" &&
@@ -154,6 +237,7 @@ const notifySuccess = () => {
                     name={item["name"]}
                     onChange={(e) => {onChangeState(e)}}
                     onSaveImages={saveAllImage}
+                    numbers={2}
                   />
                 }
                 {
@@ -178,6 +262,13 @@ const notifySuccess = () => {
               <Button color="info" onClick={(event) => { updateConfig(event) }}>Update</Button>
             </Button.Group>
       </form>
+      <>
+      {posts.map((post, i) => (
+        <div key={i} className="post">
+          <div data-id={post._id}>{post.title}</div>
+        </div>
+      ))}
+      </>
     </Layout>
   )
 }

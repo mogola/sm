@@ -4,9 +4,9 @@ const {Field, Control, Label, Help } = Form;
 
 import ImageUploading from "react-images-uploading";
 
-const ImageUploads = (props, {name = "", state}) => {
+const ImageUploads = (props, {name = "", numbers}) => {
   const [images, setImages] = useState([]);
-  const maxNumber = 69;
+  const maxNumber = props.numbers;
 
   const handleChange = (imageList, addUpdateIndex) => {
     // data for submit
@@ -28,6 +28,7 @@ const ImageUploads = (props, {name = "", state}) => {
 
   return (
     <Box>
+      <Label>{props.name}</Label>
       <ImageUploading
         multiple
         value={images}
