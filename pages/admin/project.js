@@ -265,7 +265,9 @@ const notifySuccess = () => {
       <>
       {posts.map((post, i) => (
         <div key={i} className="post">
-          <div data-id={post._id}>{post.title}</div>
+          <div data-id={post._id}>{post.title}
+          <img src={post.imageMainPrincipal} width={70} />
+          </div>
         </div>
       ))}
       </>
