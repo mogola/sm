@@ -8,12 +8,12 @@ import InputConfig from '../../components/InputConfig'
 import Textarea from '../../components/Textarea'
 import Selects from '../../components/Select'
 import UploadFile from './../../helpers/upload'
-import { Button, Heading, Box, Loader, Tag, Form, Column } from 'react-bulma-components';
+import { Button, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
 import Files from './../../components/File'
 import ImageUploads from './../../components/ImageUpload'
 import baseUrl from '../../helpers/baseUrl'
 import { getAllPosts } from '../api/home'
-
+import utilStyles from '../../styles/utils.module.css'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
@@ -263,13 +263,44 @@ const notifySuccess = () => {
             </Button.Group>
       </form>
       <>
+      <h1 className={utilStyles.heading2Xl}>
+        <span className={utilStyles.nameSite}>
+        Liste des projets</span>
+      </h1>
+      <Columns>
       {posts.map((post, i) => (
-        <div key={i} className="post">
-          <div data-id={post._id}>{post.title}
-          <img src={post.imageMainPrincipal} width={70} />
-          </div>
-        </div>
+         <Columns.Column size="half">
+        <Card key={i} className="post">
+          <Card.Image data-id={post._id} size="4by3" src={post.imageMainPrincipal} />
+          <Card.Content>
+          <Media>
+            <Media.Item renderAs="figure" position="left">
+              <Image size={64} alt="64x64" src="http://bulma.io/images/placeholders/128x128.png" />
+            </Media.Item>
+            <Media.Item>
+              <Heading size={4}>{post.title}</Heading>
+              <Heading subtitle size={6}>@johnsmith</Heading>
+            </Media.Item>
+          </Media>
+          <Content>
+            {post.description}
+            <br />
+            <time dateTime={post.date}>{post.date}</time>
+          </Content>
+          </Card.Content>
+          <Card.Footer>
+          <Card.Footer.Item renderAs="a" href="#Yes">Supprimer</Card.Footer.Item>
+          <Card.Footer.Item>
+            <Link href={'/project/[id]'} as={`/project/${post._id}`}>
+              <a>View Post</a>
+            </Link>
+          </Card.Footer.Item>
+          <Card.Footer.Item renderAs="a" href="#Maybe">Update</Card.Footer.Item>
+        </Card.Footer>
+        </Card>
+        </Columns.Column>
       ))}
+      </Columns>
       </>
     </Layout>
   )
