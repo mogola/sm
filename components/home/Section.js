@@ -11,7 +11,7 @@ import {
     Content
 } from 'react-bulma-components';
 
-const Sections = ({title = "", list = []}) => {
+const Sections = ({title = "", data = []}) => {
     return(<>
     <Section>
         <Container className="containerTitleSection">
@@ -21,33 +21,30 @@ const Sections = ({title = "", list = []}) => {
         </Container>
         <Container>
             <Columns className="homeCategory">
-                <Columns.Column size="half">
-                    <Image rounded={false} src="http://bulma.io/images/placeholders/640x384.png" size="3by2" />
+            {data.map((post, i) => (
+                <Columns.Column key={i} size="half">
+                    <Image rounded={false} src={post.imageMainPrincipal} size="3by2" />
                     <Tag.Group className="tagGroupPost">
                         <Tag className="recentDate">
-                            Septembre 2019
+                            {post.date}
                         </Tag>
                         <Tag>
-                            Illustration
-                        </Tag>
-                        <Tag>
-                            Digital painting
+                            {post.listCategory}
                         </Tag>
                     </Tag.Group>
                     <Heading subtitle className="subTitleProjects">
-                        Nom du projet
+                       {post.title}
                     </Heading>
                     <Content className="contentText">
                         <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac nulla consequat, euismod ipsum dictum, condimentum lectus. Sed rutrum lani…
+                        {post.subTextDescription}
                         </p>
                     </Content>
-                    <Link href="/">
-                        <a className="linkToProject">
-                            Voir le Projet
-                        </a>
-                    </Link>
+                        <Link href={'/project/[id]'} as={`/project/${post._id}`}>
+                            <a>Voir le projet</a>
+                        </Link>
                 </Columns.Column>
+                ))}
             </Columns>
         </Container>
     </Section>

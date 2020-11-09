@@ -5,22 +5,24 @@ import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 import { getSortedPostsData, getPostFromDataBase} from '../lib/posts'
 import Sections from './../components/home/Section'
+import Hometop from './../components/home/Hometop'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 
-import { getPostConfig } from './api/home'
+import { getPostConfig, getAllPosts} from './api/home'
 
 export async function getStaticProps() {
   const config = await getPostConfig()
-
+  const posts = await getAllPosts()
   return {
     props: {
-      config: JSON.parse(JSON.stringify(config[0]))
+      config: JSON.parse(JSON.stringify(config[0])),
+      posts: JSON.parse(JSON.stringify(posts))
     }
   }
 }
 
-export default function Home({config}) {
+export default function Home({config, posts}) {
   const [title, setTitle] = useState();
   const [urlImage, setUrlImage] = useState();
   const [configs, setConfigs] = useState(config)
@@ -37,11 +39,12 @@ export default function Home({config}) {
   }
 
   return (
-    <Layout portfolio>
+    <Layout none>
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <Sections title={configs.titleCategoryRecent}/>
+        <Hometop state={config}/>
+        <Sections data={posts} title={configs.titleCategoryRecent}/>
       <Link href="/admin/dashboard">
         <a>Go to Dashboard</a></Link>
       <form onSubmit={submitForm}>

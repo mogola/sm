@@ -10,7 +10,7 @@ import fetch from 'node-fetch'
 const name = 'Your Name'
 export const siteTitle = 'Next.js Sample Website'
 
-export default function Layout({ children, home, portfolio, dashboard }) {
+export default function Layout({ children, none, home, portfolio, dashboard }) {
   const [dataConfigs, setDataConfig] = useState([])
   const [naming, setNaming] = useState()
   const [menu, setMenu] = useState()
@@ -93,7 +93,7 @@ export default function Layout({ children, home, portfolio, dashboard }) {
   return (
     <themeContextUser.Consumer>
       {({ dataConfig }) => (
-        <div data={naming} className={portfolio ? "config.nameSite" : styles.container}>
+        <div data={naming} className={portfolio || none ? "config.nameSite" : styles.container}>
           <Head>
             <link rel="icon" href="/favicon.ico" />
             <meta
@@ -127,6 +127,9 @@ export default function Layout({ children, home, portfolio, dashboard }) {
                     {state.nameSite}</span><span>Créer un projet</span>
                 </h1>
               </>
+            )
+            : none ? (
+              <></>
             )
             : portfolio ? (
               <>
