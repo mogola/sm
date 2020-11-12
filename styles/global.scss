@@ -112,6 +112,13 @@ img {
   }
   .divHeader {
     width:30%;
+    .isOpen {
+      position: fixed;
+      z-index:10000;
+      width:100%;
+      top:0;
+      left:0;
+    }
     @include mobileView(){
       > h2 {
         margin: 0;
@@ -122,6 +129,10 @@ img {
   }
   .txtLogo {
     font-family: 'brotherhoodregular';
+    @include mobileView(){
+      font-size: 28px;
+      top: 18px;
+    }
     &:hover {
       color: #fff;
       text-decoration: none;
@@ -148,21 +159,55 @@ img {
 .mainMenu {
   width: 70%;
   align-items: center;
+  &.isOpen {
+    display:block;
+  }
   @include mobileView{
     display:none;
+    &.activeMobile {
+      width:100%;
+      height:100%;
+      position: fixed;
+      top:0;
+      left:0;
+      background:#000;
+      z-index: 2000;
+    }
   }
   ul {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
+    @include mobileView{
+      flex-direction: column;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+    }
     li {
       padding: 0 20px;
       &:last-child{
         padding: 0;
+        @include mobileView{
+          padding-top:20px;
+        }
       }
       a {
         cursor: pointer;
+      }
+      @include mobileView{
+        color: #FFFFFF;
+        font-family: Overpass;
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: 0;
+        line-height: 37px;
+        text-transform: uppercase;
+        + li {
+          padding-top:20px;
+        }
       }
     }
   }
@@ -172,6 +217,9 @@ img {
       letter-spacing: 0;
       line-height: 24px;
       font-family: 'Source Sans Pro', sans-serif;
+      @include mobileView{
+        font-size:32px;
+      }
     &:hover{
       text-decoration: none;
     }
@@ -309,6 +357,19 @@ img {
     right: initial;
     left: 24px;
     bottom: 110px;
+    display: flex;
+    flex-direction: column;
+
+    span {
+      padding-bottom: 5px;
+      letter-spacing:0.5px;
+    }
+    .emailUser {
+      order:2;
+    }
+    .contactUser {
+      order: 1;
+    }
   }
   span {
     color: #FAFAFA;
@@ -322,7 +383,7 @@ img {
       font-family: "Source Sans Pro";
       font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0;
+      letter-spacing: 0.5px;
       line-height: 16px;
       font-weight: 400;
     }
@@ -498,21 +559,50 @@ html .loadDiv {
   left:30px;
   cursor: pointer;
 
+  &.isClosed {
+    z-index:30000;
+    top: 34px;
+    left: 27px;
+  }
+
+  &.menuBurgerMobile.isOpen{
+    position:fixed;
+    z-index: 30000;
+    top: 34px;
+    left: 27px;
+  }
+
+  &.isOpen {
+    top: 36px;
+    left: 27px;
+
+    span{
+      height: 3px;
+    }
+    .mTop{
+      transform: rotate(45deg);
+    }
+    .mBottom{
+      bottom: 7px;
+      transform: rotate(-45deg);
+      transform-origin: center;
+    }
+  }
   @include mobileView(){
     display:block;
   }
-  span{
+  span {
     box-sizing: border-box;
     height: 1px;
     width: 40px;
     background: #F9F9F9;
     display:block;
     position: absolute;
-    &.mtop{
+    &.mtop {
       top: 0;
       left:0;
     }
-    &.mBottom{
+    &.mBottom {
       bottom: 0;
       left:0;
     }

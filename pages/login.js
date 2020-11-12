@@ -51,7 +51,8 @@ export default function Login({ connect }) {
             let userToken = sign({ email: body.email }, body)
             setTokenUser(userToken)
             setUserBody(body)
-            await apiUpload(`${baseUrl}/api/login/account`, 'POST', body, callback)
+            await
+            apiUpload(`${baseUrl}/api/login/account`, 'POST', body, callback)
         }
         catch (err) {
             console.log('err', err)
@@ -94,11 +95,16 @@ export default function Login({ connect }) {
                             payload.email === data.account.email &&
                             data.account.role === "admin") {
                             notifySuccess()
-                            setUserIsConnected(true)
+                            setUserIsConnected(data.success)
+                            setIsUserAdmin(data.success)
                             localStorage.setItem('userIsConnected', true)
                             document.cookie = `name=; path=/`;
                             document.cookie = `token=${localStorage.getItem('token')}; path=/`;
-                            router.push(`/admin/config`)
+
+                            setTimeout(() => {
+                                router.push(`/`)
+                            }, 1500)
+
                         } else {
                             localStorage.removeItem("token")
                         }

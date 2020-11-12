@@ -22,7 +22,7 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({config, posts}) {
+export default function Home({config, posts, connect}) {
   const [title, setTitle] = useState();
   const [urlImage, setUrlImage] = useState();
   const [configs, setConfigs] = useState(config)
@@ -43,7 +43,7 @@ export default function Home({config, posts}) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-        <Hometop state={config}/>
+        <Hometop state={config} connect={connect}/>
         <Sections data={posts} title={configs.titleCategoryRecent}/>
       <Link href="/admin/dashboard">
         <a>Go to Dashboard</a></Link>
