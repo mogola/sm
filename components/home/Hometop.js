@@ -23,6 +23,7 @@ const Hometop = ({state = '', connect}) => {
     const [isMobileMenu, setIsMobileMenu] = useState(false)
     const [isToggle, setIsToggle] = useState(false)
     const [isBackground, setIsBackground] = useState(state.colorBackgroundMenu)
+    const [isInnerWidth, setIsInnerWidth] = useState()
     const viewPortDetection = () => {
         console.log(window.innerWidth)
         if(window.innerWidth < isMobile){
@@ -40,6 +41,7 @@ const Hometop = ({state = '', connect}) => {
       console.log("console.log toggle", isToggle)
     }
     useEffect(() => {
+      setIsInnerWidth(window.innerWidth)
         const available = state.textAvailable.split(' ')
         let arrayAvailable = []
         let arrayConcat = [];
@@ -98,7 +100,9 @@ const Hometop = ({state = '', connect}) => {
                         </h2>
                       </div>
                       {state.menuCategoryLink &&
-                        <div style={isMobileMenu === true ? {backgroundColor: isBackground} : {backgroundColor: "none"}}
+                        <div
+                        data-ismobile={isMobileMenu}
+                        style={isMobileMenu ? {backgroundColor: isBackground} : {backgroundColor: "transparent"}}
                         className={`mainMenu ${isMobileMenu} ${isMobileMenu ? "activeMobile": "activeDesktop"} ${isToggle ? "isOpen" : "isClosed"}`}>
                           <ul>
                             {state.menuCategoryLink.map((item, i) => (
@@ -109,11 +113,18 @@ const Hometop = ({state = '', connect}) => {
                               </li>
                             ))}
                             {isUserAdmin &&
+                            <>
                             <li key="ezrze">
-                              <Link href="/admin/project">
-                                <a className="menuLink">Manage project</a>
+                              <Link href="/admin/config">
+                                <a className="menuLink">Manage globales</a>
                               </Link>
-                              </li>
+                            </li>
+                            <li key="eaze">
+                              <Link href="/admin/project">
+                                <a className="menuLink">Create project</a>
+                              </Link>
+                            </li>
+                            </>
                             }
                             {!isUserAdmin &&
                             <>

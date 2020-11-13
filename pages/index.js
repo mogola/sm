@@ -13,7 +13,7 @@ import { getPostConfig, getAllPosts} from './api/home'
 
 export async function getStaticProps() {
   const config = await getPostConfig()
-  const posts = await getAllPosts()
+  const posts = await getAllPosts(4)
   return {
     props: {
       config: JSON.parse(JSON.stringify(config[0])),

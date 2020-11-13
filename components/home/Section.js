@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import moment from 'moment'
 import {
     Container,
     Columns,
@@ -23,14 +24,14 @@ const Sections = ({title = "", data = []}) => {
             <Columns className="homeCategory">
             {data.map((post, i) => (
                 <Columns.Column key={i} size="half">
-                    <Image rounded={false} src={post.imageMainPrincipal} size="3by2" />
+                    <Image rounded={false} src={post.imageMainPrincipal} />
                     <Tag.Group className="tagGroupPost">
                         <Tag className="recentDate">
-                            {post.date}
+                            {moment(post.date).locale('fr').format('LL', 'fr')}
                         </Tag>
-                        <Tag>
-                            {post.listCategory}
-                        </Tag>
+                        {post.listCategory.map((tag, i) => (
+                            <Tag key={i}>{tag}</Tag>
+                        ))}
                     </Tag.Group>
                     <Heading subtitle className="subTitleProjects">
                        {post.title}
@@ -41,11 +42,16 @@ const Sections = ({title = "", data = []}) => {
                         </p>
                     </Content>
                         <Link href={'/project/[id]'} as={`/project/${post._id}`}>
-                            <a>Voir le projet</a>
+                            <a className="linkSee">Voir le projet</a>
                         </Link>
                 </Columns.Column>
                 ))}
             </Columns>
+            <Container className="containLink">
+                <Link href="/category/project">
+                    <a className="linkSee getOrange">Voir tous les projets</a>
+                </Link>
+            </Container>
         </Container>
     </Section>
     </>)

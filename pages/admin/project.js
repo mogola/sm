@@ -9,6 +9,7 @@ import Textarea from '../../components/Textarea'
 import Selects from '../../components/Select'
 import UploadFile from './../../helpers/upload'
 import { Button, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
+
 import Files from './../../components/File'
 import ImageUploads from './../../components/ImageUpload'
 import baseUrl from '../../helpers/baseUrl'
@@ -16,8 +17,9 @@ import { getAllPosts } from '../api/home'
 import utilStyles from '../../styles/utils.module.css'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
+import moment from 'moment'
 
-
+const {Field, Control} = Form
 console.log(projectConfig)
 
 export async function getStaticProps() {
@@ -38,7 +40,11 @@ export default function Default({dataProjects = projectConfig, posts}) {
   const [value, setValue] = useState('');
   const [imageDownloaded, setImageDownloaded] = useState();
   const [onLoading, setOnLoading] = useState(false)
-
+  const [booleanState, setBooleanState] = useState(false)
+  const [dataSelect, setDataSelect] = useState({})
+  const [tagsCategory, setTagsCategory] = useState([]);
+  const [idPost, setIdPost] = useState()
+  const [deleting, setDeleting] = useState(false)
   const onChange = ({target}) => {
     // state$
 
@@ -47,7 +53,12 @@ export default function Default({dataProjects = projectConfig, posts}) {
     if(target.name === "listCategory"){
       let pushCategory = new Array()
       pushCategory.push(target.value)
+      const checkValue = (arr, getValue) => {
+        return arr.some(val => val === getValue)
+      }
+      console.log(checkValue(tagsCategory, target.value))
       changeState({...state, [target.name]: pushCategory})
+
     }else{
       changeState({...state, [target.name]: target.value})
     }
@@ -164,8 +175,8 @@ const notifySuccess = () => {
   const submitForm = async (e) => {
     e.preventDefault()
     setOnLoading(true)
+    changeState({...state, listCategory: tagsCategory })
     console.log("update effect", state)
-
     fetch(`${baseUrl}/api/projects`,{
       method:"POST",
       headers:{
@@ -184,8 +195,64 @@ const notifySuccess = () => {
     })
   }
 
+  const addTag = (name) => {
+    let currentSelect = document.querySelector(`[name="${name}"]`)
+    console.log("current sel", currentSelect.value);
+    let listTags = tagsCategory
+    const checkValue = (arr, getValue) => {
+      return arr.some(val => val === getValue)
+    }
+
+    if(!checkValue(listTags, currentSelect.value)){
+      listTags.push(currentSelect.value)
+    }else{
+      console.log('exist deja')
+    }
+
+    console.log(listTags)
+    changeState({...state, "listTags":listTags})
+  }
+
+  const deleteTag = (index) => {
+    let arr = tagsCategory;
+    let getIndex = arr[index]
+    arr = arr.filter((value,index, arr) => {
+      console.log(arr[index], value, arr)
+      return value !== getIndex
+    })
+
+    setTagsCategory(arr)
+    console.log("array", arr)
+
+  }
+
+  const deleteProject = (id) => {
+    setOnLoading(true)
+    fetch(`${baseUrl}/api/projects`,{
+      method:"DELETE",
+      headers:{
+      'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        id:id,
+      })
+    }).then(result => {
+      let resultData = result.json()
+      resultData.then(dataProject => {
+        console.log("resulting post", dataProject)
+        notifySuccess()
+        setOnLoading(false)
+      })
+    })
+  }
+
   useEffect(() => {
     console.log("update state", state, imageDownloaded)
+    let selectAll = document.querySelectorAll('select')
+      for(var i = 0; i < selectAll.length; i++){
+        let currentSelector = document.querySelectorAll('select')[i]
+        currentSelector.setAttribute("value", currentSelector.options[0].text)
+      }
   }, [state, imageDownloaded])
 
   return (
@@ -204,13 +271,44 @@ const notifySuccess = () => {
           {dataProjects.map((item, i) => (
               <div key={`${item["name"]}${i}`}>
                   {item.type === "select" &&
+                  <>
                   <Selects
                     key={`${item["name"]}${i}`}
                     onChange={onChange}
                     name={item["name"]}
                     list={item["option"]}
-                    value={state[item.name[0]]}
+                    addtag={true}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      addTag(item["name"])}
+                    }
+                    value={state[item["name"]] === undefined ?
+                    state[item["name"]] :
+                    (state[item["name"]] === undefined ?
+                      state[item["name"]][0]
+                    :
+                    state[item["name"]]
+                    )
+                  }
                   />
+                  {item["name"] === 'listCategory' && <Field>
+                    {tagsCategory.map((tag, i)=>(
+                      <Tag
+                        style={{marginRight:"10px"}}
+                        color="info"
+                        key={i}>{tag}<a
+                        onClick={(e) => {
+                          e.preventDefault()
+                          deleteTag(i)
+                        }}
+                        className="deleteTag">
+                          X
+                        </a>
+                        </Tag>
+                    ))}
+                  </Field>
+                  }
+                  </>
                 }
                 {item.type === "textarea" &&
                 <Textarea
@@ -259,7 +357,10 @@ const notifySuccess = () => {
               style={{ width: '100%', padding:'20px' }}
             >
               <Button color="success" style={{marginRight:"15px"}} onClick={(event) => { submitForm(event) }}>Sauvegarder</Button>
-              <Button color="info" onClick={(event) => { updateConfig(event) }}>Update</Button>
+              <Button color="info" onClick={(event) => {
+                setDeleting(false)
+                updateConfig(event)
+              }}>Update</Button>
             </Button.Group>
       </form>
       <>
@@ -269,9 +370,9 @@ const notifySuccess = () => {
       </h1>
       <Columns>
       {posts.map((post, i) => (
-         <Columns.Column size="half">
-        <Card key={i} className="post">
-          <Card.Image data-id={post._id} size="4by3" src={post.imageMainPrincipal} />
+         <Columns.Column key={i} size="half">
+        <Card className="post">
+          <Card.Image data-id={post._id} src={post.imageMainPrincipal} />
           <Card.Content>
           <Media>
             <Media.Item renderAs="figure" position="left">
@@ -285,11 +386,17 @@ const notifySuccess = () => {
           <Content>
             {post.description}
             <br />
-            <time dateTime={post.date}>{post.date}</time>
+            <time dateTime={moment(post.date).utc().format('LL', 'fr')}>{moment(post.date).locale('fr').format('LL', 'fr')}</time>
           </Content>
           </Card.Content>
           <Card.Footer>
-          <Card.Footer.Item renderAs="a" href="#Yes">Supprimer</Card.Footer.Item>
+          <Card.Footer.Item
+            renderAs="a"
+           onClick={(e) => {
+             e.preventDefault()
+             setDeleting(true)
+             setIdPost(post._id)
+           }}>Supprimer</Card.Footer.Item>
           <Card.Footer.Item>
             <Link href={'/project/[id]'} as={`/project/${post._id}`}>
               <a>View Post</a>
@@ -302,6 +409,23 @@ const notifySuccess = () => {
       ))}
       </Columns>
       </>
+      {deleting && <div data-idpost={idPost} className="deletedPost">
+        <Field>
+          <Control>
+            <Heading>Etes vous sure ?</Heading>
+            <Button.Group>
+              <Button onClick={() =>{
+                 setDeleting(false)
+                deleteProject(idPost)
+              }} color="danger">Supprimer</Button>
+              <Button onClick={() => {
+                setDeleting(false)
+              }}
+              color="info">Annuler</Button>
+            </Button.Group>
+          </Control>
+        </Field>
+      </div>}
     </Layout>
   )
 }

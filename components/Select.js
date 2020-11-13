@@ -1,10 +1,10 @@
 import React, { useRef } from 'react'
-import { Form, Box } from 'react-bulma-components';
-const { Select, Field,Control, Label,} = Form;
+import { Form, Box, Button} from 'react-bulma-components';
+const { Select, Field,Control, Label} = Form;
 
 // selected={option === getref ? 'selected' : ''}
 
-const Selects = ({props, onChange, name, list = [], valueoption, ...rest }) => {
+const Selects = ({props, addtag, onChange, name, onClick, list = [], valueoption, ...rest }) => {
         return (<Box style={{marginBottom: "10px"}}>
             <Field>
                 <Control>
@@ -23,6 +23,9 @@ const Selects = ({props, onChange, name, list = [], valueoption, ...rest }) => {
                                 </option>
                             ))}
                         </Select>
+                        {addtag && name === 'listCategory' && <Button
+                            onClick={onClick}
+                        >Ajouter</Button>}
                 </Control>
             </Field>
         </Box>)

@@ -219,6 +219,22 @@ img {
       font-family: 'Source Sans Pro', sans-serif;
       @include mobileView{
         font-size:32px;
+        position: relative;
+        &:hover {
+          &:before {
+            display: block;
+          }
+        }
+        &:before {
+          content: "";
+          display:none;
+          position: absolute;
+          bottom: -6px;
+          left: 0;
+          background: #FF4000;
+          width: 100%;
+          height: 3px;
+        }
       }
     &:hover{
       text-decoration: none;
@@ -242,10 +258,13 @@ img {
 
     @include mobileView(){
       height: 568px;
+      overflow: hidden;
       img {
         position: absolute;
-        height: 100%;
+        min-height: 568px;
         width: auto;
+        max-width: initial;
+        transform:translateX(-50%)
       }
     }
   }
@@ -577,7 +596,7 @@ html .loadDiv {
     left: 27px;
 
     span{
-      height: 3px;
+      height: 1px;
     }
     .mTop{
       transform: rotate(45deg);
@@ -606,5 +625,53 @@ html .loadDiv {
       bottom: 0;
       left:0;
     }
+  }
+}
+
+html {
+  .linkSee {
+    color: #090909;
+    font-family: "Source Sans Pro";
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    line-height: 24px;
+    text-align: center;
+    text-transform:uppercase;
+    &:hover {
+      text-decoration:none;
+      color:#000;
+    }
+  }
+
+  .deleteTag{
+    text-decoration:none;
+    color:#fff;
+    font-family:Overpass;
+    position:relative;
+    top:2px;
+    padding-left: 5px;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.deletedPost{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  z-index:30000;
+  padding:20px;
+  background: #fff;
+  border: #FF4000;
+  border-radius: 10px;
+}
+
+.containLink{
+  text-align:right;
+  .getOrange {
+    color: #FF4000;
   }
 }

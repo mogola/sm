@@ -76,7 +76,7 @@ const saveProjects = async (req,res)=>{
      _id: new mongoose.Types.ObjectId(),
      title: projects.title,
      description:projects.description,
-     listCategory:projects.listCategory,
+     listCategory:projects.listTags,
      idCategory:projects.idCategory,
      imageMainPrincipal:projects.mainImage,
      imageArray:projects.arrayImage,
