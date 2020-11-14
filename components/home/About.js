@@ -21,7 +21,9 @@ const About = ({title = "", data = '', ...rest}) => {
         </Container>
         <Container className="contentSection">
             <Columns className="aboutSection">
+            <Columns.Column>
                 {data}
+            </Columns.Column>
             </Columns>
         </Container>
         <Container className="containLink">
