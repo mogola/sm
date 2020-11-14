@@ -28,7 +28,7 @@ const About = ({title = "", data = '', ...rest}) => {
         </Container>
         <Container className="containLink">
             <Link href="/about">
-                <a className="linkSee getOrange">En Savoir plus</a>
+                <a className="linkSee getOrange">En Savoir plus <span className="icoRight orangeSvg" width={26}></span></a>
             </Link>
         </Container>
     </Section>

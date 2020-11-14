@@ -6,6 +6,7 @@ const withFonts = require('next-fonts');
 
 module.exports = withFonts({
   // Target must be serverless
+  enableSvg: true,
   target: 'serverless',
   env: {
     production: process.env.NEXT_PUBLIC_URL_PRODUCTION,

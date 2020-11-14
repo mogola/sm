@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import moment from 'moment'
+import arrowRight from './../../public/images/right-arrow.svg'
 import {
     Container,
     Columns,
@@ -42,14 +43,14 @@ const Sections = ({title = "", data = [], ...rest}) => {
                         </p>
                     </Content>
                         <Link href={'/project/[id]'} as={`/project/${post._id}`}>
-                            <a className="linkSee">Voir le projet</a>
+                            <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
                         </Link>
                 </Columns.Column>
                 ))}
             </Columns>
             <Container className="containLink">
                 <Link href="/category/project">
-                    <a className="linkSee getOrange">Voir tous les projets</a>
+                    <a className="linkSee getOrange">Voir tous les projets <span className="icoRight orangeSvg" width={26}></span></a>
                 </Link>
             </Container>
         </Container>

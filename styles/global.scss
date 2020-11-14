@@ -745,3 +745,17 @@ html {
     }
   }
 }
+
+.icoRight {
+  display: inline-block;
+  position: relative;
+  top: 6px;
+  margin-left: 9px;
+  height: 22px;
+  width: 47px;
+  background-image: url('./../public/images/right-arrow.svg');
+  background-repeat: no-repeat;
+  &.orangeSvg{
+    filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+  }
+}
