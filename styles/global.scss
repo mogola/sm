@@ -440,14 +440,14 @@ img {
   margin-top: 80px;
 }
 
-html .titleMainCategory {
+html .titleMainCategory.title.is-1 {
   color: #090909;
   font-family: Overpass;
   font-size: 56px;
   font-weight: 800;
   letter-spacing: 0;
   line-height: 86px;
-  margin-bottom: 48px;
+  margin-bottom: 30px;
   @include mobileView() {
     color: #090909;
     font-family: Overpass;
@@ -673,5 +673,54 @@ html {
   text-align:right;
   .getOrange {
     color: #FF4000;
+  }
+}
+
+.section-home {
+  background: #DEDEDE;
+}
+
+//about
+
+html {
+  .section-about {
+    .contentSection {
+      font-size: 1em;
+      &:before{
+        content: "À propos";
+        position:absolute;
+        top: -106px;
+        left: -67px;
+        font-size: 15em;
+        font-family: "Source Sans Pro";
+        font-weight: 600;
+        color:#F5F5F5;
+        z-index:1;
+        @include mobileView{
+          font-size: 10em;
+          word-break: break-all;
+        }
+      }
+    }
+    .containerTitleSection {
+      .titleMainCategory {
+        color: #FF4000;
+      }
+    }
+    .aboutSection {
+      color: #FF4000;
+      font-family: "Source Sans Pro";
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      line-height: 40px;
+      max-width: 920px;
+      position:relative;
+      z-index:2;
+    }
+    .linkSee {
+      padding-top: 40px;
+      display: inline-block;
+    }
   }
 }

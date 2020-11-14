@@ -5,6 +5,7 @@ import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 import { getSortedPostsData, getPostFromDataBase} from '../lib/posts'
 import Sections from './../components/home/Section'
+import About from './../components/home/About'
 import Hometop from './../components/home/Hometop'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
@@ -43,8 +44,17 @@ export default function Home({config, posts, connect}) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-        <Hometop state={config} connect={connect}/>
-        <Sections data={posts} title={configs.titleCategoryRecent}/>
+        <Hometop state={config} connect={connect} />
+        <Sections
+          data={posts}
+          title={configs.titleCategoryRecent}
+          className="section-home"
+        />
+        <About
+          data={configs.textContentAbout}
+          title={configs.titleCategoryAbout}
+          className="section-about"
+        />
       <Link href="/admin/dashboard">
         <a>Go to Dashboard</a></Link>
       <form onSubmit={submitForm}>

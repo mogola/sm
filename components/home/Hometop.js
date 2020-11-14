@@ -40,6 +40,29 @@ const Hometop = ({state = '', connect}) => {
       setIsToggle(!isToggle)
       console.log("console.log toggle", isToggle)
     }
+    const scrollToTheView = () => {
+      let wrapper = document.querySelector(".homeWrapper");
+      console.log("wrapper", wrapper.offsetHeight)
+      let classNameExist = wrapper.getAttribute("class");
+      let verifyClassExist = classNameExist.split(" ");
+      console.log(verifyClassExist)
+
+      const verify = (val, arr) => {
+        return arr.some((value) => value === val)
+      }
+
+      if(!verify("scrolling", verifyClassExist)){
+        wrapper.setAttribute("class", `${classNameExist} scrolling`)
+      }else{
+        console.log("class Exist")
+      }
+
+      window.scroll({
+        top: wrapper.offsetHeight,
+        behavior: 'smooth'
+      })
+
+    }
     useEffect(() => {
       setIsInnerWidth(window.innerWidth)
         const available = state.textAvailable.split(' ')
@@ -166,7 +189,10 @@ const Hometop = ({state = '', connect}) => {
                       ))}
                     </div>
                     </div>
-                    <a className="scrollTopLink">{state.textScrollTop}</a>
+                    <a
+                      onClick={scrollToTheView}
+                      className="scrollTopLink"
+                    >{state.textScrollTop}</a>
                     </div>
                   <div className="homeImage">
                     <img data-img={state.menuCategoryLink} rel="preload" src={state.logoSiteUrl} width="100%" height="auto"/>

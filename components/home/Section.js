@@ -12,9 +12,9 @@ import {
     Content
 } from 'react-bulma-components';
 
-const Sections = ({title = "", data = []}) => {
+const Sections = ({title = "", data = [], ...rest}) => {
     return(<>
-    <Section>
+    <Section {...rest}>
         <Container className="containerTitleSection">
         <Heading className="titleMainCategory" size={1}>
           {title}
