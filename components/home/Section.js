@@ -42,14 +42,24 @@ const Sections = ({title = "", data = [], ...rest}) => {
                         {post.subTextDescription}
                         </p>
                     </Content>
-                        <Link href={'/project/[id]'} as={`/project/${post._id}`}>
+                        {/* <Link
+                            href={'/project/[id]'}
+                            as={`/project/${post._id}`}>
+                            <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
+                        </Link> */}
+                        <Link
+                            href={'/projet/[slug]'}
+                            as={`/projet/${encodeURIComponent(post.title)}`}
+                        >
                             <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
                         </Link>
                 </Columns.Column>
                 ))}
             </Columns>
             <Container className="containLink">
-                <Link href="/category/project">
+                <Link
+                    href={'/projets/[slug]'}
+                    as={`/projets/recents`}>
                     <a className="linkSee getOrange">Voir tous les projets <span className="icoRight orangeSvg" width={26}></span></a>
                 </Link>
             </Container>

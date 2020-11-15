@@ -36,7 +36,7 @@ const Prestation = ({title = "", data = '', ...rest}) => {
                             </span>
                         }
                         {i === 0 &&
-                            <span class="icon">
+                            <span className="icon">
                                 <FontAwesomeIcon icon="pencil-alt" size="xs" />
                             </span>
                         }
