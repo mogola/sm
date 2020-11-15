@@ -7,16 +7,17 @@ import baseUrl from '../../helpers/baseUrl'
 import Layout, { siteTitle } from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from '../../components/layout.module.css'
-import Input from '../../components/Input'
-import InputConfig from '../../components/InputConfig'
-import UploadFile from './../../helpers/upload'
 import { getPostConfig } from '../api/home'
 import { themeContext, getUrlSaved } from './../../context/context'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import { themeContextUser } from './../../context/contextUser'
+import Input from '../../components/Input'
+import InputConfig from '../../components/InputConfig'
+import UploadFile from './../../helpers/upload'
 import { Button, Heading, Box, Loader, Tag, Form, Column } from 'react-bulma-components';
 
+import { Editor } from '@tinymce/tinymce-react';
 const { Field, InputFile, Control } = Form
 export async function getStaticProps() {
   const config = await getPostConfig()
@@ -146,6 +147,18 @@ export default function config({ config, connect }) {
       console.log(err)
     }
   }
+
+  const handleChangeEditor = (target) => {
+    let getName = target.getElement().name
+    const cloneArray = { ...dataConfig }
+    console.log(getName)
+    cloneArray[getName] = target.getContent()
+
+    setDataConfig(cloneArray)
+    console.log("new value", dataConfig)
+    //console.log('target', target.getContent(), target)
+  }
+
   const deleteItem = (i, name) => {
     let updateArray = { ...dataConfig }
     const arrayToDelete = [...inputSocial[name]]
@@ -244,6 +257,37 @@ export default function config({ config, connect }) {
                                 }} />
                             </div>
                           }
+                          {
+                            (inputConfig === "textContentAbout") &&
+                            <>
+                            <label className="label" htmlFor={inputConfig}>
+                              {inputConfig}
+                            </label>
+                            <Editor
+                              apiKey="n20l3oxsnnev0ao8wjw8bqhpou0jajpz8ew2r3pysqf0mxgn"
+                              initialValue={dataConfig[inputConfig]}
+                              tagName={inputConfig}
+                              textareaName={inputConfig}
+                              init={{
+                                height: 500,
+                                menubar: false,
+                                plugins: [
+                                  'advlist autolink lists link image',
+                                  'charmap print preview anchor help',
+                                  'searchreplace visualblocks code',
+                                  'insertdatetime media table paste wordcount'
+                                ],
+                                toolbar:
+                                  'undo redo | formatselect | bold italic | \
+                                  alignleft aligncenter alignright | \
+                                  bullist numlist outdent indent | help | forecolor backcolor'
+                              }}
+                              onChange={({target}) => {
+                                handleChangeEditor(target)
+                              }}
+                            />
+                            </>
+                          }
                           {(inputConfig === "socialLink" ||
                             inputConfig === "menuCategoryLink") &&
                             <>
@@ -289,6 +333,7 @@ export default function config({ config, connect }) {
                             inputConfig !== "menuCategoryLink" &&
                             inputConfig !== "logoSiteUrl" &&
                             inputConfig !== "logoSiteImageUrl" &&
+                            inputConfig !== "textContentAbout" &&
                             <InputConfig
                               name={inputConfig}
                               defaultValue={dataConfig[inputConfig]}

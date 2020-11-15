@@ -21,8 +21,7 @@ const About = ({title = "", data = '', ...rest}) => {
         </Container>
         <Container className="contentSection">
             <Columns className="aboutSection">
-            <Columns.Column>
-                {data}
+            <Columns.Column dangerouslySetInnerHTML={{__html:data}}>
             </Columns.Column>
             </Columns>
         </Container>
