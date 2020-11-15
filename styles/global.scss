@@ -499,6 +499,10 @@ html .tagGroupPost.tags {
     margin: 0 32px 0 0;
     display: block;
     color: #737373;
+    @include mobileView{
+      display: block;
+      width: 100%;
+    }
     &:before {
       content:"";
       height: 20px;
