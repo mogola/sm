@@ -206,7 +206,7 @@ export default function Layout({ children, none, home, portfolio, dashboard }) {
                 )}
           </header>
           <main>{children}</main>
-          {!home && (
+          {!none && (
             <div className={styles.backToHome}>
               <Link href="/">
                 <a className={utilStyles.linkInherit}>← Back to home</a>

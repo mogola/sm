@@ -32,6 +32,7 @@ export async function getStaticProps() {
 
 const addConfig = async (config) => {
   try {
+    console.log("new data", config)
     const res = await fetch(`${baseUrl}/api/homeconfig`, {
       method: "POST",
       headers: {
@@ -75,7 +76,6 @@ export default function config({ config, connect }) {
 
   const submitForm = async (event) => {
     event.preventDefault();
-
     try {
       await addConfig(dataConfig)
     }
@@ -97,6 +97,11 @@ export default function config({ config, connect }) {
     if (target.hasAttribute("i_url")) {
       refInputUrl = target.value
       cloneArray[name][i].url = refInputUrl
+      console.log(refInputUrl)
+    }
+    if (target.hasAttribute("i_content")) {
+      refInputUrl = target.value
+      cloneArray[name][i].content = refInputUrl
       console.log(refInputUrl)
     }
 
@@ -122,6 +127,10 @@ export default function config({ config, connect }) {
       menuCategoryExist = { ...dataConfig, menuCategoryLink: [{ name: "test", url: "example of url" }] }
     } else {
       menuCategoryExist = { ...dataConfig }
+    }
+
+    if(config["textContentServices"] === undefined){
+      menuCategoryExist = {...dataConfig, textContentServices: []}
     }
 
     console.log("update menucategoryLink", menuCategoryExist)
@@ -177,10 +186,17 @@ export default function config({ config, connect }) {
     e.preventDefault()
     let updateArray = { ...dataConfig }
     console.log(updateArray[name])
+    if(name !== "textContentServices"){
     updateArray[name].push({
       "name": "new",
       "url": "http://www.example.com"
     })
+  }else{
+    updateArray[name].push({
+      "name": "new",
+      "content": "example text"
+    })
+  }
 
     let newList = updateArray[name]
     console.log('newList', newList)
@@ -288,6 +304,46 @@ export default function config({ config, connect }) {
                             />
                             </>
                           }
+                          {inputConfig === "textContentServices" &&
+                            <>
+                              <div className="listChild">
+                                {dataConfig[inputConfig].map((item, i) => (
+                                  <Input
+                                    key={i}
+                                    value={item.name}
+                                    url={item.url}
+                                    nameReference={inputConfig}
+                                    i_content={dataConfig[inputConfig][i].content}
+                                    i_name={dataConfig[inputConfig][i].name}
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      deleteItem(i, inputConfig)
+                                    }}
+                                    onChange={(e) => { handleChangeSocial(i, inputConfig, e.target) }}
+                                  />
+                                ))}
+                              </div>
+                              <Button.Group
+                                hasAddons={false}
+                                position='centered'
+                                size='medium'
+                                style={{ width: '100%', paddingTop: "15px" }}
+                              >
+                                <Button
+                                  color="info"
+                                  onClick={(e) => {
+                                    insertInputFile(e, inputConfig)
+                                  }}>Add field</Button>
+                                <Button
+                                  color="success"
+                                  style={{ marginRight: "15px" }}
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    saveList()
+                                  }}>save</Button>
+                              </Button.Group>
+                            </>
+                          }
                           {(inputConfig === "socialLink" ||
                             inputConfig === "menuCategoryLink") &&
                             <>
@@ -297,6 +353,7 @@ export default function config({ config, connect }) {
                                     key={i}
                                     value={item.name}
                                     url={item.url}
+                                    nameReference={inputConfig}
                                     i_name={dataConfig[inputConfig][i].name}
                                     i_url={dataConfig[inputConfig][i].url}
                                     onClick={(e) => {
@@ -331,6 +388,7 @@ export default function config({ config, connect }) {
 
                           {inputConfig !== "socialLink" &&
                             inputConfig !== "menuCategoryLink" &&
+                            inputConfig !== "textContentServices" &&
                             inputConfig !== "logoSiteUrl" &&
                             inputConfig !== "logoSiteImageUrl" &&
                             inputConfig !== "textContentAbout" &&

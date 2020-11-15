@@ -657,7 +657,7 @@ html {
     text-transform:uppercase;
     &:hover {
       text-decoration:none;
-      color:#000;
+      color:inherit;
     }
     @include mobileView{
       font-weight: 600;
@@ -701,14 +701,100 @@ html {
 html{
   .section-home {
     background: #DEDEDE;
-    padding:48px 24px;
+    padding:0 24px 88px;
+    .titleMainCategory{
+      margin-top:48px;
+    }
   }
 }
 
 //about
 
 html {
+  // services prestations
+  .containerTitleSection {
+    overflow: hidden;
+  }
+  .section-prestation {
+    background: #2C2B2B;
+    padding:0 24px 88px;
+    .contentSection {
+      color: #FAFAFA;
+
+    }
+    .serviceSection {
+      @include mobileView{
+        flex-direction: column;
+      }
+      .column{
+        @include mobileView{
+          padding-top: 24px;
+        }
+        + .column{
+          padding-left: 120px;
+          @include mobileView{
+            padding: 40px .75rem 0;
+          }
+        }
+      }
+    }
+
+    .icon {
+      border: 1px solid #FF4000;
+      margin-bottom: 24px;
+      height: 48px;
+      width: 48px;
+      display: block;
+      position: relative;
+      svg {
+        width: 62%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+    .titleServices{
+      color: #FAFAFA;
+      font-family: Overpass;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 37px;
+      &:after {
+        content:"";
+        height: 1px;
+        width: 48px;
+        border: 1px solid #737373;
+        display: block;
+        margin-top: 16px;
+      }
+    }
+    .contentServices {
+      color: #FAFAFA;
+      font-family: "Source Sans Pro";
+      font-size: 16px;
+      letter-spacing: 0;
+      line-height: 24px;
+    }
+    .linkSee {
+      color: #FAFAFA;
+    }
+    .flexEndContent {
+      align-self: flex-end;
+    }
+    .icoRight {
+      filter: invert(1);
+    }
+    .containerTitleSection {
+      .titleMainCategory {
+        color: #FAFAFA;
+        margin-top:48px;
+      }
+    }
+  }
   .section-about {
+    padding:0 24px 88px;
     .contentSection {
       font-size: 1em;
       @include mobileView{
@@ -735,6 +821,7 @@ html {
     .containerTitleSection {
       .titleMainCategory {
         color: #FF4000;
+        margin-top:48px;
       }
     }
     .aboutSection {
@@ -747,12 +834,14 @@ html {
       max-width: 920px;
       position:relative;
       z-index:2;
+      text-transform:uppercase;
       @include mobileView{
         font-size: 16px;
         letter-spacing: 0;
         line-height: 24px;
       }
     }
+
     .containLink{
       @include mobileView {
         text-align: left;
@@ -761,6 +850,68 @@ html {
     .linkSee {
       padding-top: 40px;
       display: inline-block;
+    }
+  }
+}
+
+html {
+  .section-footer {
+    background:#090909;
+    .listMenuFooter {
+      display: flex;
+      padding-bottom: 72px;
+      li {
+        + li {
+          padding-left: 38px;
+        }
+        a{
+          color: #FAFAFA;
+          font-family: "Source Sans Pro";
+          font-size: 16px;
+          font-weight: 300;
+          letter-spacing: 0;
+          line-height: 24px;
+        }
+      }
+    }
+    .titleSubFooter {
+      color: #FFFFFF;
+      font-family: "Source Sans Pro";
+      font-size: 24px;
+      letter-spacing: 0;
+      line-height: 40px;
+      font-weight: normal;
+    }
+    .partFooter {
+      li{
+        list-style-type: none;
+        a {
+          color: #737373;
+          font-family: "Source Sans Pro";
+          font-size: 24px;
+          letter-spacing: 0;
+          line-height: 40px;
+          text-decoration: underline;
+          font-weight: 500;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+    .txtLegale {
+      padding-top: 130px;
+      p, .content {
+        color: #FFFFFF;
+        font-family: "Source Sans Pro";
+        font-size: 14px;
+        letter-spacing: 0;
+        line-height: 20px;
+        a{
+          text-decoration: none;
+          color: #fff;
+        }
+      }
     }
   }
 }

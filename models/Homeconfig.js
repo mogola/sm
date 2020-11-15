@@ -52,6 +52,10 @@ let HomeConfigSchema = new Schema({
         type: String,
         default: "default text"
     },
+    textContentServices: {
+        type: Array,
+        default: []
+    },
     titleBlocOne: {
         type: String,
         default: "default text"

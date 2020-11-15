@@ -6,7 +6,9 @@ import Link from 'next/link'
 import { getSortedPostsData, getPostFromDataBase} from '../lib/posts'
 import Sections from './../components/home/Section'
 import About from './../components/home/About'
+import Prestation from './../components/home/Prestation'
 import Hometop from './../components/home/Hometop'
+import Footer from './../components/home/Footer'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 
@@ -55,7 +57,17 @@ export default function Home({config, posts, connect}) {
           title={configs.titleCategoryAbout}
           className="section-about"
         />
-      <Link href="/admin/dashboard">
+        <Prestation
+          data={configs.textContentServices}
+          title={configs.textCategoryServices}
+          className="section-prestation"
+        />
+        <Footer
+          menu={configs.menuCategoryLink}
+          data={configs}
+          className="section-footer"
+        />
+      {/* <Link href="/admin/dashboard">
         <a>Go to Dashboard</a></Link>
       <form onSubmit={submitForm}>
         <div className="title_p">
@@ -90,14 +102,14 @@ export default function Home({config, posts, connect}) {
           </li>
         ))}
       </ul> */}
-      <section className={utilStyles.headingMd}>
+      {/* <section className={utilStyles.headingMd}>
         <p>Captain Tsubasa</p>
         <p><Link href="/posts/first-post"><a>Go to post</a></Link></p>
         <p>
           (This is a sample website - you’ll be building a site like this on{' '}
           <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
         </p>
-      </section>
+      </section>  */}
       {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
