@@ -33,31 +33,31 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                             <Content className="info">
                             <Tag.Group className="tagGroupPost">
                                 <Tag className="recentDate">
-                                    {moment(post.date).locale('fr').format('LL', 'fr')}
+                                    {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
                                 </Tag>
                                 {post.listCategory.map((tag, i) => (
                                     <Tag key={i}>{tag}</Tag>
                                 ))}
                             </Tag.Group>
-                            <Heading subtitle className="subTitleProjects">
-                            {post.title}
-                            </Heading>
-                            <Content className="contentText">
-                                <p>
-                                {post.subTextDescription}
-                                </p>
-                            </Content>
-                                {/* <Link
-                                    href={'/project/[id]'}
-                                    as={`/project/${post._id}`}>
-                                    <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
-                                </Link> */}
-                                <Link
-                                    href={'/projet/[slug]'}
-                                    as={`/projet/${encodeURIComponent(post.title)}`}
-                                >
-                                    <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
-                                </Link>
+                            <div className="center-category">
+                                <Heading className="subTitleMainProject" size={1}>
+                                {post.title}
+                                </Heading>
+                                <Content className="contentText">
+                                    <p>
+                                    {post.subTextDescription}
+                                    </p>
+                                </Content>
+                                </div>
+                                <div className="indexZone">
+                                   <span className="nbItem">{`0${i+1}`}</span>
+                                   <Link
+                                        href={'/projet/[slug]'}
+                                        as={`/projet/${encodeURIComponent(post.title)}`}
+                                    >
+                                        <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
+                                    </Link>
+                                </div>
                                 </Content>
                             </Columns.Column>
                             </Container>

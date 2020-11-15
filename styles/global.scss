@@ -121,6 +121,14 @@ img {
       width:100%;
       top:0;
       left:0;
+      .txtLogo{
+        @include mobileView{
+          .mainMenuNoHome &{
+            color:#fff;
+            top:16px;
+          }
+        }
+      }
     }
     @include mobileView(){
       > h2 {
@@ -135,6 +143,9 @@ img {
     @include mobileView(){
       font-size: 28px;
       top: 18px;
+      .mainMenuNoHome &{
+        top:8px;
+      }
     }
     &:hover {
       color: #fff;
@@ -159,6 +170,9 @@ img {
 
 // menu
 .mainMenuNoHome {
+  @include mobileView{
+    height: 56px;
+  }
   .mainHeader{
     padding-top: 0;
     padding-bottom: 0;
@@ -172,10 +186,25 @@ img {
     align-items: center;
     align-self: flex-end;
     justify-content: flex-end;
+    @include mobileView{
+      display: none;
+      &.activeMobile {
+        width:100%;
+        height:100vh;
+        position: fixed;
+        top:0;
+        left:0;
+        background:#000;
+        z-index: 2000;
+      }
+    }
     ul {
       li{
         a{
           color: #090909;
+          @include mobileView{
+            color: #fff;
+          }
         }
       }
     }
@@ -514,6 +543,10 @@ html .tagGroupPost.tags {
     color:#FF4000;
     display: inline-block;
     background: none;
+
+    .section-category &{
+      color: #FAFAFA;
+    }
   }
   .recentDate {
     position: relative;
@@ -521,6 +554,9 @@ html .tagGroupPost.tags {
     margin: 0 32px 0 0;
     display: block;
     color: #737373;
+    .section-category &{
+      color: #FAFAFA;
+    }
     @include mobileView{
       display: block;
       width: 100%;
@@ -550,6 +586,13 @@ html .subTitleProjects:not(:last-child){
     line-height: 37px;
     margin-bottom: 16px;
     padding: 0;
+}
+
+html .subTitleMainProject{
+  font-family: Overpass;
+  @include mobileView{
+    font-size: 24px !important;
+  }
 }
 
 html .contentText {
@@ -628,6 +671,9 @@ html .loadDiv {
     z-index:30000;
     top: 34px;
     left: 27px;
+    .mainMenuNoHome &{
+      top: 23px;
+    }
   }
 
   &.menuBurgerMobile.isOpen{
@@ -641,6 +687,13 @@ html .loadDiv {
     top: 36px;
     left: 27px;
 
+    @include mobileView{
+      span{
+        .mainMenuNoHome &{
+          background:#fff;
+        }
+      }
+    }
     span{
       height: 1px;
     }
@@ -663,6 +716,10 @@ html .loadDiv {
     background: #F9F9F9;
     display:block;
     position: absolute;
+    .mainMenuNoHome &{
+      background:#000;
+
+    }
     &.mtop {
       top: 0;
       left:0;
@@ -734,6 +791,125 @@ html{
     .mainProject{
       margin: 0;
       padding: 0;
+      .contentText{
+        p{
+          color: #FAFAFA;
+          font-family: "Source Sans Pro";
+          font-size: 24px;
+          letter-spacing: 1px;
+          line-height: 40px;
+          font-weight: normal;
+          text-transform:uppercase;
+          strong{
+            color:#FF4000;
+          }
+
+        }
+      }
+      .content{
+        &.info{
+          padding:106px 104px;
+          background: #090909;
+          display: flex;
+          align-items:stretch;
+          position: relative;
+          @include mobileView{
+            flex-direction: column;
+            padding: 40px 24px;
+          }
+          .center-category{
+            position: relative;
+            flex-grow: 2;
+            p{
+              @include mobileView{
+                color: #FFFFFF;
+                font-family: "Source Sans Pro";
+                font-size: 16px;
+                font-weight: 600;
+                letter-spacing: 0;
+                line-height: 24px;
+                text-transform: initial;
+              }
+            }
+          }
+          .indexZone{
+            flex-grow: 1;
+            position: relative;
+            @include mobileView{
+              position: static;
+              padding-top:40px;
+              font-size:16px;
+            }
+            .nbItem {
+              color: #FAFAFA;
+              font-family: Overpass;
+              font-size: 56px;
+              font-weight: 800;
+              letter-spacing: 0;
+              line-height: 86px;
+              @include mobileView{
+                position: absolute;
+                top: 60px;
+                right: 24px;
+                font-size:24px;
+              }
+            }
+
+            .linkSee {
+              position: absolute;
+              bottom: 0;
+              left:0;
+              color:#FAFAFA;
+              font-weight: normal;
+              font-size:14px;
+              @include mobileView{
+                position: static;
+              }
+              .icoRight{
+                filter: invert(1);
+              }
+            }
+          }
+          .tags{
+            padding-top:0;
+            flex-grow: 1;
+          }
+          .tag{
+            color: #FAFAFA;;
+            font-family: "Source Sans Pro";
+            font-size: 16px;
+            letter-spacing: 0;
+            line-height: 24px;
+            text-transform: capitalize;
+            font-weight: normal;
+            &.recentDate {
+              color: #FFFFFF;
+              font-family: "Source Sans Pro";
+              font-size: 24px;
+              font-weight: bold;
+              padding-bottom: 51px;
+              letter-spacing: 0;
+              line-height: 40px;
+              text-transform: capitalize;
+              display:block;
+              width:100%;
+              @include mobileView{
+                padding-bottom:7px;
+                font-size: 16px;
+              }
+              &:before {
+                display: none;
+              }
+            }
+          }
+          @include mobileView{
+            padding: 48px 24px;
+          }
+          * {
+            color:#fafafa;
+          }
+        }
+      }
     }
 
     .mainImageCategory{
