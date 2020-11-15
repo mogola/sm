@@ -245,6 +245,11 @@ img {
 // titleMainBlock
 .homeWrapper {
   position: relative;
+  height: 100vh;
+  max-height:900px;
+  @include mobileView{
+    max-height: initial;
+  }
   > div {
     height: 100%;
   }
@@ -253,18 +258,24 @@ img {
     position: relative;
     top: 0;
     left: 0;
-    width: 100%;
+    width: auto;
+    max-width: initial;
+    max-height: 900px;
     z-index: -1;
-
+    height: 100vh;
+    img {
+      max-width: initial;
+    }
     @include mobileView(){
-      height: 568px;
+      height: 100vh;
       overflow: hidden;
+      max-height:initial;
       img {
         position: absolute;
-        min-height: 568px;
         width: auto;
         max-width: initial;
-        transform:translateX(-50%)
+        transform:translateX(-50%);
+        height: 100vh;
       }
     }
   }
@@ -684,9 +695,11 @@ html {
     color: #FF4000;
   }
 }
-
-.section-home {
-  background: #DEDEDE;
+html{
+  .section-home {
+    background: #DEDEDE;
+    padding:48px 24px;
+  }
 }
 
 //about
@@ -695,6 +708,9 @@ html {
   .section-about {
     .contentSection {
       font-size: 1em;
+      @include mobileView{
+        overflow: hidden;
+      }
       &:before{
         content: "À propos";
         position:absolute;
