@@ -452,6 +452,9 @@ img {
 
 .containerTitleSection {
   margin-top: 80px;
+  @include mobileView{
+    margin-top:0;
+  }
 }
 
 html .titleMainCategory.title.is-1 {
@@ -860,6 +863,9 @@ html {
     .listMenuFooter {
       display: flex;
       padding-bottom: 72px;
+      @include mobileView{
+        display: none;
+      }
       li {
         + li {
           padding-left: 38px;
