@@ -28,12 +28,13 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                 <>
                     {i === 0 && <>
                         <Container className="mainProject"  key={i} fluid="true">
-                        <Columns.Column size="12">
+                        <Columns.Column className="columnProject" size="12">
                         <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
                             <Content className="info">
                             <Tag.Group className="tagGroupPost">
                                 <Tag className="recentDate">
                                     {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
+                                    <span className="nbItem">{`0${i+1}`}</span>
                                 </Tag>
                                 {post.listCategory.map((tag, i) => (
                                     <Tag key={i}>{tag}</Tag>
@@ -50,13 +51,15 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                                 </Content>
                                 </div>
                                 <div className="indexZone">
-                                   <span className="nbItem">{`0${i+1}`}</span>
-                                   <Link
-                                        href={'/projet/[slug]'}
-                                        as={`/projet/${encodeURIComponent(post.title)}`}
-                                    >
-                                        <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
-                                    </Link>
+                                    <div class="contentZone">
+                                    <span className="nbItem">{`0${i+1}`}</span>
+                                    <Link
+                                            href={'/projet/[slug]'}
+                                            as={`/projet/${encodeURIComponent(post.title)}`}
+                                        >
+                                            <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
+                                        </Link>
+                                    </div>
                                 </div>
                                 </Content>
                             </Columns.Column>

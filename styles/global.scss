@@ -503,6 +503,9 @@ img {
 
 .containerTitleSection {
   margin-top: 80px;
+  .section-category &{
+    margin-top: 0;
+  }
   @include mobileView{
     margin-top:0;
   }
@@ -811,7 +814,7 @@ html{
           padding:106px 104px;
           background: #090909;
           display: flex;
-          align-items:stretch;
+          align-items:flex-start;
           position: relative;
           @include mobileView{
             flex-direction: column;
@@ -835,10 +838,25 @@ html{
           .indexZone{
             flex-grow: 1;
             position: relative;
+            min-width: 282px;
+            align-self: stretch;
+            align-items: stretch;
             @include mobileView{
               position: static;
               padding-top:40px;
               font-size:16px;
+            }
+            .contentZone {
+              display: flex;
+              align-items: stretch;
+              position: absolute;
+              height: 100%;
+              width: 100%;
+              @include mobileView{
+                height: initial;
+                width: initial;
+                position: static;
+              }
             }
             .nbItem {
               color: #FAFAFA;
@@ -851,17 +869,21 @@ html{
                 position: absolute;
                 top: 60px;
                 right: 24px;
-                font-size:24px;
+                font-size: 24px;
+                display: none;
               }
             }
 
             .linkSee {
-              position: absolute;
-              bottom: 0;
-              left:0;
               color:#FAFAFA;
               font-weight: normal;
               font-size:14px;
+              align-self: flex-end;
+              position: absolute;
+              width: 100%;
+              display: block;
+              bottom: 0;
+              text-align: left;
               @include mobileView{
                 position: static;
               }
@@ -873,6 +895,7 @@ html{
           .tags{
             padding-top:0;
             flex-grow: 1;
+            min-width: 282px;
           }
           .tag{
             color: #FAFAFA;;
@@ -882,6 +905,17 @@ html{
             line-height: 24px;
             text-transform: capitalize;
             font-weight: normal;
+            &:not(.recentDate){
+              display:block;
+              margin-right: 0;
+              padding-right: 0;
+              clear:both;
+              width: 100%;
+              padding-bottom: 8px;
+              @include mobileView{
+                display:inline;
+              }
+            }
             &.recentDate {
               color: #FFFFFF;
               font-family: "Source Sans Pro";
@@ -893,17 +927,37 @@ html{
               text-transform: capitalize;
               display:block;
               width:100%;
+              position:relative;
               @include mobileView{
                 padding-bottom:7px;
                 font-size: 16px;
+                margin-right:0 !important;
+                padding-right:0;
               }
               &:before {
                 display: none;
               }
+              .nbItem{
+                display: none;
+                @include mobileView{
+                  color: #FAFAFA;
+                  font-family: Overpass;
+                  font-size: 24px;
+                  font-weight: 800;
+                  letter-spacing: 0;
+                  line-height: 48px;
+                  padding-right:0 !important;
+                  margin-right:0 !important;
+                  display: block;
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                }
+              }
             }
           }
           @include mobileView{
-            padding: 48px 24px;
+            padding: 40px 24px;
           }
           * {
             color:#fafafa;
