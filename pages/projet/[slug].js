@@ -7,6 +7,18 @@ import {useRef,useEffect,useState} from 'react'
 import Layout, { siteTitle } from '../../components/layout'
 import Menu from './../../components/home/Menu'
 import Footer from './../../components/home/Footer'
+import moment from 'moment'
+import {
+    Container,
+    Columns,
+    Section,
+    Heading,
+    Image,
+    Box,
+    Loader,
+    Tag,
+    Content
+} from 'react-bulma-components';
 
 const Post = ({post, config, connect})=>{
     const [configs, setConfigs] = useState(config)
@@ -29,7 +41,7 @@ const Post = ({post, config, connect})=>{
     }, [])
 
     return(
-        <Layout none>
+        <Layout post>
       <Head>
         <title>{siteTitle}</title>
       </Head>
@@ -37,38 +49,62 @@ const Post = ({post, config, connect})=>{
             state={config}
             connect={connect}
         />
+        <Container data-id={post._id} className="mainProject" fluid="true">
+            <Columns.Column className="columnProject" size="12">
+                <Content className="info postProjectDetails">
+                    <Tag.Group className="tagGroupPost">
+                        <Tag className="recentDate">
+                            {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
+                        </Tag>
+                        {post.listCategory.map((tag, i) => (
+                            <Tag key={i}>{tag}</Tag>
+                        ))}
+                    </Tag.Group>
+                    <div className="center-category">
+                        <Heading className="subTitleMainProject" size={1}>
+                        {post.title}
+                        </Heading>
+                        <Content className="contentText">
+                            <p>
+                            {post.subTextDescription}
+                            </p>
+                        </Content>
+                    </div>
+                </Content>
+                </Columns.Column>
+                </Container>
         <div className="container center-align">
            <ul>
-
-                   {post.linkImage &&
+                {post.linkImage &&
                    <li>
                        <img src={post.linkImage} width={200} />
                     </li>
                 }
                 <li>
-                    {post._id}
-                </li>
-                <li>
-                    {post.title}
-                </li>
-                <li>
                     <img src={post.imageMainPrincipal} width="auto" height="auto" />
                 </li>
                 <li>
-                    <>
-                        {
-                            post.imageArray.map((image, i) => (
-                                <img key={i} src={image} width={200} height="auto" />
-                            ))
-                        }
-                    </>
+                    <Container className="descriptionPost">
+                        <Content className="contentDescription">
+                            {post.description}
+                        </Content>
+                    </Container>
                 </li>
-                <li>
-                   <a onClick={() =>{
-                       console.log(router.back('/admin/dashboard'))
-                    }}>Return to the list</a>
-                </li>
-           </ul>
+            </ul>
+            <Container className="listImagesPost">
+                <Columns>
+                    {
+                        post.imageArray.map((image, i) => (
+                            <Columns.Column size="half">
+                                <Image key={i} src={image} height="auto" />
+                            </Columns.Column>
+                        ))
+                    }
+                </Columns>
+            </Container>
+            <a onClick={() =>{
+                console.log(router.back('/category/recents'))
+            }}>Return to the list</a>
         </div>
         <Footer
           menu={configs.menuCategoryLink}

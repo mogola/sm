@@ -54,7 +54,10 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                                     <div class="contentZone">
                                     <span className="nbItem">{`0${i+1}`}</span>
                                     <Link
-                                            href={'/projet/[slug]'}
+                                            href={{
+                                                pathname:'/projet/[slug]',
+                                                query:{id: post._id},
+                                            }}
                                             as={`/projet/${encodeURIComponent(post.title)}`}
                                         >
                                             <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>

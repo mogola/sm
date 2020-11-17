@@ -10,7 +10,7 @@ import fetch from 'node-fetch'
 const name = 'Your Name'
 export const siteTitle = "Mogola Sangaré website"
 
-export default function Layout({ children, none, home, portfolio, dashboard }) {
+export default function Layout({ children, none, home, portfolio, dashboard, post}) {
   const [dataConfigs, setDataConfig] = useState([])
   const [naming, setNaming] = useState()
   const [menu, setMenu] = useState()
@@ -93,7 +93,7 @@ export default function Layout({ children, none, home, portfolio, dashboard }) {
   return (
     <themeContextUser.Consumer>
       {({ dataConfig }) => (
-        <div data={naming} className={portfolio || none ? "config.nameSite" : styles.container}>
+        <div data={naming} className={portfolio || none || post ? "df-none" : styles.container}>
           <Head>
             <link rel="icon" href="/favicon.ico" />
             <meta
@@ -128,8 +128,11 @@ export default function Layout({ children, none, home, portfolio, dashboard }) {
                 </h1>
               </>
             )
-            : none ? (
-              <></>
+            : (none || post) ? (
+              <>
+                {post &&
+                <div className="postBgSingle" style={{background:state.backgroudPost}}></div>}
+              </>
             )
             : portfolio ? (
               <>
@@ -205,7 +208,7 @@ export default function Layout({ children, none, home, portfolio, dashboard }) {
                   </>
                 )}
           </header>
-          <main>{children}</main>
+          <main className={post ? "wrapperPost" : ""}>{children}</main>
           {!none && (
             <div className={styles.backToHome}>
               <Link href="/">

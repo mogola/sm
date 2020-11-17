@@ -6,8 +6,10 @@ import ImageUploading from "react-images-uploading";
 
 const ImageUploads = (props, {name = "", numbers}) => {
   const [images, setImages] = useState([]);
+  const [urlImageUdate, setUrlImageUpdate] = useState(props.update)
+  const [urlMainImage, setUrlMainImage] = useState(props.singleimage)
   const maxNumber = props.numbers;
-
+  console.log("urlImageUdate", urlImageUdate)
   const handleChange = (imageList, addUpdateIndex) => {
     // data for submit
     console.log("props", props)
@@ -90,6 +92,23 @@ const ImageUploads = (props, {name = "", numbers}) => {
                 </Box>
               </Control>
             ))}
+
+            <Label>Image Actuel</Label>
+            {urlImageUdate !== undefined && urlImageUdate.map((image, index) => (
+              <Control key={index} className="image-item">
+                <Box style={{width: "100%", display: "flex"}}>
+                  <img style={{maxWidth:"200px"}} src={image} alt="" width="100%" max-width="150" height="auto" />
+                </Box>
+              </Control>
+            ))}
+
+          {urlMainImage &&
+              <Control className="image-item">
+                <Box style={{width: "100%", display: "flex"}}>
+                  <img style={{maxWidth:"200px"}} src={urlMainImage} alt="" width="100%" max-width="150" height="auto" />
+                </Box>
+              </Control>
+          }
             <Button
             color="success"
             onClick={onImageSave}>Sauvegarder</Button>
