@@ -23,11 +23,11 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
             </Heading>
         }
         </Container>
-            <Columns className="homeCategory">
+            <Columns className="homeCategory" size="null">
             {data.map((post, i) => (
                 <>
-                    {i === 0 && <>
-                        <Container className="mainProject"  key={i} fluid="true">
+                    {i === 0 &&
+                        <Container className="mainProject onTopView" key={i} fluid="true">
                         <Columns.Column className="columnProject" size="12">
                         <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
                             <Content className="info">
@@ -64,39 +64,50 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                                 </Content>
                             </Columns.Column>
                             </Container>
-                    </>}
-                    {i !== 0 && <>
-                        <Columns.Column key={i} size="half">
-                        <Image rounded={false} src={post.imageMainPrincipal} />
-                            <Tag.Group className="tagGroupPost">
-                                <Tag className="recentDate">
-                                    {moment(post.date).locale('fr').format('LL', 'fr')}
-                                </Tag>
-                                {post.listCategory.map((tag, i) => (
-                                    <Tag key={i}>{tag}</Tag>
-                                ))}
-                            </Tag.Group>
-                            <Heading subtitle className="subTitleProjects">
-                            {post.title}
-                            </Heading>
-                            <Content className="contentText">
-                                <p>
-                                {post.subTextDescription}
-                                </p>
-                            </Content>
-                                {/* <Link
-                                    href={'/project/[id]'}
-                                    as={`/project/${post._id}`}>
-                                    <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
-                                </Link> */}
-                                <Link
-                                    href={'/projet/[slug]'}
-                                    as={`/projet/${encodeURIComponent(post.title)}`}
-                                >
-                                    <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
-                                </Link>
+                    }
+                    {i !== 0 &&
+                        <Container className="mainProject subMainProject"  key={i} fluid="true">
+                            <Columns.Column className="columnProject" size="12">
+                                <Content className="info secondary-pr">
+                                <Tag.Group className="tagGroupPost">
+                                    <Tag className="recentDate">
+                                        {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
+                                        <span className="nbItem">{`0${i+1}`}</span>
+                                    </Tag>
+                                    {post.listCategory.map((tag, i) => (
+                                        <Tag key={i}>{tag}</Tag>
+                                    ))}
+                                </Tag.Group>
+                                <div className="center-category">
+                                    <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
+                                    </div>
+                                    <div className="indexZone">
+                                        <div class="contentZone">
+                                        <span className="nbItem">{`0${i+1}`}</span>
+                                        </div>
+                                    </div>
+                                    </Content>
+                                    <Content className="wrapperPostProject">
+                                        <div className="infoPostCategory">
+                                            <Heading className="subTitleMainProject" size={1}>
+                                            {post.title}
+                                            </Heading>
+                                            <Content className="contentText">
+                                                <p>
+                                                {post.subTextDescription}
+                                                </p>
+                                            </Content>
+                                        </div>
+                                        <Link
+                                            href={'/projet/[slug]'}
+                                            as={`/projet/${encodeURIComponent(post.title)}`}
+                                        >
+                                            <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
+                                        </Link>
+                                    </Content>
                                 </Columns.Column>
-                            </>}
+                            </Container>
+                        }
                     </>
                 ))}
             </Columns>

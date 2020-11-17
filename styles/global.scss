@@ -791,9 +791,61 @@ html{
   .section-category {
     padding: 0;
     margin: 0;
+    @include mobileView{
+      overflow: hidden;
+    }
     .mainProject{
       margin: 0;
       padding: 0;
+      + .mainProject {
+        .infoPostCategory {
+          border-bottom: 2px solid #737373;
+          padding-bottom: 90px;
+
+          @include mobileView{
+            padding-bottom: 6px;
+            border-bottom: 0;
+          }
+        }
+      }
+      &.onTopView{
+        + .subMainProject{
+          @include mobileView{
+            padding-top: 40px;
+          }
+        }
+      }
+      &.subMainProject{
+        &:last-child {
+          @include mobileView{
+            .wrapperPostProject {
+              border: 0 none;
+            }
+          }
+        }
+        .columnProject{
+          padding-bottom: 0;
+        }
+        + .subMainProject {
+          .columnProject {
+            padding-top: 90px;
+            @include mobileView{
+              padding-top: 40px;
+            }
+          }
+        }
+
+        .indexZone{
+          @include mobileView{
+            display: none;
+          }
+        }
+      }
+      .columnProject{
+        @include mobileView{
+          padding:0;
+        }
+      }
       .contentText{
         p{
           color: #FAFAFA;
@@ -810,6 +862,47 @@ html{
         }
       }
       .content{
+        &.wrapperPostProject{
+          padding: 0;
+          width: calc(100% - 204px);
+          margin: 0 104px;
+          box-sizing: border-box;
+          position: relative;
+
+          @include mobileView{
+            width: calc( 100% - 88px);
+            margin: 0 44px;
+            border-bottom: 1px solid #737373;
+            padding-bottom: 40px;
+          }
+
+          .subTitleMainProject {
+            font-size: 24px;
+            margin: 0;
+            color: #090909;
+          }
+          .contentText {
+            p {
+              color: #090909;
+              text-transform: initial;
+              font-size: 16px;
+              letter-spacing: 0;
+            }
+          }
+          .linkSee {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: initial;
+            @include mobileView{
+              position: static;
+            }
+            .icoRight{
+              width: 24px;
+            }
+          }
+        }
+
         &.info{
           padding:106px 104px;
           background: #090909;
@@ -818,11 +911,12 @@ html{
           position: relative;
           @include mobileView{
             flex-direction: column;
-            padding: 40px 24px;
+            padding: 40px 44px;
           }
           .center-category{
             position: relative;
             flex-grow: 2;
+            width: 100%;
             p{
               @include mobileView{
                 color: #FFFFFF;
@@ -852,6 +946,7 @@ html{
               position: absolute;
               height: 100%;
               width: 100%;
+              justify-content: flex-end;
               @include mobileView{
                 height: initial;
                 width: initial;
@@ -877,18 +972,20 @@ html{
             .linkSee {
               color:#FAFAFA;
               font-weight: normal;
-              font-size:14px;
+              font-size: 16px;
               align-self: flex-end;
               position: absolute;
               width: 100%;
               display: block;
               bottom: 0;
-              text-align: left;
+              text-align: right;
               @include mobileView{
                 position: static;
+                text-align: left;
               }
               .icoRight{
                 filter: invert(1);
+                width: 27px;
               }
             }
           }
@@ -896,6 +993,9 @@ html{
             padding-top:0;
             flex-grow: 1;
             min-width: 282px;
+            @include mobileView{
+              flex-direction: row;
+            }
           }
           .tag{
             color: #FAFAFA;;
@@ -914,6 +1014,7 @@ html{
               padding-bottom: 8px;
               @include mobileView{
                 display:inline;
+                width: auto;
               }
             }
             &.recentDate {
@@ -928,11 +1029,14 @@ html{
               display:block;
               width:100%;
               position:relative;
+
+
               @include mobileView{
                 padding-bottom:7px;
                 font-size: 16px;
                 margin-right:0 !important;
                 padding-right:0;
+                line-height: 20px;
               }
               &:before {
                 display: none;
@@ -956,8 +1060,64 @@ html{
               }
             }
           }
-          @include mobileView{
-            padding: 40px 24px;
+          &.secondary-pr{
+            background:#fff;
+            padding-bottom: 0;
+            padding-top: 0;
+            * {
+              color:#000;
+            }
+            .contentZone {
+              justify-content: flex-end;
+            }
+            .mainImageCategory{
+              max-height: initial !important;
+              @include mobileView{
+                margin:0;
+              }
+            }
+
+            .tags{
+              @include mobileView{
+                width: 100%;
+              }
+            }
+            .tag{
+              &.recentDate {
+                color: #737373;
+                font-size: 14px;
+                @include mobileView{
+                  width: 100%;
+                }
+                .nbItem{
+                  color: #FA4000 !important;
+                  @include mobileView{
+                    line-height: normal;
+                  }
+                }
+              }
+
+              &:not(.recentDate) {
+                color: #FA4000 !important;
+                font-size: 14px;
+                font-weight: 600;
+              }
+
+            }
+
+            .nbItem{
+              color:#FA4000;
+            }
+
+            .linkSee{
+              color: #000 !important;
+              .icoRight{
+                filter:initial !important;
+              }
+            }
+          }
+          .linkSee {
+            text-align: right;
           }
           * {
             color:#fafafa;
@@ -969,6 +1129,11 @@ html{
     .mainImageCategory{
       max-height:620px;
       overflow: hidden;
+    }
+    .containLink {
+      @include mobileView{
+        padding: 0 40px 64px;
+      }
     }
   }
   .section-home {
