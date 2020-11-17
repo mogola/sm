@@ -41,6 +41,11 @@ export default function Home({config, posts, connect}) {
           data={posts}
           className="section-category"
         />
+        <Footer
+          menu={configs.menuCategoryLink}
+          data={configs}
+          className="section-footer"
+        />
     </Layout>
   )
 }

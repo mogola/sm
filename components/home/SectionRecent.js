@@ -72,7 +72,7 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                                 <Tag.Group className="tagGroupPost">
                                     <Tag className="recentDate">
                                         {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
-                                        <span className="nbItem">{`0${i+1}`}</span>
+                                        <span className="nbItem">{i+1 > 9 ? `${i+1}` : `0${i+1}`}</span>
                                     </Tag>
                                     {post.listCategory.map((tag, i) => (
                                         <Tag key={i}>{tag}</Tag>
@@ -83,7 +83,7 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                                     </div>
                                     <div className="indexZone">
                                         <div class="contentZone">
-                                        <span className="nbItem">{`0${i+1}`}</span>
+                                        <span className="nbItem">{i+1 > 9 ? `${i+1}` : `0${i+1}`}</span>
                                         </div>
                                     </div>
                                     </Content>

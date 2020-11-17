@@ -8,7 +8,7 @@ import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 
 const name = 'Your Name'
-export const siteTitle = 'Next.js Sample Website'
+export const siteTitle = "Mogola Sangaré website"
 
 export default function Layout({ children, none, home, portfolio, dashboard }) {
   const [dataConfigs, setDataConfig] = useState([])

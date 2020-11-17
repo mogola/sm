@@ -2,10 +2,14 @@ import fetch from 'isomorphic-unfetch'
 import Head from 'next/head'
 import {useRouter} from 'next/router'
 import baseUrl from '../../helpers/baseUrl'
-import { getAllPosts } from '../api/home'
+import { getAllPosts, getPostConfig } from '../api/home'
 import {useRef,useEffect,useState} from 'react'
 import Layout, { siteTitle } from '../../components/layout'
-const Post = ({post})=>{
+import Menu from './../../components/home/Menu'
+import Footer from './../../components/home/Footer'
+
+const Post = ({post, config, connect})=>{
+    const [configs, setConfigs] = useState(config)
     const router = useRouter()
     console.log(router)
     const {id} = router.query
@@ -25,10 +29,14 @@ const Post = ({post})=>{
     }, [])
 
     return(
-        <Layout portfolio>
+        <Layout none>
       <Head>
         <title>{siteTitle}</title>
       </Head>
+      <Menu
+            state={config}
+            connect={connect}
+        />
         <div className="container center-align">
            <ul>
 
@@ -62,19 +70,26 @@ const Post = ({post})=>{
                 </li>
            </ul>
         </div>
+        <Footer
+          menu={configs.menuCategoryLink}
+          data={configs}
+          className="section-footer"
+        />
         </Layout>
     )
 }
 
 export async function getStaticProps({params:{slug}}) {
     try{
+    const config = await getPostConfig()
     const postData = await getAllPosts()
     const posts = JSON.parse(JSON.stringify(postData))
     const getPostData = posts.find(post => post.title == slug)
 console.log('data', getPostData)
         return {
             props: {
-                post:JSON.parse(JSON.stringify(getPostData))
+                post:JSON.parse(JSON.stringify(getPostData)),
+                config: JSON.parse(JSON.stringify(config[0]))
             }
         }
     }

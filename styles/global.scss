@@ -133,6 +133,11 @@ img {
     @include mobileView(){
       > h2 {
         margin: 0;
+        @include mobileView{
+          .mainMenuNoHome &{
+            height:65px;
+          }
+        }
       }
       text-align:center;
       width: 100%;
@@ -144,7 +149,7 @@ img {
       font-size: 28px;
       top: 18px;
       .mainMenuNoHome &{
-        top:8px;
+        top:16px;
       }
     }
     &:hover {
@@ -171,7 +176,7 @@ img {
 // menu
 .mainMenuNoHome {
   @include mobileView{
-    height: 56px;
+    height: 65px;
   }
   .mainHeader{
     padding-top: 0;
@@ -675,7 +680,7 @@ html .loadDiv {
     top: 34px;
     left: 27px;
     .mainMenuNoHome &{
-      top: 23px;
+      top: 30px;
     }
   }
 
@@ -817,6 +822,9 @@ html{
       }
       &.subMainProject{
         &:last-child {
+          .infoPostCategory {
+            border: 0 none;
+          }
           @include mobileView{
             .wrapperPostProject {
               border: 0 none;
@@ -932,7 +940,7 @@ html{
           .indexZone{
             flex-grow: 1;
             position: relative;
-            min-width: 282px;
+            min-width: 20%;
             align-self: stretch;
             align-items: stretch;
             @include mobileView{
@@ -992,7 +1000,7 @@ html{
           .tags{
             padding-top:0;
             flex-grow: 1;
-            min-width: 282px;
+            min-width: 20%;
             @include mobileView{
               flex-direction: row;
             }
@@ -1131,7 +1139,10 @@ html{
       overflow: hidden;
     }
     .containLink {
+      text-align: center;
+      padding-bottom: 96px;
       @include mobileView{
+        text-align: left;
         padding: 0 40px 64px;
       }
     }
