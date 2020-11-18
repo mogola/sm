@@ -346,7 +346,7 @@ const notifySuccess = () => {
                       name={item["name"]}
                       onChange={(e) => {onChangeState(e)}}
                       onSaveImages={saveAllImage}
-                      numbers={2}
+                      numbers={3}
                       update={post[item["name"]]}
                     />
                   }
@@ -414,7 +414,7 @@ const notifySuccess = () => {
              setIdPost(post._id)
            }}>Supprimer</Card.Footer.Item>
           <Card.Footer.Item>
-            <Link href={'/project/[id]'} as={`/project/${post._id}`}>
+            <Link href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(post.title)}`}>
               <a>View Post</a>
             </Link>
           </Card.Footer.Item>

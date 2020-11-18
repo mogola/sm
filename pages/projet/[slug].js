@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-unfetch'
 import Head from 'next/head'
+import Link from 'next/link'
 import {useRouter} from 'next/router'
 import baseUrl from '../../helpers/baseUrl'
 import { getAllPosts, getPostConfig } from '../api/home'
@@ -49,8 +50,8 @@ const Post = ({post, config, connect})=>{
             state={config}
             connect={connect}
         />
-        <Container data-id={post._id} className="mainProject" fluid="true">
-            <Columns.Column className="columnProject" size="12">
+        <Container data-id={post._id} className="mainProject" fluid>
+            <Columns.Column className="columnProject" size={12}>
                 <Content className="info postProjectDetails">
                     <Tag.Group className="tagGroupPost">
                         <Tag className="recentDate">
@@ -76,14 +77,14 @@ const Post = ({post, config, connect})=>{
         <div className="container center-align">
            <ul>
                 {post.linkImage &&
-                   <li>
+                   <li key="oier">
                        <img src={post.linkImage} width={200} />
                     </li>
                 }
-                <li>
+                <li key="peiroi">
                     <img src={post.imageMainPrincipal} width="auto" height="auto" />
                 </li>
-                <li>
+                <li key="eiopzieop">
                     <Container className="descriptionPost">
                         <Content className="contentDescription">
                             {post.description}
@@ -95,16 +96,16 @@ const Post = ({post, config, connect})=>{
                 <Columns>
                     {
                         post.imageArray.map((image, i) => (
-                            <Columns.Column size="half">
-                                <Image key={i} src={image} height="auto" />
+                            <Columns.Column key={i} size="half">
+                                <Image src={image} height="auto" />
                             </Columns.Column>
                         ))
                     }
                 </Columns>
             </Container>
-            <a onClick={() =>{
-                console.log(router.back('/category/recents'))
-            }}>Return to the list</a>
+            <Link href="/projets/recents">
+                <a>Return to the list</a>
+            </Link>
         </div>
         <Footer
           menu={configs.menuCategoryLink}
