@@ -31,7 +31,7 @@ const Prestation = ({title = "", data = '', ...rest}) => {
                 {data.map((service, i) => (
                     <Columns.Column key={i}>
                         {i === 1 &&
-                            <span class="icon">
+                            <span className="icon">
                                 <FontAwesomeIcon icon="tshirt" size="xs" />
                             </span>
                         }

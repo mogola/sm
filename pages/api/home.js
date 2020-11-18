@@ -1,5 +1,5 @@
 import { connectToDatabase } from "../../utils/mongodb";
-
+import ProjectsSchema from '../../models/Projects'
 export async function getPost() {
     const { db } = await connectToDatabase();
 
@@ -53,6 +53,14 @@ export async function getAllPosts(number) {
   .sort({ "_id":-1 })
   .limit(number)
   .toArray();
+
+  return posts
+}
+
+export async function getSinglePost(id) {
+  const { db } = await connectToDatabase();
+
+  const posts = await ProjectsSchema.findOne({_id: id})
 
   return posts
 }

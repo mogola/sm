@@ -13,7 +13,7 @@ import {useRouter} from 'next/router'
 import Files from './../../components/File'
 import ImageUploads from './../../components/ImageUpload'
 import baseUrl from '../../helpers/baseUrl'
-import { getAllPosts } from '../api/home'
+import { getAllPosts, getSinglePost } from '../api/home'
 import utilStyles from '../../styles/utils.module.css'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
@@ -22,18 +22,20 @@ import moment from 'moment'
 const {Field, Control} = Form
 console.log(projectConfig)
 
-export async function getStaticProps() {
+export async function getServerSideProps(context) {
   const posts = await getAllPosts()
-  console.log("data", posts)
-
+  console.log("data", context.query.id)
+  const currentPost = await getSinglePost(context.query.id)
+  console.log("currentPost", currentPost)
   return {
     props: {
-      posts: JSON.parse(JSON.stringify(posts))
+      posts: JSON.parse(JSON.stringify(posts)),
+      currentPost: JSON.parse(JSON.stringify(currentPost))
     }
   }
 }
 
-export default function Updateproject({dataProjects = projectConfig, posts}) {
+export default function Updateproject({dataProjects = projectConfig, posts, currentPost}) {
   const [configProject, setConfigProject] = useState(projectConfig)
   const [state, changeState] = useState({});
   const [value, setValue] = useState('');
@@ -47,9 +49,9 @@ export default function Updateproject({dataProjects = projectConfig, posts}) {
   const router = useRouter()
   const {id} = router.query
   console.log(id)
-  const [postToUpdate, setPostToUpdate] = useState(posts.filter(post =>{return post._id === id }))
-  const [updatePost, setUpdatePost] = useState(postToUpdate[0])
-  console.log("idsingle Post", posts.filter(post =>{return post._id === id }))
+  const [postToUpdate, setPostToUpdate] = useState([currentPost])
+  const [updatePost, setUpdatePost] = useState([postToUpdate])
+  console.log("idsingle Post", posts.filter(post =>{return post._id === id }), currentPost)
     const onChange = ({target}) => {
     // state$
 
@@ -72,21 +74,21 @@ export default function Updateproject({dataProjects = projectConfig, posts}) {
   const onChangeState = (data) => {
       console.log("data from child", data)
       setValue(data)
-      changeState({...state, "arrayImage": data, _id:id})
+      changeState({...state, "imageArray": data, _id:id})
       console.log("Form>", state);
   }
 
   const onChangeStateMain = (data) => {
     console.log("data from child", data)
     setValue(data)
-    changeState({...state, "mainImage": data, _id:id})
+    changeState({...state, "imageMainPrincipal": data, _id:id})
     console.log("Form>", state);
 }
 
   const saveAllImage= () => {
-    console.log("imagesArrayState", state.arrayImage)
+    console.log("imagesArrayState", state.imageArray)
     let imagesDetails = new Array()
-   let images = state.arrayImage
+   let images = state.imageArray
 
    setOnLoading(true)
    images.map((image, i) => {
@@ -114,7 +116,7 @@ export default function Updateproject({dataProjects = projectConfig, posts}) {
         console.log(dataProject)
         console.log("resulting images", dataProject.urlDataList)
         setImageDownloaded(dataProject.urlDataList)
-        changeState({...state, "arrayImage": dataProject.urlDataList, _id:id})
+        changeState({...state, "imageArray": dataProject.urlDataList, _id:id})
         notifySuccess()
         setOnLoading(false)
 
@@ -129,7 +131,7 @@ const onSaveMainImage = () => {
  setOnLoading(true)
 
     let imagesDetails = new Array()
-   let images = state.mainImage
+   let images = state.imageMainPrincipal
 
    setOnLoading(true)
    images.map((image, i) => {
@@ -155,7 +157,7 @@ const onSaveMainImage = () => {
     resultData.then(dataProject => {
       console.log(dataProject)
       console.log("resulting images", dataProject.urlDataList)
-      changeState({...state, "mainImage": dataProject.urlDataList, _id:id})
+      changeState({...state, "imageMainPrincipal": dataProject.urlDataList, _id:id})
       notifySuccess()
       setOnLoading(false)
     })
@@ -215,7 +217,7 @@ const notifySuccess = () => {
     }
 
     console.log(listTags)
-    changeState({...state, "listTags":listTags})
+    changeState({...state, "listTags":listTags, _id:id})
   }
 
   const deleteTag = (index) => {
@@ -289,7 +291,6 @@ const notifySuccess = () => {
                         e.preventDefault()
                         addTag(item["name"])}
                       }
-                      defaultValue={post[item["name"]][0]}
                       value={state[item["name"]] === undefined ?
                       state[item["name"]] :
                       (state[item["name"]] === undefined ?
@@ -385,7 +386,7 @@ const notifySuccess = () => {
       </h1>
       <Columns>
       {postToUpdate.map((post, i) => (
-         <Columns.Column key={i} size="half">
+         <Columns.Column key={i} size={12}>
         <Card className="post">
           <Card.Image data-id={post._id} src={post.imageMainPrincipal} />
           <Card.Content>

@@ -1,3 +1,4 @@
+import React from 'react'
 import Link from 'next/link'
 import moment from 'moment'
 import arrowRight from './../../public/images/right-arrow.svg'
@@ -13,22 +14,22 @@ import {
     Content
 } from 'react-bulma-components';
 
-const SectionsRecent = ({title = "", data = [], ...rest}) => {
+const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
     return(<>
     <Section {...rest}>
-        <Container className="containerTitleSection">
+        <Container breakpoint="fullhd" fluid className="containerTitleSection">
         {title &&
             <Heading className="titleMainCategory" size={1}>
              {title}
             </Heading>
         }
         </Container>
-            <Columns className="homeCategory" size="null">
+            <Columns className="homeCategory">
             {data.map((post, i) => (
-                <>
+                <React.Fragment key={i}>
                     {i === 0 &&
-                        <Container className="mainProject onTopView" key={i} fluid="true">
-                        <Columns.Column className="columnProject" size="12">
+                        <Container breakpoint="fullhd" fluid className="mainProject onTopView" key={`${i}${post._id}`}>
+                        <Columns.Column className="columnProject" size={12}>
                         <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
                             <Content className="info">
                             <Tag.Group className="tagGroupPost">
@@ -36,8 +37,8 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                                     {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
                                     <span className="nbItem">{`0${i+1}`}</span>
                                 </Tag>
-                                {post.listCategory.map((tag, i) => (
-                                    <Tag key={i}>{tag}</Tag>
+                                {post.listCategory.map((tag, j) => (
+                                    <Tag  key={`${j}${post._id}`}>{tag}</Tag>
                                 ))}
                             </Tag.Group>
                             <div className="center-category">
@@ -51,7 +52,7 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                                 </Content>
                                 </div>
                                 <div className="indexZone">
-                                    <div class="contentZone">
+                                    <div className="contentZone">
                                     <span className="nbItem">{`0${i+1}`}</span>
                                     <Link
                                             href={{
@@ -62,6 +63,17 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                                         >
                                             <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
                                         </Link>
+                                        {
+                                            isadmin &&
+                                            <Link href={{
+                                                pathname:'/admin/updateproject',
+                                                query:{id: post._id},
+                                            }}>
+                                                <a className="udpatePost">
+                                                    Mettre à jour
+                                                </a>
+                                            </Link>
+                                        }
                                     </div>
                                 </div>
                                 </Content>
@@ -69,23 +81,23 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                             </Container>
                     }
                     {i !== 0 &&
-                        <Container className="mainProject subMainProject"  key={i} fluid="true">
-                            <Columns.Column className="columnProject" size="12">
+                        <Container breakpoint="fullhd" fluid className="mainProject subMainProject" key={`${i}${post._id}`}>
+                            <Columns.Column className="columnProject" size={12}>
                                 <Content className="info secondary-pr">
                                 <Tag.Group className="tagGroupPost">
                                     <Tag className="recentDate">
                                         {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
                                         <span className="nbItem">{i+1 > 9 ? `${i+1}` : `0${i+1}`}</span>
                                     </Tag>
-                                    {post.listCategory.map((tag, i) => (
-                                        <Tag key={i}>{tag}</Tag>
+                                    {post.listCategory.map((tag, j) => (
+                                        <Tag key={`${j}${post._id}`}>{tag}</Tag>
                                     ))}
                                 </Tag.Group>
                                 <div className="center-category">
                                     <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
                                     </div>
                                     <div className="indexZone">
-                                        <div class="contentZone">
+                                        <div className="contentZone">
                                         <span className="nbItem">{i+1 > 9 ? `${i+1}` : `0${i+1}`}</span>
                                         </div>
                                     </div>
@@ -107,11 +119,22 @@ const SectionsRecent = ({title = "", data = [], ...rest}) => {
                                         >
                                             <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
                                         </Link>
+                                        {
+                                            isadmin &&
+                                            <Link href={{
+                                                pathname:'/admin/updateproject',
+                                                query:{id: post._id},
+                                            }}>
+                                                <a className="udpatePost">
+                                                    Mettre à jour
+                                                </a>
+                                            </Link>
+                                        }
                                     </Content>
                                 </Columns.Column>
                             </Container>
                         }
-                    </>
+                    </React.Fragment>
                 ))}
             </Columns>
             <Container className="containLink">

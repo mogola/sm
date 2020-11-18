@@ -669,7 +669,7 @@ html .loadDiv {
 .menuB {
   display:none;
   height: 9px;
-  width: 40px;
+  width: 36px;
   position: absolute;
   top:24px;
   left:30px;
@@ -703,7 +703,7 @@ html .loadDiv {
       }
     }
     span{
-      height: 1px;
+      height: 2px;
     }
     .mTop{
       transform: rotate(45deg);
@@ -719,8 +719,8 @@ html .loadDiv {
   }
   span {
     box-sizing: border-box;
-    height: 1px;
-    width: 40px;
+    height: 2px;
+    width: 37px;
     background: #F9F9F9;
     display:block;
     position: absolute;
@@ -846,6 +846,24 @@ html{
         .indexZone{
           @include mobileView{
             display: none;
+          }
+        }
+
+        .udpatePost {
+          text-decoration: none;
+          color: #FA4000;
+          border: 1px solid #FA4000;
+          z-index: 2;
+          bottom: 85px;
+          @include mobileView{
+            color: #000;
+            border-color: #000;
+            position: static;
+            display: inline-block;
+            margin-top: 14px;
+            padding: 5px 7px;
+            bottom: -65px;
+            float: right;
           }
         }
       }
@@ -1148,7 +1166,7 @@ html{
     }
   }
   .section-home {
-    background: #DEDEDE;
+    background: #ffffff;
     padding:0 24px 88px;
     .titleMainCategory{
       margin-top:48px;
@@ -1241,7 +1259,9 @@ html {
       }
     }
   }
+
   .section-about {
+    background: #FAFAFA;
     padding:0 24px 88px;
     .contentSection {
       font-size: 1em;
@@ -1438,4 +1458,22 @@ html {
   width: 100%;
   height: 100%;
   z-index:1;
+}
+
+.udpatePost {
+  position: absolute;
+  font-family: Overpass;
+  right: 0;
+  bottom: -63px;
+  font-weight: 300;
+  text-decoration: none;
+  border: 1px solid #fff;
+  padding: 5px 8px;
+  border-radius: 19px;
+  font-size: 13px;
+  @include mobileView{
+    right: 40px;
+    bottom: 35px;
+    padding: 5px 2px;
+  }
 }

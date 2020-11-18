@@ -11,6 +11,7 @@ import Menu from './../../components/home/Menu'
 import Footer from './../../components/home/Footer'
 import baseUrl from './../../helpers/baseUrl'
 import fetch from 'node-fetch'
+import PropTypes from 'prop-types';
 
 import { getPostConfig, getAllPosts} from './../api/home'
 
@@ -27,7 +28,9 @@ export async function getStaticProps() {
 
 export default function Home({config, posts, connect}) {
   const [configs, setConfigs] = useState(config)
+  const [isAdmin, setIsAdmin] = useState(connect)
 
+  console.log("connect", typeof connect, connect === true)
   return (
     <Layout none>
       <Head>
@@ -40,6 +43,7 @@ export default function Home({config, posts, connect}) {
         <SectionsRecent
           data={posts}
           className="section-category"
+          isadmin={isAdmin === true ? true : false}
         />
         <Footer
           menu={configs.menuCategoryLink}
@@ -48,4 +52,8 @@ export default function Home({config, posts, connect}) {
         />
     </Layout>
   )
+}
+
+Home.propTypes = {
+  isadmin: PropTypes.bool
 }
