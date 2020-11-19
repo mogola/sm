@@ -10,6 +10,7 @@ module.exports = withFonts({
   target: 'serverless',
   env: {
     production: process.env.NEXT_PUBLIC_URL_PRODUCTION,
+    development: "http://localhost:9000/",
     keyPrivate: privateKEY,
     keyPublic: publicKEY
   },

@@ -122,8 +122,10 @@ export async function getStaticProps({params:{slug}}) {
     const postData = await getAllPosts()
     const posts = JSON.parse(JSON.stringify(postData))
     const getPostData = posts.find(post => post.title == slug)
-console.log('data', getPostData)
-        return {
+
+    console.log('data', getPostData)
+
+    return {
             props: {
                 post:JSON.parse(JSON.stringify(getPostData)),
                 config: JSON.parse(JSON.stringify(config[0]))

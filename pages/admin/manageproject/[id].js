@@ -1,43 +1,93 @@
+import fetch from 'isomorphic-unfetch'
+
 import React, { useState, useEffect} from 'react'
 import Head from 'next/head'
-import Layout, { siteTitle } from '../../../components/layout'
+import Layout from './../../../components/layout'
 import Link from 'next/link'
-import {projectConfig} from '../../../services/jsonProjects'
-import Input from '../../../components/Input'
-import InputConfig from '../../../components/InputConfig'
-import Textarea from '../../../components/Textarea'
-import Selects from '../../../components/Select'
-import UploadFile from '../../../helpers/upload'
+//import {projectConfig} from './../../../services/jsonProjects'
+import InputConfig from './../../../components/InputConfig'
+import Textarea from './../../../components/Textarea'
+import Selects from './../../../components/Select'
 import { Button, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
-import {useRouter} from 'next/router'
-import ImageUploads from '../../../components/ImageUpload'
-import baseUrl from '../../../helpers/baseUrl'
-import { getAllPosts, getSinglePost } from '../../api/home'
-import utilStyles from '../../../styles/utils.module.css'
+import { useRouter } from 'next/router'
+import ImageUploads from './../../../components/ImageUpload'
+import baseUrl from './../../../helpers/baseUrl'
+import utilStyles from './../../../styles/utils.module.css'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import moment from 'moment'
+const {Field, Control} = Form;
 
-const {Field, Control} = Form
-console.log(projectConfig)
+export async function getServerSideProps(context) {
+    console.log("data id id id id", context.query.id)
+    const posts = await fetch(`${baseUrl}/api/detailproject`, {method: "GET"})
+    const idPost = await posts.json()
+    const getPostData = idPost.filter(post => post._id === context.query.id)
+    console.log("==============", getPostData)
+    const projectConfig = [
+        {
+            "name": "title",
+            "type": "input"
+        },
+        {
+            "name":"description",
+            "type": "textarea"
+        },
+        {
+            "name": "listCategory",
+            "option":["portfolio", "prestations", "services"],
+            "type": "select"
+        },
+        {
+            "name": "idCategory",
+            "option":["portfolio", "prestations", "services"],
+            "type": "select"
+        },
+        {
+            "name": "imageMainPrincipal",
+            "type": "file"
+        },
+        {
+            "name": "imageArray",
+            "type":"file"
+        },
+        {
+            "name":"subTextDescription",
+            "type":"text"
+        }
+    ]
 
-export async function getStaticProps({params:{id}}) {
-  const posts = await getAllPosts()
-  console.log("data", id)
-  const currentPost = await getSinglePost(id)
- console.log("currentPost", currentPost)
-  return {
-    props: {
-      posts: JSON.parse(JSON.stringify(posts)),
-      currentPost: JSON.parse(JSON.stringify(currentPost))
-    },
-    revalidate: 1
-  }
+    return {
+        props: {
+            posts: JSON.parse(JSON.stringify(idPost)),
+            currentPost: JSON.parse(JSON.stringify(getPostData)),
+            dataProjects: JSON.parse(JSON.stringify(projectConfig))
+        },
+    }
 }
 
-export default function Updateproject({dataProjects = projectConfig, posts, currentPost}) {
-  const [configProject, setConfigProject] = useState(projectConfig)
-  const [state, changeState] = useState({});
+// // This function gets called at build time
+// export async function getStaticPaths() {
+//     // Call an external API endpoint to get posts
+//     try{
+//         const post =  await getAllPosts()
+//         const posts = JSON.parse(JSON.stringify(post))
+//         // Get the paths we want to pre-render based on posts
+//         const paths = posts.map((post) => ({
+//         params: { id: post._id },
+//         }))
+
+//         // We'll pre-render only these paths at build time.
+//         // { fallback: false } means other routes should 404.
+//         return { paths, fallback: false }
+//     }
+//     catch(err){
+//         console.log(err)
+//     }
+//}
+
+export default function Updateproject({dataProjects, posts, currentPost}) {
+    const [state, changeState] = useState({});
   const [value, setValue] = useState('');
   const [imageDownloaded, setImageDownloaded] = useState();
   const [onLoading, setOnLoading] = useState(false)
@@ -49,9 +99,10 @@ export default function Updateproject({dataProjects = projectConfig, posts, curr
   const router = useRouter()
   const {id} = router.query
   console.log(id)
-  const [postToUpdate, setPostToUpdate] = useState([currentPost])
+  const [postToUpdate, setPostToUpdate] = useState(currentPost)
   const [updatePost, setUpdatePost] = useState([postToUpdate])
-  console.log("idsingle Post", posts.filter(post =>{return post._id === id }), currentPost)
+
+//   console.log("idsingle Post", posts.filter(post =>{return post._id === id }), currentPost)
     const onChange = ({target}) => {
     // state$
 
@@ -414,8 +465,8 @@ const notifySuccess = () => {
              setIdPost(post._id)
            }}>Supprimer</Card.Footer.Item>
           <Card.Footer.Item>
-            <Link href={'/admin/manageprojet/[id]'} as={`/admin/manageprojet/${post._id}`}>
-              <a href={`"admin/manageprojet/${post._id}`}>View Post</a>
+            <Link href={'/admin/manageproject/[id]'} as={`/admin/manageproject/${post._id}`}>
+              <a href={`/admin/manageproject/${post._id}`}>View Post</a>
             </Link>
           </Card.Footer.Item>
           <Card.Footer.Item renderAs="a" href="#Maybe">Update</Card.Footer.Item>
@@ -445,23 +496,3 @@ const notifySuccess = () => {
     </Layout>
   )
 }
-
-// This function gets called at build time
-export async function getStaticPaths() {
-    // Call an external API endpoint to get posts
-    try{
-      const post =  await getAllPosts()
-      const posts = JSON.parse(JSON.stringify(post))
-      // Get the paths we want to pre-render based on posts
-      const paths = posts.map((post) => ({
-        params: { id: post._id },
-      }))
-
-      // We'll pre-render only these paths at build time.
-      // { fallback: false } means other routes should 404.
-      return { paths, fallback: false }
-    }
-    catch(err){
-      console.log(err)
-    }
-  }
