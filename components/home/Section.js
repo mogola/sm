@@ -37,10 +37,7 @@ const Sections = ({title = "", data = [], ...rest}) => {
                     <Heading subtitle className="subTitleProjects">
                        {post.title}
                     </Heading>
-                    <Content className="contentText">
-                        <p>
-                        {post.subTextDescription}
-                        </p>
+                    <Content className="contentText" dangerouslySetInnerHTML={{__html:post.subTextDescription}}>
                     </Content>
                         {/* <Link
                             href={'/project/[id]'}

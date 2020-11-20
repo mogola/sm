@@ -16,6 +16,7 @@ import utilStyles from './../../../styles/utils.module.css'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import moment from 'moment'
+import { Editor } from '@tinymce/tinymce-react';
 const {Field, Control} = Form;
 
 export async function getServerSideProps(context) {
@@ -304,6 +305,17 @@ const notifySuccess = () => {
     })
   }
 
+  const handleChangeEditor = (target) => {
+    let getName = target.getElement().name
+    const cloneArray = { ...state }
+    console.log(getName)
+    cloneArray[getName] = target.getContent()
+
+    changeState({...state, [getName]: target.getContent(), _id:id})
+    console.log("new value", state)
+    //console.log('target', target.getContent(), target)
+  }
+
   useEffect(() => {
     console.log("update state", state, imageDownloaded)
     let selectAll = document.querySelectorAll('select')
@@ -370,13 +382,36 @@ const notifySuccess = () => {
                     }
                     </>
                   }
-                  {item.type === "textarea" &&
-                  <Textarea
-                    onChange={onChange}
-                    name={item["name"]}
-                    defaultValue={post[item["name"]]}
-                    placeholder="Description..."
-                  />
+                 {
+                    item.type === "textarea" &&
+                    <>
+                    <label className="label">
+                      {item["name"]}
+                    </label>
+                    <Editor
+                      apiKey="n20l3oxsnnev0ao8wjw8bqhpou0jajpz8ew2r3pysqf0mxgn"
+                      initialValue={post[item["name"]]}
+                      tagName={item["name"]}
+                      textareaName={item["name"]}
+                      init={{
+                        height: 500,
+                        menubar: false,
+                        plugins: [
+                          'advlist autolink lists link image',
+                          'charmap print preview anchor help',
+                          'searchreplace visualblocks code',
+                          'insertdatetime media table paste wordcount'
+                        ],
+                        toolbar:
+                          'undo redo | formatselect | bold italic | \
+                          alignleft aligncenter alignright | \
+                          bullist numlist outdent indent | help | forecolor backcolor'
+                      }}
+                      onChange={({target}) => {
+                        handleChangeEditor(target)
+                      }}
+                    />
+                    </>
                   }
                   {item.type === "file" &&
                   item.name !== "imageArray" &&
@@ -403,8 +438,8 @@ const notifySuccess = () => {
                   }
                   {
                       item.type !== "select" &&
-                      item.type !== "textarea" &&
                       item.type !== "file" &&
+                      item.type !== "textarea" &&
                       <>
                       <InputConfig
                         defaultValue={post[item["name"]]}
@@ -451,8 +486,7 @@ const notifySuccess = () => {
             </Media.Item>
           </Media>
           <Content>
-            {post.description}
-            <br />
+            <div dangerouslySetInnerHTML={{__html:post.description}}></div>
             <time dateTime={moment(post.date).utc().format('LL', 'fr')}>{moment(post.date).locale('fr').format('LL', 'fr')}</time>
           </Content>
           </Card.Content>

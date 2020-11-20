@@ -384,7 +384,7 @@ const notifySuccess = () => {
             </Media.Item>
           </Media>
           <Content>
-            {post.description}
+            {post.subTextDescription}
             <br />
             <time dateTime={moment(post.date).utc().format('LL', 'fr')}>{moment(post.date).locale('fr').format('LL', 'fr')}</time>
           </Content>

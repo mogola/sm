@@ -2,7 +2,7 @@
 
 import { themeContextUser } from 'context/contextUser';
 import Link from 'next/link'
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
     Container,
     Columns,
@@ -130,21 +130,21 @@ const Menu = ({state = '', connect}) => {
                               </li>
                             ))}
                             {isUserAdmin &&
-                            <>
+                            <React.Fragment>
                             <li key="ezrze">
                               <Link href="/admin/config">
-                                <a className="menuLink">Manage globales</a>
+                                <a href="/admin/config" className="menuLink">Manage globales</a>
                               </Link>
                             </li>
                             <li key="eaze">
                               <Link href="/admin/project">
-                                <a className="menuLink">Create project</a>
+                                <a href="/admin/project" className="menuLink">Create project</a>
                               </Link>
                             </li>
-                            </>
+                            </React.Fragment>
                             }
                             {!isUserAdmin &&
-                            <>
+                            <React.Fragment>
                             <li key="ezr">
                               <Link href="/login">
                                 <a className="menuLink">Login</a>
@@ -155,7 +155,7 @@ const Menu = ({state = '', connect}) => {
                                 <a className="menuLink">register</a>
                               </Link>
                             </li>
-                            </>
+                            </React.Fragment>
                             }
                           </ul>
                         </div>

@@ -66,8 +66,7 @@ const Post = ({post, config, connect})=>{
                         {post.title}
                         </Heading>
                         <Content className="contentText">
-                            <p>
-                            {post.subTextDescription}
+                            <p dangerouslySetInnerHTML={{__html:post.description}}>
                             </p>
                         </Content>
                     </div>
@@ -86,8 +85,9 @@ const Post = ({post, config, connect})=>{
                 </li>
                 <li key="eiopzieop">
                     <Container className="descriptionPost">
-                        <Content className="contentDescription">
-                            {post.description}
+                        <Content className="contentText">
+                            <p dangerouslySetInnerHTML={{__html:post.subTextDescription}}>
+                            </p>
                         </Content>
                     </Container>
                 </li>

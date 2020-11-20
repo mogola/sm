@@ -65,13 +65,8 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                         </Link>
                                         {
                                             isadmin &&
-                                            <Link href={{
-                                                pathname:'/admin/updateproject',
-                                                query:{id: post._id},
-                                            }}>
-                                                <a className="udpatePost">
-                                                    Mettre à jour
-                                                </a>
+                                            <Link href={'/admin/manageproject/[id]'} as={`/admin/manageproject/${post._id}`}>
+                                                <a className="updatePost" href={`/admin/manageproject/${post._id}`}>View Post</a>
                                             </Link>
                                         }
                                     </div>
@@ -121,13 +116,8 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                         </Link>
                                         {
                                             isadmin &&
-                                            <Link href={{
-                                                pathname:'/admin/updateproject',
-                                                query:{id: post._id},
-                                            }}>
-                                                <a className="udpatePost">
-                                                    Mettre à jour
-                                                </a>
+                                            <Link href={'/admin/manageproject/[id]'} as={`/admin/manageproject/${post._id}`}>
+                                                <a className="updatePost" href={`/admin/manageproject/${post._id}`}>View Post</a>
                                             </Link>
                                         }
                                     </Content>
