@@ -65,9 +65,7 @@ const Post = ({post, config, connect})=>{
                         <Heading className="subTitleMainProject" size={1}>
                         {post.title}
                         </Heading>
-                        <Content className="contentText">
-                            <p dangerouslySetInnerHTML={{__html:post.description}}>
-                            </p>
+                        <Content className="contentText" dangerouslySetInnerHTML={{__html:post.description}}>
                         </Content>
                     </div>
                 </Content>
@@ -85,9 +83,7 @@ const Post = ({post, config, connect})=>{
                 </li>
                 <li key="eiopzieop">
                     <Container className="descriptionPost">
-                        <Content className="contentText">
-                            <p dangerouslySetInnerHTML={{__html:post.subTextDescription}}>
-                            </p>
+                        <Content className="contentText" dangerouslySetInnerHTML={{__html:post.subTextDescription}}>
                         </Content>
                     </Container>
                 </li>
@@ -104,7 +100,7 @@ const Post = ({post, config, connect})=>{
                 </Columns>
             </Container>
             <Link href="/projets/recents">
-                <a>Return to the list</a>
+            <a className="linkSee nextProjectLink">Voir le prochain projet <span className="icoRight" width={26}></span></a>
             </Link>
         </div>
         <Footer

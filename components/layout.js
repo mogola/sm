@@ -209,7 +209,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
                 )}
           </header>
           <main className={post ? "wrapperPost" : ""}>{children}</main>
-          {!none && (
+          {(!none || !post) && (
             <div className={styles.backToHome}>
               <Link href="/">
                 <a className={utilStyles.linkInherit}>← Back to home</a>

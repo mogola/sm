@@ -756,6 +756,12 @@ html {
     @include mobileView{
       font-weight: 600;
     }
+
+    &.nextProjectLink {
+      text-align: right;
+      padding: 40px 24px 64px 24px;
+      display: block;
+    }
   }
 
   .deleteTag{
@@ -849,7 +855,7 @@ html{
           }
         }
 
-        .udpatePost {
+        .updatePost {
           text-decoration: none;
           color: #FA4000;
           border: 1px solid #FA4000;
@@ -913,6 +919,7 @@ html{
               text-transform: initial;
               font-size: 16px;
               letter-spacing: 0;
+              line-height:24px;
             }
           }
           .linkSee {
@@ -1434,8 +1441,7 @@ html {
     padding-top: 104px;
     padding-bottom: 104px;
     @include mobileView{
-      padding-top: 40px;
-      padding-bottom: 40px;
+      padding: 50px 40px;
     }
     .contentDescription {
       color: #090909;
@@ -1452,15 +1458,24 @@ html {
   }
 }
 
+.listImagesPost {
+  @include mobileView{
+    background: #2C2B2B;
+    padding: 48px 0;
+  }
+}
 .postBgSingle {
   max-height: 900px;
   position: absolute;
   width: 100%;
   height: 100%;
   z-index:1;
+  @include mobileView{
+    height: 30%;
+  }
 }
 
-.udpatePost {
+.updatePost {
   position: absolute;
   font-family: Overpass;
   right: 0;

@@ -47,7 +47,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                 </Heading>
                                 <Content className="contentText">
                                     <p>
-                                    {post.subTextDescription}
+                                    {post.subTextDescription.substring(1, 200)}
                                     </p>
                                 </Content>
                                 </div>
@@ -104,7 +104,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                             </Heading>
                                             <Content className="contentText">
                                                 <p>
-                                                {post.subTextDescription}
+                                                {post.subTextDescription.substring(1, 200)}
                                                 </p>
                                             </Content>
                                         </div>
