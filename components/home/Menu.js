@@ -93,6 +93,7 @@ const Menu = ({state = '', connect}) => {
       <themeContextUser.Consumer>
         {({userConnected}) => (
           <div className="mainMenuNoHome">
+            <Link href="" >
                 <a
                   className={`
                   ${isMobileMenu ? "menuBurgerMobile": "menuBurgerDesktop"} menuB
@@ -103,6 +104,7 @@ const Menu = ({state = '', connect}) => {
                   <span className="mTop"></span>
                   <span className="mBottom"></span>
                 </a>
+              </Link>
                   <div className="contentMenu">
                   <div className="mainHeader">
                       <div className="divHeader">
@@ -133,12 +135,12 @@ const Menu = ({state = '', connect}) => {
                             <React.Fragment>
                             <li key="ezrze">
                               <Link href="/admin/config">
-                                <a href="/admin/config" className="menuLink">Manage globales</a>
+                                <a className="menuLink">Manage globales</a>
                               </Link>
                             </li>
                             <li key="eaze">
                               <Link href="/admin/project">
-                                <a href="/admin/project" className="menuLink">Create project</a>
+                                <a className="menuLink">Create project</a>
                               </Link>
                             </li>
                             </React.Fragment>

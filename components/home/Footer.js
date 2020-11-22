@@ -65,10 +65,14 @@ const Footer = ({title = "", menu='', data = '', ...rest}) => {
                     <Heading className="titleSubFooter" size={4}>{data.textContactMe}</Heading>
                     <ul>
                         <li className="emailContact">
-                            <a mailto={data.email}>{data.email}</a>
+                            <Link href="">
+                                <a mailto={data.email}>{data.email}</a>
+                            </Link>
                         </li>
                         <li className="phoneContact">
-                            <a>{data.phone}</a>
+                            <Link href="">
+                                <a>{data.phone}</a>
+                            </Link>
                         </li>
                     </ul>
                 </Columns.Column>

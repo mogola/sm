@@ -21,12 +21,14 @@ import {
     Content
 } from 'react-bulma-components';
 
-const Post = ({post, config, connect})=>{
+const Post = ({post, config, connect, nextPost, prevPost})=>{
     const [configs, setConfigs] = useState(config)
     const router = useRouter()
+    const [getNextId, setGetNextId] = useState(nextPost)
+    const [getPrevId, setGetPrevId] = useState(prevPost)
     console.log(router)
     const {id} = router.query
-    console.log("id of post", router.isFallback)
+    //console.log("id of post", router.isFallback, getNextId, getPrevId)
 
     if(router.isFallback){
         return(
@@ -99,9 +101,14 @@ const Post = ({post, config, connect})=>{
                     }
                 </Columns>
             </Container>
-            <Link href="/projets/recents">
-            <a className="linkSee nextProjectLink">Voir le prochain projet <span className="icoRight" width={26}></span></a>
-            </Link>
+            <div className="navigationPost">
+                <Link prefetch={false}  href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(nextPost)}`}>
+                    <a className="linkSee nextProjectLink">Voir le projet suivant</a>
+                </Link>
+                <Link prefetch={false} href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(prevPost)}`}>
+                    <a className="linkSee prevProjectLink">Voir le projet précédent</a>
+                </Link>
+            </div>
         </div>
         <Footer
           menu={configs.menuCategoryLink}
@@ -118,14 +125,42 @@ export async function getStaticProps({params:{slug}}) {
     const postData = await getAllPosts()
     const posts = JSON.parse(JSON.stringify(postData))
     const getPostData = posts.find(post => post.title == slug)
+    const findindex = posts.findIndex(post => post.title === slug)
+    console.log("index post", findindex)
+    let getPrev = posts[findindex + 1]
+    let getNext = posts[findindex - 1]
+    let idprev
+    let idnext
+
+    console.log(getNext, getPrev )
+    if(getNext === undefined) {
+        console.log("pas de post existant")
+        getNext = posts[findindex]
+        idnext = getNext.title
+    }else {
+        idnext = getNext.title
+    }
+
+    if(getPrev === undefined) {
+        console.log("pas de post existant")
+        getPrev = posts[findindex]
+
+        idprev = getPrev.title
+    }else {
+        idprev = getPrev.title
+    }
+    console.log('prev', idprev, idnext)
 
     console.log('data', getPostData)
 
     return {
             props: {
                 post:JSON.parse(JSON.stringify(getPostData)),
-                config: JSON.parse(JSON.stringify(config[0]))
-            }
+                config: JSON.parse(JSON.stringify(config[0])),
+                nextPost: idprev,
+                prevPost: idnext
+            },
+            revalidate: 1
         }
     }
     catch(err){

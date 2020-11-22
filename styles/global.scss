@@ -762,6 +762,12 @@ html {
       padding: 40px 24px 64px 24px;
       display: block;
     }
+
+    &.prevProjectLink {
+      text-align: left;
+      padding: 40px 24px 64px 24px;
+      display: block;
+    }
   }
 
   .deleteTag{
@@ -1490,5 +1496,24 @@ html {
     right: 40px;
     bottom: 35px;
     padding: 5px 2px;
+  }
+}
+
+.navigationPost {
+  display: flex;
+  width: 100%;
+  padding: 0 45px;
+  flex-wrap: wrap;
+
+  .linkSee {
+    width: 50%;
+  }
+
+  .nextProjectLink {
+    order: 2;
+  }
+
+  .prevProjectLink {
+    order: 1;
   }
 }
