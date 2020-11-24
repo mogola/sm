@@ -23,13 +23,6 @@ export async function getServerSideProps(context) {
     console.log("data id id id id", context.query.id)
     const posts = await fetch(`${baseUrl}/api/detailproject`, {method: "GET"})
     const idPost = await posts.json()
-    const findindex = idPost.findIndex(index => index._id === context.query.id)
-    console.log("index post", findindex)
-    const getPrev = idPost[findindex + 1]
-    const getNext = idPost[findindex - 1]
-    const idprev = getPrev._id
-    const idnext = getNext._id
-    console.log('prev', idprev, idnext)
     const getPostData = idPost.filter(post => post._id === context.query.id)
     console.log("==============", getPostData)
     const projectConfig = [
