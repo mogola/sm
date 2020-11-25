@@ -34,7 +34,7 @@ const refCategory = useRef(null)
     newList.push(name)
     console.log(newList.includes(name))
     setGetCollection(newList)
-    fetch(`${baseUrl}/api/collection`, {
+    fetch(`${baseUrl}/api/collection/collection`, {
         method: "POST",
         headers:{
           'Content-Type':'application/json'
