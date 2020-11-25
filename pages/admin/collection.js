@@ -3,13 +3,13 @@ import Head from 'next/head'
 import Layout, { siteTitle } from '../../components/layout'
 import baseUrl from '../../helpers/baseUrl'
 import Link from 'next/link'
-import fetch from 'node-fetch'
+import fetch from 'isomorphic-unfetch'
 
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
-export async function getStaticProps() {
-const list = await fetch(`${baseUrl}/api/collection`, {method:"GET"})
+export async function getServerSideProps() {
+const list = await fetch(`${baseUrl}/api/collection/collection`, {method:"GET"})
 const data = await list.json()
 console.log("list", JSON.parse(JSON.stringify(data)))
 return {
