@@ -1,5 +1,5 @@
-//const MongoClient = require('mongodb').MongoClient;
-//import { db } from '../../../helpers/connectToMongo'
+const MongoClient = require('mongodb').MongoClient;
+import { db } from '../../../helpers/connectToMongo'
 //import 'mongoose' from mongoose
 export default async (req,res)=>{
   switch (req.method)
