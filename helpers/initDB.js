@@ -22,9 +22,9 @@ function initDB(){
 }
 
 
-export async function db(name, dbreq, dbres){
+export function db(name, dbreq, dbres){
     try{
-        await MongoClient
+     MongoClient
         .connect('mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/',
         {
          useNewUrlParser: true,
@@ -81,10 +81,9 @@ export async function db(name, dbreq, dbres){
 
 
 
-export async function getCollectionCreated(dbres){
+export function getCollectionCreated(dbres){
     try{
 
-        await
         MongoClient
         .connect('mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/',
         {
