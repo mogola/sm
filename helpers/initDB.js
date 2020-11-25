@@ -56,6 +56,16 @@ export async function db(name, dbreq, dbres){
                         collectionExist: false
                     }
 
+                    // dbo.collection("About").insertOne({
+                    //     "title" : "example",
+                    //     "content": "example 1",
+                    //     "urlImage": "urlImage"
+                    // }, function(err, res){
+                    //     if (err) throw err;
+                    //         console.log("1 document inserted");
+                    //     db.close();
+                    // })
+
                     return dbres.json(dataReturn)
                  }
 
@@ -74,7 +84,8 @@ export async function db(name, dbreq, dbres){
 export async function getCollectionCreated(dbres){
     try{
 
-        await MongoClient
+        await
+        MongoClient
         .connect('mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/',
         {
          useNewUrlParser: true,
