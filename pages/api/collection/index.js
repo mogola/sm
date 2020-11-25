@@ -1,47 +1,5 @@
-import initDB, {db} from '../../../helpers/initDB'
-var MongoClient = require('mongodb').MongoClient;
-
-// const db = async (name, dbreq, dbres) => {
-//     await MongoClient
-//     .connect('mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/',
-//     {
-//      useNewUrlParser: true,
-//      useUnifiedTopology: true,
-//    },
-//    async function(err, db) {
-//      if(name !== undefined && name !== ''){
-//          if (err) throw err;
-//          var dbo = db.db("Portfolio");
-//          await dbo.createCollection(name, async function(err, res) {
-//              if (err) console.log(err.codeName);
-//              if(err.code === 48) {
-//                  console.log("Collection created!");
-//                  const dataCollections = await dbo.collections()
-//                  dataCollections.forEach((cols) => {
-//                      console.log("collectionName", cols.collectionName)
-//                  })
-
-//                  let dataReturn = {
-//                      message: err.codeName,
-//                      collectionAlreadyExisting: name
-//                  }
-
-//                  dbres.json(dataReturn)
-//              }else{
-//                  let dataReturn = {
-//                      collectionNameCreated: name
-//                  }
-
-//                  new Promise((resolve) => {
-//                      resolve(dataReturn)
-//                  })
-//              }
-
-//              db.close();
-//          });
-//      }
-//      });
-//  }
+import { db } from '../../../helpers/initDB'
+const MongoClient = require('mongodb').MongoClient;
 
 export default async (req,res)=>{
   switch (req.method)
@@ -59,14 +17,14 @@ export default async (req,res)=>{
 }
 
 const getAllCollection = async (req, res) => {
-    await
+    try{
         MongoClient
         .connect('mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/',
         {
-         useNewUrlParser: true,
-         useUnifiedTopology: true,
-       },
-       async function(err, db) {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        },
+        async function(err, db) {
         var dbo = db.db("Portfolio");
             const dataCollections = await dbo.collections()
             let collectionList = []
@@ -78,9 +36,11 @@ const getAllCollection = async (req, res) => {
             console.log(collectionList)
             res.json({data: collectionList})
             db.close();
-
-       })
-
+        })
+    }
+    catch(err){
+        console.log(err)
+    }
 }
 
 const createCollection = async (req, res) => {

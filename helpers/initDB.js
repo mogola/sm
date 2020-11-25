@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-var MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 
 let uri = process.env.MONGODB_URI
 let dbName = process.env.MONGODB_DB
