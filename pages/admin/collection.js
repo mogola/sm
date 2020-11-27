@@ -1,9 +1,12 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect  } from 'react'
 import Head from 'next/head'
 import Layout, { siteTitle } from '../../components/layout'
 import baseUrl from '../../helpers/baseUrl'
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
+
+import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
+const {Field, Control, Label} = Form;
 
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
@@ -23,7 +26,20 @@ export default function Collection({collection}) {
 const [getName, setGetName] = useState('')
 const [getCollections, setGetCollection] = useState(collection)
 const [onLoading, setOnLoading] = useState(false)
+const [getField, setGetField] = useState('')
+const [getValue, setGetValue] = useState('')
+const [modelData, setModelData] = useState({})
+const [stringifyData, setStringifyData] = useState('')
+const [collectionName, setCollectioName] = useState('')
+const [stringifyManyData, setStringifyManyData] = useState('')
+const [arrModel, setArrModel] = useState([])
+const [objModel, setObjModel] = useState({})
+const [addObj, setAddObj] = useState()
 const refCategory = useRef(null)
+const refValue = useRef(null)
+const refKey = useRef(null)
+const refCollection = useRef(null)
+
   const submitForm = async (name) => {
     event.preventDefault
     let newList = [...getCollections]
@@ -41,6 +57,43 @@ const refCategory = useRef(null)
         },
         body : JSON.stringify({
             name: name
+        })
+    }).then(async (data) => {
+      console.log(await data.json())
+      notifySuccess()
+    })
+  }
+
+  const udpateCollection = async () => {
+    event.preventDefault
+    console.log("modelSubmitdata", modelData)
+    fetch(`${baseUrl}/api/collection/collection`, {
+        method: "PUT",
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify({
+            nameCollection: collectionName,
+            obj: modelData, //objModel
+            multiple: false
+        })
+    }).then(async (data) => {
+      console.log(await data.json())
+      notifySuccess()
+    })
+  }
+
+  const udpateManyCollection = async () => {
+    event.preventDefault
+    fetch(`${baseUrl}/api/collection/collection`, {
+        method: "PUT",
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify({
+            nameCollection: collectionName,
+            obj: objModel,
+            multiple: true
         })
     }).then(async (data) => {
       console.log(await data.json())
@@ -78,8 +131,53 @@ const refCategory = useRef(null)
       }
     })
   }
+
+  const reset = () => {
+    setGetValue('')
+    setGetField('')
+  }
+
+  const getNameCollection = ({target}) => {
+    console.log(target.value)
+    setCollectioName(target.value)
+  }
+
+  const addManyIndex =  async () => {
+    try{
+      event.preventDefault()
+      let newDataItem = {[refKey.current.name]:refKey.current.value, [refValue.current.name]:refValue.current.value}
+    // setObjModel({...objModel, newDataItem})
+      setArrModel([...arrModel, newDataItem])
+      // console.log("objModel", objModel)
+      // console.log("arrModel", arrModel)
+      await arrModel.forEach((keys) => {
+        setAddObj({...addObj, [keys["fieldProp"]] : keys["valueProp"]})
+      // console.log("addObj", addObj)
+        //setObjModel({...dataModel, [keys["fieldProp"]] : keys["valueProp"]})
+        //console.log('obj model',{[keys["fieldProp"]] : keys["valueProp"]}, objModel)
+
+        // for (const [key, value] of Object.entries(keys)){
+        //   console.log(`${key}: ${value}`);
+        // }
+      })
+
+        setObjModel(addObj)
+        setStringifyManyData(JSON.stringify(addObj))
+        console.log("addObj", objModel)
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+  const onChange = ({target}) => {
+    setModelData({...modelData, [target.name]: target.value})
+    setObjModel({...modelData, [target.name]: target.value})
+    setStringifyData(JSON.stringify(modelData))
+  }
+
   useEffect(() => {
-      console.log("get collection name", collection)
+    addManyIndex()
   }, [])
 
   return (
@@ -88,8 +186,90 @@ const refCategory = useRef(null)
         <title>{siteTitle}</title>
       </Head>
       <ToastContainer />
+      <Field>
       <form>
-      <div>
+        <select
+        ref={refCollection}
+        onChange={getNameCollection}
+        className="select">
+              {getCollections.map((item, i) => (
+                <option key={i}>
+                  {item}
+                </option>
+              ))}
+          </select>
+          <Columns>
+            <Columns.Column>
+            <Control>
+                <Columns>
+                  <Columns.Column>
+                    <Container>
+                        <Label>Key</Label>
+                        <input ref={refKey}
+                        className="input"
+                        name="fieldProp"
+                        type="input"
+                        onChange={onChange}
+                        defaultValue={getField}/>
+                    </Container>
+                    </Columns.Column>
+                    <Columns.Column>
+                      <Container>
+                        <Label>Value</Label>
+                        <input ref={refValue}
+                        className="input"
+                        name="valueProp"
+                        type="input"
+                        onChange={onChange}
+                        defaultValue={getValue}/>
+                      </Container>
+                    </Columns.Column>
+                  </Columns>
+                  <Button onClick={(e) =>
+                  {
+                    e.preventDefault()
+                    console.log("modelData", modelData)
+                    udpateCollection()
+                  }
+                  }>add New Attribute</Button>
+                  <Button type="submit" onClick={(e) => {
+                        event.preventDefault()
+                        let newDataItem = {[refKey.current.name]:refKey.current.value, [refValue.current.name]:refValue.current.value}
+                        // setObjModel({...objModel, newDataItem})
+                        // console.log("objModel", objModel)
+                        // console.log("arrModel", arrModel)
+                        setAddObj({...addObj, [refKey.current.value] : refValue.current.value})
+                        // arrModel.forEach((keys) => {
+                        //   setAddObj({...addObj, [keys["fieldProp"]] : keys["valueProp"]})
+                        // console.log("addObj", addObj)
+                          //setObjModel({...dataModel, [keys["fieldProp"]] : keys["valueProp"]})
+                          //console.log('obj model',{[keys["fieldProp"]] : keys["valueProp"]}, objModel)
+
+                          // for (const [key, value] of Object.entries(keys)){
+                          //   console.log(`${key}: ${value}`);
+                          // }
+                        //})
+                        setStringifyManyData(JSON.stringify(addObj))
+                        setObjModel(addObj)
+                        console.log("addObj",addObj)
+                   // addManyIndex()
+                  }}>add Multiple Attribute</Button>
+                  <Button type="submit" onClick={(e) => {
+                    e.preventDefault()
+                       udpateManyCollection()
+                  }}>Submit Object</Button>
+              </Control>
+            </Columns.Column>
+            <Columns.Column>
+              <div id="data">
+                {stringifyData}
+                <hr />
+                {stringifyManyData}
+              </div>
+            </Columns.Column>
+          </Columns>
+          </form>
+          <form>
           <input ref={refCategory}
             className="input"
             name="collection"
@@ -100,7 +280,8 @@ const refCategory = useRef(null)
               console.log(refCategory.current.value)
               submitForm(refCategory.current.value)
           }}>Envoyer</button>
-        </div>
+          </form>
+        </Field>
         <div>
           <ul>
             {getCollections.map((item, i) => (
@@ -110,7 +291,6 @@ const refCategory = useRef(null)
             ))}
           </ul>
         </div>
-      </form>
     </Layout>
   )
 }

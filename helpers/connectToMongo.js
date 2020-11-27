@@ -3,6 +3,28 @@ const MongoClient = require('mongodb').MongoClient;
 let uri = process.env.MONGODB_URI
 let dbName = process.env.MONGODB_DB
 
+function database(obj, collection){
+    try{
+       const dbo =  MongoClient
+        .connect('mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/',
+        {
+         useNewUrlParser: true,
+         useUnifiedTopology: true,
+       },
+       async function(err, db) {
+            const dbo = db.db("Portfolio");
+            dbo.collection(collection).insertOne(obj, function(err, res){
+                if (err) throw err;
+                    console.log("1 document inserted");
+                db.close();
+            })
+        })
+    }
+    catch(err){
+        console.log(error)
+    }
+}
+
 function db(name, dbreq, dbres){
     try{
      MongoClient
@@ -97,5 +119,6 @@ function getCollectionCreated(dbres){
 //export const db = connect("mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/Portfolio?retryWrites=true&w=majority")
 export {
     db,
-    getCollectionCreated
+    getCollectionCreated,
+    database
 }

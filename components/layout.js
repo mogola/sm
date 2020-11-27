@@ -28,7 +28,6 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   }
 
   let dataStorage = (callback) => {
-    console.log("compare object",callback)
     return localStorage.getItem("info") !== null && compareStorage(localStorage.getItem("info"),callback) === true
     ? JSON.parse(localStorage.getItem("info"))
     : callback
@@ -49,7 +48,6 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
       setTextScrollTop(textScrollTop)
 
       let dataCfs = Object.entries(result)
-      console.log(dataCfs)
 
       let obj = [];
       dataCfs.forEach(([key, value]) => {
@@ -75,7 +73,6 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
 
       dataCfs.forEach(([key, value])=> changeState(prevState => ({...prevState, [key]: value })));
 
-      console.log(dataCfs)
       setDataConfig(obj)
       if(compareStorage(localStorage.getItem("info"),result)){
         setDataConfig(localStorage.getItem("info"))

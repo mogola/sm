@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
-import { db } from '../../../helpers/connectToMongo'
+import { db,database } from '../../../helpers/connectToMongo'
 //import 'mongoose' from mongoose
 export default async (req,res)=>{
   switch (req.method)
@@ -10,6 +10,9 @@ export default async (req,res)=>{
         case "POST":
             await createCollection(req,res)
             break
+        case "PUT":
+            await updateCollection(req, res)
+            break
         case "DELETE":
             await deleteCollection(req,res)
             break
@@ -18,6 +21,7 @@ export default async (req,res)=>{
 
 const getAllCollection = async (req, res) => {
     try{
+
         MongoClient
         .connect('mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/',
         {
@@ -60,4 +64,23 @@ const createCollection = async (req, res) => {
 
 const deleteCollection = (req, res) => {
     res.json({message :"getAllCollection"})
+}
+
+
+const updateCollection = async (req, res) => {
+    const {obj, nameCollection, multiple} = req.body
+    const {fieldProp, valueProp} = obj
+    let objArr;
+    if(multiple !== true){
+        objArr = {[fieldProp]: valueProp}
+    }else {
+        objArr = obj
+    }
+    console.log(req.body, typeof nameCollection)
+    try{
+        await database(objArr, nameCollection)
+    }
+    catch(err){
+        console.log(err)
+    }
 }
