@@ -1174,7 +1174,7 @@ html{
       padding-bottom: 96px;
       @include mobileView{
         text-align: left;
-        padding: 0 40px 64px;
+        padding: 0 0 64px;
       }
     }
   }
@@ -1197,6 +1197,9 @@ html {
   .section-prestation {
     background: #2C2B2B;
     padding:0 24px 88px;
+    @include mobileView{
+      padding-bottom: 0;
+    }
     .contentSection {
       color: #FAFAFA;
 
@@ -1430,7 +1433,15 @@ html {
     }
   }
   .mainMenuNoHome{
+    &.fixedMenu {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 2;
+    }
     .mainMenu{
+      background: #000;
       ul{
         li{
           a{
@@ -1462,12 +1473,148 @@ html {
       }
     }
   }
+  .aboutMainProfil {
+    min-height: 900px;
+    width: 100%;
+    background: #000;
+    align-items: center;
+    justify-content: left;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    @include mobileView{
+      min-height: initial;
+      flex-direction: column;
+      display: flex;
+    }
+  }
+  .mainProfilImage {
+    @include mobileView{
+      order: 1;
+      padding:0;
+    }
+  }
+  .txtContentProfil {
+    padding-left: 104px;
+    @include mobileView{
+      padding-left: 24px;
+      padding-right:24px;
+      order:2;
+    }
+    .textProfil {
+      color: #FAFAFA;
+      font-family: Overpass;
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 86px;
+      position: relative;
+      left: 191px;
+      z-index: 1;
+
+      @include mobileView{
+        color: #FAFAFA;
+        font-family: Overpass;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 0;
+        line-height: 37px;
+        left: 0;
+        top: -28px;
+      }
+    }
+  }
+  .mainListImageProfil{
+    .listImageProfil {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      padding-right: 120px;
+      @include mobileView {
+        padding-right: 0;
+      }
+      .image{
+        width: calc(33.33% - 16px);
+        overflow:hidden;
+        position:relative;
+        margin: 0 16px 16px 0;
+        padding: 0;
+        &:nth-child(odd){
+          @include mobileView{
+            margin-right:8px;
+            margin-left:0;
+          }
+        }
+        &:nth-child(even){
+          @include mobileView{
+            margin-left:8px;
+            margin-right:0;
+          }
+        }
+        @include mobileView{
+          width: calc(50% - 8px)
+        }
+        &:before {
+          content: "";
+          display: block;
+          padding-bottom: 100%;
+        }
+      }
+      img{
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        width: auto;
+        display: block;
+        height: 100%;
+        max-width: initial;
+      }
+    }
+  }
+  .profilSubContent {
+    padding: 120px 0 0 0;
+    @include mobileView{
+      padding: 40px 24px 0;
+      overflow: hidden;
+    }
+    .columns {
+      @include mobileView{
+        flex-direction: column;
+        display: flex;
+        flex-wrap: initial;
+      }
+    }
+  }
+  .mainListImageProfil{
+    @include mobileView{
+      @include mobileView{
+        order: 1;
+      }
+    }
+  }
+  .profilSubText{
+    align-self: flex-end;
+    @include mobileView{
+    }
+  }
+
+  .titleAboutName.is-4 {
+    color: #090909;
+    font-family: Overpass;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 31px;
+  }
 }
 
 .listImagesPost {
   @include mobileView{
     background: #2C2B2B;
     padding: 48px 0;
+    order: 2;
   }
 }
 .postBgSingle {
@@ -1515,5 +1662,14 @@ html {
 
   .prevProjectLink {
     order: 1;
+  }
+}
+
+.noMarginContent {
+  margin: 0;
+  padding: 0 0 120px 0;
+
+  @include mobileView{
+    padding: 0 0 48px 0;
   }
 }

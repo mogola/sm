@@ -1,5 +1,3 @@
-
-
 import { themeContextUser } from 'context/contextUser';
 import Link from 'next/link'
 import React, {useState, useEffect} from 'react'
@@ -16,7 +14,7 @@ import {
 } from 'react-bulma-components';
 import utilStyles from '../../styles/utils.module.css'
 
-const Menu = ({state = '', connect}) => {
+const Menu = ({state = '', connect, classMenu = ''}) => {
     const [textAvailable, setTextAvailable] = useState([])
     const [isUserAdmin, setIsUserAdmin] = useState()
     const [isMobile, setIsMobile] = useState(768)
@@ -92,7 +90,7 @@ const Menu = ({state = '', connect}) => {
     return (
       <themeContextUser.Consumer>
         {({userConnected}) => (
-          <div className="mainMenuNoHome">
+          <div className={`${classMenu} mainMenuNoHome`}>
             <Link href="" >
                 <a
                   className={`

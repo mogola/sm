@@ -95,7 +95,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
             <link rel="icon" href="/favicon.ico" />
             <meta
               name="description"
-              content="Learn how to build a personal website using Next.js"
+              content="Sangaré Mogola, illustrateur et designer textile"
             />
             <meta
               property="og:image"
@@ -121,7 +121,10 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
               <>
                 <h1 className={utilStyles.heading2Xl}>
                   <span className={utilStyles.nameSite}>
-                    {state.nameSite}</span><span>Créer un projet</span>
+                    <Link href="/">
+                      <a>{state.nameSite}</a>
+                      </Link>
+                    </span><span>Créer un projet</span>
                 </h1>
               </>
             )

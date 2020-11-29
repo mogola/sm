@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
-
+import AboutSchema from './../models/About'
 let uri = process.env.MONGODB_URI
 let dbName = process.env.MONGODB_DB
 
@@ -116,9 +116,51 @@ function getCollectionCreated(dbres){
     }
 }
 
+function getCollectionData(collection, res){
+    try{
+       MongoClient
+        .connect('mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/',
+        {
+         useNewUrlParser: true,
+         useUnifiedTopology: true,
+       },
+       async function(err, db) {
+            const dbo = db.db("Portfolio");
+            const data = await dbo.collection(collection).findOne()
+            res.json({
+                data
+            })
+            db.close();
+        })
+    }
+    catch(err){
+        console.log(error)
+    }
+}
+
+const updatePostData = async (res, data, id) => {
+    try{
+       await AboutSchema.updateOne(
+            { _id: id },
+            data,
+        function(err, updatePost){
+            if(err) console.log(err)
+            console.log("updateAbout", updatePost)
+            res.json({
+                "aboutUpdate":updatePost
+            })
+        })
+    }
+    catch(err){
+        console.log(error)
+    }
+}
+
 //export const db = connect("mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/Portfolio?retryWrites=true&w=majority")
 export {
     db,
     getCollectionCreated,
-    database
+    database,
+    getCollectionData,
+    updatePostData
 }
