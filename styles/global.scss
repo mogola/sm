@@ -1483,6 +1483,7 @@ html {
     margin-right: 0;
     padding-left: 0;
     padding-right: 0;
+
     @include mobileView{
       min-height: initial;
       flex-direction: column;
@@ -1490,6 +1491,44 @@ html {
     }
   }
   .mainProfilImage {
+    padding: 0;
+    position: relative;
+    align-self: stretch;
+    .image{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      @include mobileView{
+        position: static;
+      }
+      img{
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        height: 100%;
+        max-width: initial;
+        width: auto;
+
+        @include mobileView{
+          position: static;
+          height: auto;
+          width: 100%;
+          transform: initial;
+        }
+      }
+    }
+    &:before {
+      content: "";
+      display:block;
+      padding-bottom: 100%;
+      @include mobileView{
+        display: none;
+      }
+    }
     @include mobileView{
       order: 1;
       padding:0;
@@ -1584,6 +1623,31 @@ html {
         flex-direction: column;
         display: flex;
         flex-wrap: initial;
+      }
+    }
+
+    .listTools {
+      span{
+        color: #090909;
+        font-family: "Source Sans Pro";
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 1.31px;
+        line-height: 24px;
+        text-transform: uppercase;
+
+        + span {
+          &:before {
+            content:"";
+            display: inline-block;
+            height: 2px;
+            width:15px;
+            margin: 0 10px;
+            position: relative;
+            background: #090909;
+            top: -3px;
+          }
+        }
       }
     }
   }

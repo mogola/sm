@@ -88,7 +88,7 @@ const [posts, setPosts] = useState(allPost)
             <Heading className="titleAboutName" size={4}>
                 {data.titleLogiciel}
             </Heading>
-            <Content>
+            <Content className="listTools">
                 {data.listLogiciel.map((item, i) => (
                     <span key={i}>{item}</span>
                 ))}

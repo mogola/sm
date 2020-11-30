@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-unfetch'
 
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import Head from 'next/head'
 import Layout from './../../../components/layout'
 import Link from 'next/link'
@@ -32,15 +32,21 @@ export async function getServerSideProps(context) {
 
 export default function Manageabout({dataAbout}) {
     const [dataFromAbout, setDataFromAbout] = useState(dataAbout)
-    const [arrayKeys, setArrayKeys] = useState([])
+    const [arrayKeys, setArrayKeys] = useState([''])
     const [state, changeState] = useState({});
     const [onLoading, setOnLoading] = useState(false)
     const [getId, setGetId] = useState('')
+    const [count, setCount] = useState([])
+    //const [itemRef, setItemRef] = useState(Array.from({length: count.length}, a => useRef(null)))
+    const itemRef = useRef(null)
     useEffect(() => {
         console.log("data About", dataAbout)
         console.log(Object.entries(dataFromAbout.data))
         setArrayKeys(Object.entries(dataFromAbout.data))
         setGetId(Object.entries(dataFromAbout.data)[0][1])
+        // let data = ['Name', 'Age', 'Gender'];
+        // itemRef.current = new Array(data.length);
+        // setCount(data)
     }, [])
 
     const handleChangeEditor = (target) => {
@@ -159,6 +165,21 @@ export default function Manageabout({dataAbout}) {
             setOnLoading(false)
         })
       }
+
+      const addItemList = () => {
+        let item = [...count]
+        let getItem = ''
+        item.push(getItem)
+        setCount(item)
+      }
+
+      const onChangeItem = (i ,target, nameTarget) => {
+        console.log(target.value, nameTarget)
+        count[i] = target.value
+        setCount(count)
+        changeState({...state, [nameTarget]: count})
+        console.log('state', state)
+      }
   return (
     <Layout dashboard>
       <Head>
@@ -174,7 +195,7 @@ export default function Manageabout({dataAbout}) {
                             <Label>
                                 {item[0]}
                             </Label>
-                            {(item[0] !== "descriptionProfil" && item[0] !== "description")  &&
+                            {(item[0] !== "descriptionProfil" && item[0] !== "description" && item[0] !== "listLogiciel")  &&
                                 <input
                                     className="input"
                                     name={item[0]}
@@ -220,11 +241,30 @@ export default function Manageabout({dataAbout}) {
                               />
                             </>
                         }
+                        {item[0] === "listLogiciel" &&
+                            <Field>
+                                <Control>
+                                    {count.map((setitem, i) =>(
+                                        <input className="input"
+                                        key={i}
+                                        onChange={(e) => {
+                                            onChangeItem(i,e.target, item[0])
+                                        }} name="" defaultValue={count[i]} />
+                                    ))}
+                                    <Button onClick={(e) => {
+                                        e.preventDefault()
+                                        console.log(count)
+                                        addItemList()
+                                    }}>
+                                        addItem
+                                    </Button>
+                                </Control>
+                            </Field>
+                        }
                     </Control>
                     </Field>
 
                 ))}
-
                 <Button
                     onClick={(e) => {
                         e.preventDefault()
