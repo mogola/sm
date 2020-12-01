@@ -21,9 +21,26 @@ const ImageUploads = (props, {name = "", numbers}) => {
     setImages(imageList);
   };
 
+  // evolution single update post
+  const handleChangeImage = (imageList, addUpdateIndex) => {
+    // data for submit
+    console.log("props", props)
+    console.log(imageList, addUpdateIndex);
+    let updateListState = {[props.name]:imageList}
+    updateListState = updateListState[props.name]
+    props.onChangeImage(updateListState)
+    console.log("updateList", updateListState)
+    setImages(imageList);
+  };
+
   const onImageSave = (event) => {
     event.preventDefault();
-    let dataImageFromProject = props.onSaveImages();
+    let dataImageFromProject
+    if(props.multiple === true){
+      dataImageFromProject = props.onSaveAllImages();
+    }else {
+      dataImageFromProject = props.onSaveImages();
+    }
     console.log("images", dataImageFromProject)
     return dataImageFromProject
   }
@@ -34,7 +51,7 @@ const ImageUploads = (props, {name = "", numbers}) => {
       <ImageUploading
         multiple
         value={images}
-        onChange={handleChange}
+        onChange={props.multiple === true ? handleChangeImage : handleChange}
         onSaveImages={onImageSave}
         maxNumber={maxNumber}
         dataURLKey="data_url"

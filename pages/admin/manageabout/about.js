@@ -47,6 +47,8 @@ export default function Manageabout({dataAbout}) {
         // let data = ['Name', 'Age', 'Gender'];
         // itemRef.current = new Array(data.length);
         // setCount(data)
+       // console.log(dataAbout["listLogiciel"])
+        setCount(dataAbout.data["listLogiciel"])
     }, [])
 
     const handleChangeEditor = (target) => {
@@ -69,6 +71,50 @@ export default function Manageabout({dataAbout}) {
         console.log("data from child", data)
         changeState({...state, "urlProfilImage": data})
         console.log("Form>", state);
+    }
+
+    const onChangeStateMainImages = (data) => {
+      console.log("data from child", data)
+      changeState({...state, "getImagesPost": data})
+      console.log("Form>", state);
+  }
+
+
+    const onSaveMainAllImage = () => {
+      setOnLoading(true)
+
+         let imagesDetails = new Array()
+        let images = state.getImagesPost
+
+        console.log('images', images)
+        setOnLoading(true)
+        images.map((image, i) => {
+          imagesDetails.push({
+            data_url: image.data_url,
+            filename: image.file.name,
+            type: image.file.type.replace("image/", "")
+           })
+        })
+
+       fetch(`${baseUrl}/api/upload`,{
+         method:"POST",
+         headers:{
+         'Content-Type':'application/json'
+         },
+         body:JSON.stringify({
+           images:imagesDetails,
+           multiple: true,
+         })
+       }).then(result => {
+         let resultData = result.json()
+         resultData.then(dataProject => {
+           console.log(dataProject)
+           console.log("resulting images", dataProject.urlDataList)
+           changeState({...state, "getImagesPost": dataProject.urlDataList})
+           notifySuccess()
+           setOnLoading(false)
+         })
+       })
     }
 
     const onSaveMainImage = () => {
@@ -106,7 +152,7 @@ export default function Manageabout({dataAbout}) {
              setOnLoading(false)
            })
          })
-       }
+      }
 
        const notifySuccess = () => {
          toast.success("Save", {
@@ -195,7 +241,7 @@ export default function Manageabout({dataAbout}) {
                             <Label>
                                 {item[0]}
                             </Label>
-                            {(item[0] !== "descriptionProfil" && item[0] !== "description" && item[0] !== "listLogiciel")  &&
+                            {(item[0] !== "getImagesPost" && item[0] !== "descriptionProfil" && item[0] !== "description" && item[0] !== "listLogiciel")  &&
                                 <input
                                     className="input"
                                     name={item[0]}
@@ -228,16 +274,24 @@ export default function Manageabout({dataAbout}) {
                               }}
                             />
                         }
-                        {item[0] === "urlProfilImage" &&
+                        {(item[0] === "urlProfilImage" || item[0] === "getImagesPost" )  &&
                             <>
                             <ImageUploads
                                 state={state}
                                 name={item[0]}
-                                onChange={(e) => {onChangeStateMain(e)}}
+                                onChangeImage={(e) => {
+                                  onChangeStateMainImages(e)
+                                }}
+                                onChange={(e) => {
+                                    onChangeStateMain(e)
+                                 }}
                                 onSaveImages={onSaveMainImage}
+                                onSaveAllImages = {onSaveMainAllImage}
                                 numbers={1}
                                 singleimage={item[1]}
-                                numbers={1}
+                                multiple={item[0] === "getImagesPost" ? true : false}
+                                numbers={item[0] === "getImagesPost" ? 6 : 1}
+                                update={item[0] === "getImagesPost" ? dataAbout.data[item[0]] : []}
                               />
                             </>
                         }

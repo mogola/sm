@@ -67,8 +67,8 @@ const [posts, setPosts] = useState(allPost)
             <Columns>
                 <Columns.Column className="mainListImageProfil">
                     <Content className="listImageProfil">
-                        {posts.map((item, i) => (
-                            <Image key={i} src={item.imageMainPrincipal} />
+                        {data.getImagesPost.map((items, i) => (
+                            <Image key={i} src={items} />
                         ))}
                     </Content>
                 </Columns.Column>
