@@ -1506,9 +1506,9 @@ html {
       }
       img{
         position: absolute;
-        transform: translate(-50%, -50%);
+        transform: translateY(-50%);
         top: 50%;
-        left: 50%;
+        right: 0;
         height: 100%;
         max-width: initial;
         width: auto;
@@ -1736,4 +1736,24 @@ html {
   @include mobileView{
     padding: 0 0 48px 0;
   }
+}
+
+$w: Min(40em, 100%);
+$s: .5em;
+
+/* basic reset */
+* { margin: 0 }
+
+/* masonry grid styles */
+.containerMas {
+  margin: 0 auto;
+  width:900;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, $w);
+  grid-template-rows: masonry;
+  justify-content: center;
+  grid-gap: $s;
+  padding: $s;
+
+  > * { width: $w }
 }
