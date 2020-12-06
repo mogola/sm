@@ -104,6 +104,10 @@ let HomeConfigSchema = new Schema({
         type: String,
         default: "default text"
     },
+    titleLocalisation:{
+        type: String,
+        default: "default text"
+    },
     colorBackgroundMenu:{
         type: String,
         default: "default text"

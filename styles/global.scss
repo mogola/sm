@@ -1179,7 +1179,7 @@ html{
       padding-bottom: 96px;
       @include mobileView{
         text-align: left;
-        padding: 0 0 64px;
+        padding: 0;
       }
     }
   }
@@ -1453,6 +1453,35 @@ html {
           a{
             color:#fff;
           }
+        }
+      }
+    }
+
+    &.contactMenu {
+      .txtLogo {
+        color:#090909;
+      }
+      .mainMenu{
+        background: transparent;
+        ul{
+          li{
+            a{
+              color:#090909;
+              @include mobileView{
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+      .menuB{
+        &.isOpen {
+          span{
+            background: #fff;
+          }
+        }
+        span {
+          background: #090909;
         }
       }
     }
@@ -1797,35 +1826,216 @@ html .container {
 
 html {
   .wrapperContact {
-    padding: 0;
+    padding: 0 !important;
+    margin: 0 !important;
     background: #FAFAFA;
+    position: relative;
+    &:before {
+      content: "";
+      display: block;
+      height: 100%;
+      right: 0;
+      top: 0;
+      width: 40%;
+      background:#DEDEDE;
+      position: absolute;
+      @include mobileView{
+        display: none;
+      }
+    }
   }
 }
 html .ContactMain {
   display: flex;
+  flex-wrap: nowrap !important;
   padding: 136px 0;
-  max-width: 900px;
   margin: 0 auto;
+  @include mobileView{
+    padding: 72px 0 0;
+    flex-direction: column;
+  }
+
+  .column{
+    padding: 0;
+    &.contentContact{
+      padding: 0 104px;
+      @include mobileView{
+        padding: 0 24px;
+      }
+    }
+  }
 }
 
 html .contentContact {
   background: #FAFAFA;
-  flex-grow: initial;
-  flex-basis: initial
+  .title {
+    color: #FF4000;
+    font-family: Overpass;
+    font-size: 96px;
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 147px;
+    margin: 0;
+
+    @include mobileView{
+      color: #FF4000;
+      font-family: Overpass;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 49px;
+    }
+  }
+
+  .subTextContent {
+    color: #090909;
+    font-family: "Source Sans Pro";
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 24px;
+  }
+
+  .label{
+    color: #090909;
+    font-family: "Source Sans Pro";
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 20px;
+    font-weight: 500;
+  }
+
+  .input, textarea {
+    background-color: rgba(115,115,115,0.08);
+    border: 0 none;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  textarea {
+    width: calc(100% - 40px);
+    min-width: initial;
+
+    @include mobileView{
+      width: 100%;
+    }
+  }
 }
 
 .formContactMs {
   .columnField {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    padding-right: 0;
+
+    @include mobileView{
+      flex-direction: column;
+    }
+
+    &.submitting {
+      text-align: right;
+      padding-top: 38px;
+
+      @include mobileView{
+        text-align: left;
+        .field {
+          padding: 0 0 40px;
+        }
+      }
+      .button {
+        border: 0;
+        background-color: transparent;
+        color:#737373;
+        font-family: "Source Sans Pro";
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        line-height: 24px;
+        text-transform: uppercase;
+        text-align: center;
+
+        @include mobileView{
+          padding: 0;
+        }
+        .icoRight {
+          top: 1px;
+          filter: opacity(0.7);
+        }
+      }
+    }
+    .field{
+      width: 100%;
+      .input{
+        width: calc(100% - 40px);
+        @include mobileView{
+          width: 100%;
+          margin-bottom: 24px;
+        }
+      }
+    }
+    .field:nth-child(even){
+      justify-self: flex-end;
+      @include mobileView{
+        justify-self: flex-start;
+      }
+    }
   }
 }
-
-.ContainerInfo{
-  width: 500px;
-  height: 500px;
+.contactsSection {
+  flex-direction: column;
+  margin: 0 !important;
+}
+html .ContainerInfo{
+  width: 100%;
   background-color: #FF4000;
   position: relative;
   top: 10px;
-  left: -50px;
+  left: 0;
+  padding: 80px 0 80px 104px;
+  @include mobileView{
+    padding: 48px 24px;
+  }
+}
+
+html {
+  .infoContactPage {
+    padding: 80px 0 80px 104px;
+    .titleSubContacts {
+      color: #fff;
+      font-family: "Source Sans Pro";
+      font-size: 24px;
+      letter-spacing: 0;
+      line-height: 40px;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+
+    .partContacts {
+      padding-bottom: 44px;
+      &:last-child{
+        padding-bottom: 0;
+      }
+      &:nth-child(2){
+        ul li a {
+          text-decoration: underline;
+        }
+      }
+      ul{
+        li a{
+          color: #fff;
+          font-family: "Source Sans Pro";
+          font-size: 24px;
+          letter-spacing: 0;
+          line-height: 40px;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
+
+
+.input {
+  &.error {
+    border: 1px solid #FF0000 !important;
+  }
 }
