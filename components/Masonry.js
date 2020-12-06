@@ -54,7 +54,7 @@ const Masonry = ({children = []}) => {
         gridMasonry()
       }, [])
 
-    if(children.length === 0){s
+    if(children.length === 0){
         return (<></>)
     }
     return (
