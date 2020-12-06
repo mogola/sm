@@ -1751,7 +1751,7 @@ html {
 }
 
 $w: Min(40em, 100%);
-$s: .5em;
+$s: 1.5em;
 
 /* basic reset */
 * { margin: 0 }
@@ -1759,11 +1759,12 @@ $s: .5em;
 /* masonry grid styles */
 .containerMas {
   display: grid;
-  grid-template-columns: repeat(auto-fit, Min(40em, 100%));
+  grid-template-columns: repeat(auto-fit, Min(29em, 100%));
   grid-template-rows: masonry;
   justify-content: center;
   grid-gap: $s;
   padding: $s;
+  width: 100%;
 
   > * { align-self: start }
 

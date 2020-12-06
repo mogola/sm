@@ -61,7 +61,7 @@ const Masonry = ({children = []}) => {
         <>
         <Container className="containerMas">
           {children.map((item, i) => (
-              <img key={i} src={item} />
+              <img loading="lazy" rel="preload" key={i} src={item} />
             ))}
           </Container>
         </>
