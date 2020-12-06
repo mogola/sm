@@ -8,6 +8,7 @@ import {useRef,useEffect,useState} from 'react'
 import Layout, { siteTitle } from '../../components/layout'
 import Menu from './../../components/home/Menu'
 import Footer from './../../components/home/Footer'
+import Masonry from './../../components/Masonry'
 import moment from 'moment'
 import {
     Container,
@@ -73,15 +74,16 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
                 </Content>
                 </Columns.Column>
                 </Container>
-        <div className="container center-align">
+        <Container className="center-align" fluid>
+            <Container>
            <ul>
                 {post.linkImage &&
                    <li key="oier">
-                       <img src={post.linkImage} width={200} />
+                       <img loading="lazy" rel="preload" src={post.linkImage} width={200} />
                     </li>
                 }
                 <li key="peiroi">
-                    <img src={post.imageMainPrincipal} width="auto" height="auto" />
+                    <img class="imgMainPost" src={post.imageMainPrincipal} width="auto" height="auto" />
                 </li>
                 <li key="eiopzieop">
                     <Container className="descriptionPost">
@@ -90,26 +92,30 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
                     </Container>
                 </li>
             </ul>
-            <Container className="listImagesPost">
-                <Columns>
-                    {
-                        post.imageArray.map((image, i) => (
-                            <Columns.Column key={i} size="half">
-                                <Image src={image} height="auto" />
-                            </Columns.Column>
-                        ))
-                    }
-                </Columns>
+            </Container>
+            <Container className="listImagesPost" fluid>
+                <Container>
+                    <Columns>
+                    <Masonry children={post.imageArray} />
+                        {/* {
+                            post.imageArray.map((image, i) => (
+                                <Columns.Column key={i} size="half">
+                                    <Image src={image} height="auto" />
+                                </Columns.Column>
+                            ))
+                        } */}
+                    </Columns>
+                    </Container>
             </Container>
             <div className="navigationPost">
                 <Link prefetch={false}  href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(nextPost)}`}>
-                    <a className="linkSee nextProjectLink">Voir le projet suivant</a>
+                    <a className="linkSee nextProjectLink"><span className="txtLinkNav">Voir le projet suivant</span><span className="icoRight" width={26}></span></a>
                 </Link>
                 <Link prefetch={false} href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(prevPost)}`}>
-                    <a className="linkSee prevProjectLink">Voir le projet précédent</a>
+                    <a className="linkSee prevProjectLink"><span className="icoRight" width={26}></span> <span className="txtLinkNav">Voir le projet précédent</span></a>
                 </Link>
             </div>
-        </div>
+        </Container>
         <Footer
           menu={configs.menuCategoryLink}
           data={configs}

@@ -759,14 +759,19 @@ html {
 
     &.nextProjectLink {
       text-align: right;
-      padding: 40px 24px 64px 24px;
+      padding: 40px 0 64px 24px;
       display: block;
     }
 
     &.prevProjectLink {
       text-align: left;
-      padding: 40px 24px 64px 24px;
+      padding: 40px 24px 64px 0;
       display: block;
+      .icoRight {
+        transform: rotate(180deg);
+        margin-right: 9px;
+        margin-left: 0;
+      }
     }
   }
 
@@ -1207,6 +1212,7 @@ html {
     .serviceSection {
       @include mobileView{
         flex-direction: column;
+        padding-bottom: 48px;
       }
       .column{
         @include mobileView{
@@ -1675,6 +1681,7 @@ html {
 }
 
 .listImagesPost {
+  background: #2C2B2B;
   @include mobileView{
     background: #2C2B2B;
     padding: 48px 0;
@@ -1713,11 +1720,16 @@ html {
 .navigationPost {
   display: flex;
   width: 100%;
-  padding: 0 45px;
+  padding: 0;
   flex-wrap: wrap;
 
   .linkSee {
     width: 50%;
+    .txtLinkNav{
+      @include mobileView{
+        display: none;
+      }
+    }
   }
 
   .nextProjectLink {
@@ -1746,14 +1758,73 @@ $s: .5em;
 
 /* masonry grid styles */
 .containerMas {
-  margin: 0 auto;
-  width:900;
   display: grid;
-  grid-template-columns: repeat(auto-fit, $w);
+  grid-template-columns: repeat(auto-fit, Min(40em, 100%));
   grid-template-rows: masonry;
   justify-content: center;
   grid-gap: $s;
   padding: $s;
 
-  > * { width: $w }
+  > * { align-self: start }
+
+  > :first-child {
+    grid-column: 1/ -1;
+  }
+
+  img {
+    display: block;
+    width: 100%; max-height: inherit;
+  object-fit: cover;
+  }
+}
+
+html .container {
+  &.center-align{
+    padding: 0;
+  }
+  .listImagesPost {
+    padding: 104px 0;
+    @include mobileView{
+      padding: 50px 0;
+    }
+  }
+
+  .imgMainPost {
+    width: 100%;
+  }
+}
+
+html {
+  .wrapperContact {
+    padding: 0;
+    background: #FAFAFA;
+  }
+}
+html .ContactMain {
+  display: flex;
+  padding: 136px 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+html .contentContact {
+  background: #FAFAFA;
+  flex-grow: initial;
+  flex-basis: initial
+}
+
+.formContactMs {
+  .columnField {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.ContainerInfo{
+  width: 500px;
+  height: 500px;
+  background-color: #FF4000;
+  position: relative;
+  top: 10px;
+  left: -50px;
 }
