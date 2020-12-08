@@ -76,6 +76,9 @@ const Footer = ({title = "", menu='', data = '', ...rest}) => {
                         </li>
                     </ul>
                 </Columns.Column>
+                <Columns.Column className="partFooter pastilleFooter">
+                    <Link href="/contact"><a className="pastilleImg"><img src={data.bottomImageUrl} rel="preload" /></a></Link>
+                </Columns.Column>
             </Columns>
         </Container>
         <Container className="txtLegale">

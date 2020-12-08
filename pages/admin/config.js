@@ -119,21 +119,21 @@ export default function config({ config, connect }) {
   }
   const updateConfig = async (e) => {
     e.preventDefault()
-    console.log('nameCategory', dataConfig["menuCategoryLink"])
+    console.log('nameCategory', dataConfig)
 
-    let menuCategoryExist;
+    // let menuCategoryExist;
 
-    if (dataConfig["menuCategoryLink"] === undefined) {
-      menuCategoryExist = { ...dataConfig, menuCategoryLink: [{ name: "test", url: "example of url" }] }
-    } else {
-      menuCategoryExist = { ...dataConfig }
-    }
+    // if (dataConfig["menuCategoryLink"] === undefined) {
+    //   menuCategoryExist = { ...dataConfig, menuCategoryLink: [{ name: "test", url: "example of url" }] }
+    // } else {
+    //   menuCategoryExist = { ...dataConfig }
+    // }
 
-    if(config["textContentServices"] === undefined){
-      menuCategoryExist = {...dataConfig, textContentServices: []}
-    }
+    // if(config["textContentServices"] === undefined){
+    //   menuCategoryExist = {...dataConfig, textContentServices: []}
+    // }
 
-    console.log("update menucategoryLink", menuCategoryExist)
+    // console.log("update menucategoryLink", menuCategoryExist)
 
     try {
       const res = await fetch(`${baseUrl}/api/homeconfig`, {
@@ -141,10 +141,9 @@ export default function config({ config, connect }) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ "config": menuCategoryExist })
+        body: JSON.stringify({ config : dataConfig })
       })
         .then((res) => {
-          console.log("updating", menuCategoryExist)
           setDataConfig(dataConfig)
           notifySuccess()
         })
@@ -260,11 +259,13 @@ export default function config({ config, connect }) {
                     <form>
                       {labelInputItem.map((inputConfig, i) => (
                         <div key={i}>
-                          {(inputConfig === "logoSiteUrl" ||
+                          {(inputConfig === "bottomImageUrl" ||
+                            inputConfig === "topImageUrl" ||
+                            inputConfig === "logoSiteUrl" ||
                             inputConfig === "logoSiteImageUrl") &&
                             <div>
                               <UploadFile
-                                imageExist={dataConfig[inputConfig] ? true : false}
+                                imageExist={dataConfig[inputConfig] ? true : true}
                                 nameFile={inputConfig}
                                 callBack={notifySuccess}
                                 onGet={dataConfig[inputConfig]}
@@ -392,6 +393,8 @@ export default function config({ config, connect }) {
                             inputConfig !== "logoSiteUrl" &&
                             inputConfig !== "logoSiteImageUrl" &&
                             inputConfig !== "textContentAbout" &&
+                            inputConfig !== "bottomImageUrl" &&
+                            inputConfig !== "topImageUrl" &&
                             <InputConfig
                               name={inputConfig}
                               defaultValue={dataConfig[inputConfig]}

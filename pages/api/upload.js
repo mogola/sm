@@ -120,6 +120,7 @@ const postImage = async (req, res) => {
                     new Promise((resolve) => {
                         resolve(result)
                     }).then((values) => {
+                        console.log("value", values)
                         res.status(201).json({
                             "urlDataList" : values,
                             "success": true

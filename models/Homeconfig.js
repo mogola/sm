@@ -108,6 +108,14 @@ let HomeConfigSchema = new Schema({
         type: String,
         default: "default text"
     },
+    topImageUrl:{
+        type: String,
+        default: "default text"
+    },
+    bottomImageUrl:{
+        type: String,
+        default: "default text"
+    },
     colorBackgroundMenu:{
         type: String,
         default: "default text"

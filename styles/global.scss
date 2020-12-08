@@ -481,16 +481,46 @@ img {
     }
   }
 }
+.pastilleFooter {
+  align-items: flex-start;
+  display: flex !important;
+  text-align: revert;
+  justify-content: flex-end;
 
+  a{
+    position: relative;
+    top: -104px;
+    @include mobileView{
+      position: absolute;
+      top: 0;
+    }
+  }
+}
+.pastilleImg{
+  img{
+    max-width: 195px;
+    @include mobileView{
+      max-width: 130px;
+    }
+  }
+}
 .pastilleAvailable {
   position:absolute;
-  right: 178px;
+  right: 120px;
   top: 123px;
+  a {
+    cursor: pointer;
+  }
+  img{
+    max-width: 195px;
+    @include mobileView{
+      max-width: 130px;
+    }
+  }
   @include mobileView {
     position: absolute;
-    right: 79px;
+    right: 24px;
     top: 68px;
-    transform: scale(0.7);
   }
   > span {
     font-family: "Source Sans Pro";
@@ -1909,6 +1939,12 @@ html .contentContact {
     border: 0 none;
     box-shadow: none;
     border-radius: 0;
+    color: #090909;
+    font-family: "Source Sans Pro";
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 20px;
   }
 
   textarea {
@@ -1944,7 +1980,7 @@ html .contentContact {
       .button {
         border: 0;
         background-color: transparent;
-        color:#737373;
+        color: #090909;
         font-family: "Source Sans Pro";
         font-size: 16px;
         font-weight: 600;
@@ -1958,12 +1994,18 @@ html .contentContact {
         }
         .icoRight {
           top: 1px;
-          filter: opacity(0.7);
         }
       }
     }
     .field{
       width: 100%;
+      position: relative;
+      .textarea {
+        margin-bottom: 10px;
+        @include mobileView{
+          margin-bottom: 26px;
+        }
+      }
       .input{
         width: calc(100% - 40px);
         @include mobileView{
@@ -2034,8 +2076,24 @@ html {
 }
 
 
-.input {
+.input, textarea {
   &.error {
     border: 1px solid #FF0000 !important;
+  }
+}
+
+.errorsText {
+  @include mobileView{
+    position: absolute;
+    bottom: 0;
+    left:0;
+  }
+  p {
+    color: #FF0000;
+    font-family: "Source Sans Pro";
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 20px;
   }
 }

@@ -114,7 +114,7 @@ const deleteConfig = async (req,res)=>{
 
 const updateConfig = async(req, res) => {
     const {config} = req.body;
-    console.log('current post', config)
+    console.log('current post', config._id)
     try {
         await Homeconfig.updateOne({ _id:config._id},
             config,

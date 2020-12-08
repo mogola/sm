@@ -182,11 +182,14 @@ const Hometop = ({state = '', connect}) => {
                     </div>
                     <div>
                     <div className="pastilleAvailable">
-                      {textAvailable.map((letter, i) => (
+                      {
+                      <Link href="/contact"><a><img src={state.topImageUrl} rel="preload" /></a></Link>
+                      /* {textAvailable.map((letter, i) => (
                         <span key={i} className={`char${i + 1}`}>
                           {letter}
                         </span>
                       ))}
+                       */}
                     </div>
                     </div>
                     <a

@@ -37,16 +37,29 @@ export default function Contact({post, data, config, allPost, connect}) {
     const [posts, setPosts] = useState(allPost)
     const [regexEmail, setRegexEmail] = useState(new RegExp('^[a-z0-9.-]+@[a-z.]{2,}\.[a-z]$'))
     const [state, changeState] = useState({})
-
+    const [btndisabled, setBtnDisabled] = useState(false)
+    const [errorsField, setErrorsField] = useState()
     let refEmail = useRef()
     let refName = useRef()
     let refLastname = useRef()
     let refMessage = useRef()
     let refPhone = useRef()
 
+    const errorsForm = () => {
+        let getErrors = document.querySelectorAll('.error')
+        if(!getErrors.length){
+            setBtnDisabled(false)
 
-    const submitForm = async () => {
+        }else {
+            setBtnDisabled(true)
+        }
+        console.log('getErrors', getErrors.length)
+    }
+
+    const submitForm = async (e) => {
+        e.preventDefault()
         try{
+        console.log("state email", state)
           await fetch(`${baseUrl}/api/email/sendemail`, {
                 method:"POST",
                 headers: {
@@ -54,7 +67,8 @@ export default function Contact({post, data, config, allPost, connect}) {
                     'api-key': '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',
                     'accept': 'application/json',
                     'content-type': 'application/json'
-                }
+                },
+                body: JSON.stringify(state)
             })
         }
         catch(err){
@@ -63,8 +77,12 @@ export default function Contact({post, data, config, allPost, connect}) {
     }
 
   useEffect(() =>{
-
-
+      if(refLastname.current !== undefined && refLastname.current.value === ""){
+            refLastname.current.focus()
+        }
+        errorsForm()
+        setErrorsField(document.querySelectorAll('.error'))
+        console.log("errorsField", errorsField)
   }, [state])
   const onChange = ({target}) => {
     const {name, value} = target
@@ -94,54 +112,80 @@ export default function Contact({post, data, config, allPost, connect}) {
                         Vous avez un projet et vous recherchez un illustrateur / designer textile freelance ? Contactez-moi, je suis disponible pour en discuter avec vous.
                     </p>
                 </Content>
-            <form className="formContactMs" onSubmit={submitForm}>
-                <div className="columnField">
-                    <Field>
-                        <Label>Prénom</Label>
-                        <input ref={refLastname} className="input required" type="text"
-                        onChange={onChange}
-                        defaultValue={refLastname.current === undefined ? "" : refLastname.current.value} name="lastname" />
-                    </Field>
-                    <Field>
-                        <Label>Nom</Label>
-                        <input ref={refName} className="input required" type="text"
-                        onChange={onChange}
-                        defaultValue={refName.current === undefined ? "" : refName.current.value} name="name" />
-                    </Field>
-                </div>
-                <div className="columnField">
-                    <Field>
-                        <Label>Email</Label>
-                        <input ref={refEmail} className={`input required ${regexEmail.test(state["email"]) ? "valid" : "error"}`} type="email"
-                        onChange={onChange}
-                        defaultValue={refEmail.current === undefined ? "" : refEmail.current.value} name="email" />
-                    </Field>
-                    <Field>
-                        <Label>Téléphone</Label>
-                        <input ref={refPhone} className="input required" type="phone"
-                        onChange={onChange}
-                        defaultValue={refPhone.current === undefined ? "" : refPhone.current.value} name="phone" />
-                    </Field>
-                </div>
-                <div className="columnField">
-                    <Field>
-                        <Label>Message</Label>
-                        <textarea ref={refMessage} className="textarea required"
-                        onChange={onChange}
-                        defaultValue={refMessage.current === undefined ? "" : refMessage.current.value } name="message" />
-                    </Field>
-                </div>
-                <div className="columnField submitting">
-                    <Field>
-                        <Button onClick={(e) => {
-                            e.preventDefault();
-                            submitForm()
-                        }}>
-                            Envoyer le message <span className="icoRight"></span>
-                        </Button>
-                    </Field>
-                </div>
-      </form>
+                <form className="formContactMs" onSubmit={submitForm}>
+                    <div className="columnField">
+                        <Field>
+                            <Label>Prénom</Label>
+                            <input ref={refLastname}
+                            className={`input required ${(refLastname.current && !state[refLastname.current["name"]]) ? "error" : "valid"}`}
+                            type="text"
+                            onChange={onChange}
+                            defaultValue={refLastname.current === undefined ? "" : refLastname.current.value} name="lastname" />
+                            {(refLastname.current && !state[refLastname.current["name"]])  && <Content className="errorsText">
+                                <p> Veuillez remplir le champs</p>
+                            </Content>}
+                        </Field>
+                        <Field>
+                            <Label>Nom</Label>
+                            <input ref={refName}
+                            className={`input required ${(refName.current && !state[refName.current["name"]]) ? "error" : "valid"}`}
+                            type="text"
+                            onChange={onChange}
+                            defaultValue={refName.current === undefined ? "" : refName.current.value} name="name" />
+                            {(refEmail.current && !state[refEmail.current["name"]])  && <Content className="errorsText">
+                                <p> Veuillez remplir le champs</p>
+                            </Content>}
+                        </Field>
+                    </div>
+                    <div className="columnField">
+                        <Field>
+                            <Label>Email</Label>
+                            <input ref={refEmail}
+                            className={`input required ${!regexEmail.test(state["email"]) ? "error" : "valid"}`}
+                            type="email"
+                            onChange={onChange}
+                            defaultValue={refEmail.current === undefined ? "" : refEmail.current.value} name="email" />
+                            {(refEmail.current && !state[refEmail.current["name"]])  && <Content className="errorsText">
+                                <p> Veuillez remplir le champs</p>
+                            </Content>}
+                        </Field>
+                        <Field>
+                            <Label>Téléphone</Label>
+                            <input ref={refPhone}
+                            className={`input required ${(refPhone.current && !state[refPhone.current["name"]]) ? "error" : "valid"}`}
+                            type="phone"
+                            onChange={onChange}
+                            defaultValue={refPhone.current === undefined ? "" : refPhone.current.value} name="phone" />
+                            {(refPhone.current && !state[refPhone.current["name"]])  && <Content className="errorsText">
+                                <p> Veuillez remplir le champs</p>
+                            </Content>}
+                        </Field>
+                    </div>
+                    <div className="columnField">
+                        <Field>
+                            <Label>Message</Label>
+                            <textarea ref={refMessage}
+                            className={`textarea required ${(refMessage.current && !state[refMessage.current["name"]]) ? "error" : "valid"}`}
+                            onChange={onChange}
+                            defaultValue={refMessage.current === undefined ? "" : refMessage.current.value } name="message" />
+                            {(refMessage.current && !state[refMessage.current["name"]])  && <Content className="errorsText">
+                                <p> Veuillez remplir le champs</p>
+                            </Content>}
+                        </Field>
+                    </div>
+                    <div className="columnField submitting">
+                        <Field>
+                            <Button
+                                disabled={btndisabled}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    submitForm(e)
+                                }}>
+                                Envoyer le message <span className="icoRight"></span>
+                            </Button>
+                        </Field>
+                    </div>
+                </form>
             </Columns.Column>
             <Columns.Column className="infoContactPage">
                 <div className="ContainerInfo">
@@ -171,7 +215,7 @@ export default function Contact({post, data, config, allPost, connect}) {
                     </ul>
                 </Columns.Column>
                 <Columns.Column className="partContacts">
-                    <Heading className="titleSubContacts" size={4}>{configs.textLocalisation}</Heading>
+                    <Heading className="titleSubContacts" size={4}>{configs.titleLocalisation}</Heading>
                     <ul>
                         <li>
                             <Link href="">
