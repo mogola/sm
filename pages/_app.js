@@ -6,6 +6,8 @@ import { themeContextUser, tokenStorage, userIsConnected, connected} from './../
 import { getPostConfig } from './api/home'
 import baseUrl from './../helpers/baseUrl'
 import fetch from 'node-fetch'
+// import { useRouter } from 'next/router'
+import { AnimatePresence } from 'framer-motion';
 
 export async function getStaticProps() {
     const config = await getPostConfig()
@@ -18,8 +20,8 @@ export async function getStaticProps() {
     }
   }
 
-export default function App({ Component, pageProps, config }) {
-
+export default function App({ Component, pageProps, config, router }) {
+    // const router = useRouter()
     const [dataConfigs, setDataConfig] = useState()
     const [naming, setNaming] = useState()
 
@@ -49,7 +51,9 @@ export default function App({ Component, pageProps, config }) {
         }}>
             <themeContextUser.Consumer>
                 {({userConnected}) => (
-                    <Component config={dataConfigs} connect={userConnected()} {...pageProps} />
+                    <AnimatePresence exitBeforeEnter>
+                      <Component key={router.route} config={dataConfigs} connect={userConnected()} {...pageProps} />
+                    </AnimatePresence>
                 )}
             </themeContextUser.Consumer>
         </themeContextUser.Provider>)

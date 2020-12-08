@@ -110,6 +110,8 @@ img {
   flex-wrap: wrap;
   box-sizing: border-box;
   align-items: center;
+  position: relative;
+  z-index: 2;
   @include mobileView{
     padding: 0 24px;
   }
@@ -305,7 +307,7 @@ img {
 .homeWrapper {
   position: relative;
   height: 100vh;
-  max-height:900px;
+  max-height:100vh;
   @include mobileView{
     max-height: initial;
   }
@@ -319,11 +321,17 @@ img {
     left: 0;
     width: auto;
     max-width: initial;
-    max-height: 900px;
+    max-height: 100vh;
     z-index: -1;
     height: 100vh;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     img {
       max-width: initial;
+      height: 100vh;
+      width: auto;
     }
     @include mobileView(){
       height: 100vh;
@@ -343,14 +351,18 @@ img {
 .titleBlockHome {
   padding:29px 104px;
   position:absolute;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  justify-content: center;
+  top:0;
+  z-index: 1;
 
   @include mobileView{
     padding: 0 20px;
-    top: 50%;
+    top: 0;
   }
 
   h3{
@@ -2096,4 +2108,9 @@ html {
     letter-spacing: 0;
     line-height: 20px;
   }
+}
+
+.motionWrapper {
+  width:100%;
+  overflow: hidden;
 }

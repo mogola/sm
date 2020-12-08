@@ -14,8 +14,52 @@ import {
     Content
 } from 'react-bulma-components';
 
+import { motion } from 'framer-motion';
+let easing = [0.175, 0.85, 0.42, 0.96];
+
+const imageVariants = {
+  exit: { y: 150, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
+
+const textVariants = {
+  exit: { y: 100, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: { delay: 0.1, duration: 0.5, ease: easing }
+  }
+};
+
+const backVariants = {
+  exit: {
+    x: 100,
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  },
+  enter: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
+
 const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
-    return(<>
+    return(<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
     <Section {...rest}>
         <Container breakpoint="fullhd" fluid className="containerTitleSection">
         {title &&
@@ -30,7 +74,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                     {i === 0 &&
                         <Container breakpoint="fullhd" fluid className="mainProject onTopView" key={`${i}${post._id}`}>
                         <Columns.Column className="columnProject" size={12}>
-                        <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
+                            <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
                             <Content className="info">
                             <Tag.Group className="tagGroupPost">
                                 <Tag className="recentDate">
@@ -41,7 +85,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                     <Tag  key={`${j}${post._id}`}>{tag}</Tag>
                                 ))}
                             </Tag.Group>
-                            <div className="center-category">
+                            <motion.div  variants={backVariants} className="center-category">
                                 <Heading className="subTitleMainProject" size={1}>
                                 {post.title}
                                 </Heading>
@@ -50,7 +94,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                     {post.subTextDescription.substring(1, 200)}
                                     </p>
                                 </Content>
-                                </div>
+                                </motion.div>
                                 <div className="indexZone">
                                     <div className="contentZone">
                                     <span className="nbItem">{`0${i+1}`}</span>
@@ -66,7 +110,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                         {
                                             isadmin &&
                                             <Link href={'/admin/manageproject/[id]'} as={`/admin/manageproject/${post._id}`}>
-                                                <a className="updatePost" href={`/admin/manageproject/${post._id}`}>View Post</a>
+                                                <a className="updatePost">View Post</a>
                                             </Link>
                                         }
                                     </div>
@@ -88,9 +132,9 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                         <Tag key={`${j}${post._id}`}>{tag}</Tag>
                                     ))}
                                 </Tag.Group>
-                                <div className="center-category">
-                                    <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
-                                    </div>
+                                    <motion.div className="center-category">
+                                        <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
+                                    </motion.div>
                                     <div className="indexZone">
                                         <div className="contentZone">
                                         <span className="nbItem">{i+1 > 9 ? `${i+1}` : `0${i+1}`}</span>
@@ -135,7 +179,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                 </Link>
             </Container>
     </Section>
-    </>)
+    </motion.div>)
 }
 
 export default SectionsRecent;

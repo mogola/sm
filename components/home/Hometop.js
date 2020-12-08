@@ -3,6 +3,7 @@
 import { themeContextUser } from 'context/contextUser';
 import Link from 'next/link'
 import {useState, useEffect} from 'react'
+import { motion } from 'framer-motion';
 import {
     Container,
     Columns,
@@ -15,6 +16,49 @@ import {
     Content
 } from 'react-bulma-components';
 import utilStyles from '../../styles/utils.module.css'
+
+let easing = [0.175, 0.85, 0.42, 0.96];
+
+const imageVariants = {
+  exit: { y: 150, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
+
+const textVariants = {
+  exit: { y: 100, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: { delay: 0.1, duration: 0.5, ease: easing }
+  }
+};
+
+const backVariants = {
+  exit: {
+    x: 100,
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  },
+  enter: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
 
 const Hometop = ({state = '', connect}) => {
     const [textAvailable, setTextAvailable] = useState([])
@@ -111,26 +155,26 @@ const Hometop = ({state = '', connect}) => {
                     width: "100%"
                   }}>
                   <div className="mainHeader">
-                      <div className="divHeader">
+                    <motion.div variants={backVariants} className="divHeader">
                         <h2 className={`
-                        ${utilStyles.headingLg}
-                        ${isMobileMenu ? "activeMobileMenu": "activeDesktopMenu"}
-                        ${isToggle ? "isOpen" : "isClosed"}
+                          ${utilStyles.headingLg}
+                          ${isMobileMenu ? "activeMobileMenu": "activeDesktopMenu"}
+                          ${isToggle ? "isOpen" : "isClosed"}
                         `}>
                           <Link href="/">
                             <a className={`txtLogo ${utilStyles.colorInherit}`}>{state.nameSite}</a>
                           </Link>
                         </h2>
-                      </div>
+                      </motion.div>
                       {state.menuCategoryLink &&
-                        <div
+                        <motion.div variants={backVariants}
                         data-ismobile={isMobileMenu}
                         style={isMobileMenu ? {backgroundColor: isBackground} : {backgroundColor: "transparent"}}
                         className={`mainMenu ${isMobileMenu} ${isMobileMenu ? "activeMobile": "activeDesktop"} ${isToggle ? "isOpen" : "isClosed"}`}>
                           <ul>
                             {state.menuCategoryLink.map((item, i) => (
                               <li key={i}>
-                                <Link href={item.url}>
+                                <Link href={item.url} scroll={false}>
                                   <a className="menuLink">{item.name}</a>
                                 </Link>
                               </li>
@@ -164,10 +208,10 @@ const Hometop = ({state = '', connect}) => {
                             </>
                             }
                           </ul>
-                        </div>
+                          </motion.div>
                       }
                     </div>
-                    <div className="titleBlockHome">
+                    <motion.div variants={backVariants} className="titleBlockHome">
                       <h3>
                         {state.titleMain}
                       </h3>
@@ -175,13 +219,13 @@ const Hometop = ({state = '', connect}) => {
                         {state.subTitleImage}
                       </h3>
                       <span className="categoryTextHome">Portfolio</span>
-                    </div>
-                    <div className="infoContact">
+                    </motion.div>
+                    <motion.div variants={backVariants} className="infoContact">
                       <span className="emailUser">{state.email}</span>
                       <span className="contactUser">{state.textLocalisation}</span>
-                    </div>
+                    </motion.div>
                     <div>
-                    <div className="pastilleAvailable">
+                    <motion.div variants={backVariants} className="pastilleAvailable">
                       {
                       <Link href="/contact"><a><img src={state.topImageUrl} rel="preload" /></a></Link>
                       /* {textAvailable.map((letter, i) => (
@@ -190,15 +234,15 @@ const Hometop = ({state = '', connect}) => {
                         </span>
                       ))}
                        */}
-                    </div>
+                    </motion.div>
                     </div>
                     <a
                       onClick={scrollToTheView}
                       className="scrollTopLink"
                     >{state.textScrollTop}</a>
                     </div>
-                  <div className="homeImage">
-                    <img data-img={state.menuCategoryLink} rel="preload" src={state.logoSiteUrl} width="100%" height="auto"/>
+                  <div className="homeImage" style={{backgroundImage: `url(${state.logoSiteUrl})`}}>
+                    {/* <img data-img={state.menuCategoryLink} rel="preload" src={state.logoSiteUrl} width="100%" height="auto"/> */}
                   </div>
                 </div>
                 </>

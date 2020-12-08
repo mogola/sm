@@ -13,7 +13,49 @@ import {
     Content
 } from 'react-bulma-components';
 import utilStyles from '../../styles/utils.module.css'
+import { motion } from 'framer-motion';
+let easing = [0.175, 0.85, 0.42, 0.96];
 
+const imageVariants = {
+  exit: { y: 150, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
+
+const textVariants = {
+  exit: { y: 100, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: { delay: 0.1, duration: 0.5, ease: easing }
+  }
+};
+
+const backVariants = {
+  exit: {
+    x: 100,
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  },
+  enter: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
 const Menu = ({state = '', connect, classMenu = ''}) => {
     const [textAvailable, setTextAvailable] = useState([])
     const [isUserAdmin, setIsUserAdmin] = useState()
@@ -87,7 +129,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
         console.log("isBackground", typeof(isBackground))
     }, [])
 
-    return (
+    return (<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
       <themeContextUser.Consumer>
         {({userConnected}) => (
           <div className={`${classMenu} mainMenuNoHome`}>
@@ -105,7 +147,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
               </Link>
                   <div className="contentMenu">
                   <div className="mainHeader">
-                      <div className="divHeader">
+                      <motion.div variants={backVariants} className="divHeader">
                         <h2 className={`
                         ${utilStyles.headingLg}
                         ${isMobileMenu ? "activeMobileMenu": "activeDesktopMenu"}
@@ -115,9 +157,9 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                             <a className={`txtLogo ${utilStyles.colorInherit}`}>{state.nameSite}</a>
                           </Link>
                         </h2>
-                      </div>
+                      </motion.div>
                       {state.menuCategoryLink &&
-                        <div
+                        <motion.div variants={backVariants}
                         data-ismobile={isMobileMenu}
                         style={isMobileMenu ? {backgroundColor: isBackground} : {backgroundColor: "transparent"}}
                         className={`mainMenu ${isMobileMenu} ${isMobileMenu ? "activeMobile": "activeDesktop"} ${isToggle ? "isOpen" : "isClosed"}`}>
@@ -158,7 +200,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                             </React.Fragment>
                             }
                           </ul>
-                        </div>
+                        </motion.div>
                       }
                     </div>
                     <div>
@@ -167,6 +209,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                 </div>
       )}
       </themeContextUser.Consumer>
+      </motion.div>
     )
 }
 

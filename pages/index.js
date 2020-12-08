@@ -11,6 +11,7 @@ import Hometop from './../components/home/Hometop'
 import Footer from './../components/home/Footer'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
+import { motion } from 'framer-motion';
 
 import { getPostConfig, getAllPosts} from './api/home'
 
@@ -25,6 +26,48 @@ export async function getStaticProps() {
   }
 }
 
+let easing = [0.175, 0.85, 0.42, 0.96];
+
+const imageVariants = {
+  exit: { y: 150, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
+
+const textVariants = {
+  exit: { y: 100, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: { delay: 0.1, duration: 0.5, ease: easing }
+  }
+};
+
+const backVariants = {
+  exit: {
+    x: 100,
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  },
+  enter: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
 export default function Home({config, posts, connect}) {
   const [title, setTitle] = useState();
   const [urlImage, setUrlImage] = useState();
@@ -43,30 +86,39 @@ export default function Home({config, posts, connect}) {
 
   return (
     <Layout none>
+          <motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
       <Head>
         <title>{siteTitle}</title>
       </Head>
         <Hometop state={config} connect={connect} />
-        <Sections
-          data={posts}
-          title={configs.titleCategoryRecent}
-          className="section-home"
-        />
+      <motion.div variants={backVariants}>
+          <Sections
+            data={posts}
+            title={configs.titleCategoryRecent}
+            className="section-home"
+          />
+        </motion.div>
+        <motion.div variants={backVariants}>
         <About
           data={configs.textContentAbout}
           title={configs.titleCategoryAbout}
           className="section-about"
         />
+        </motion.div>
+        <motion.div variants={backVariants}>
         <Prestation
           data={configs.textContentServices}
           title={configs.textCategoryServices}
           className="section-prestation"
         />
+        </motion.div>
+        <motion.div variants={backVariants}>
         <Footer
           menu={configs.menuCategoryLink}
           data={configs}
           className="section-footer"
         />
+        </motion.div>
       {/* <Link href="/admin/dashboard">
         <a>Go to Dashboard</a></Link>
       <form onSubmit={submitForm}>
@@ -124,6 +176,7 @@ export default function Home({config, posts, connect}) {
           ))}
         </ul>
       </section> */}
+      </motion.div>
     </Layout>
   )
 }
