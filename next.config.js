@@ -7,15 +7,6 @@ module.exports = withFonts({
   // Target must be serverless
   enableSvg: true,
   target: 'serverless',
-  module: {
-    rules: [
-      {
-        parser: {
-          amd: false
-        }
-      }
-    ]
-  },
   env: {
     production: process.env.NEXT_PUBLIC_URL_PRODUCTION,
     development: "http://localhost:9000/",
@@ -25,6 +16,7 @@ module.exports = withFonts({
   },
   webpack: (config, { isServer }) => {
     // Fixes npm packages that depend on `fs` module
+    config.module.rules.push({ parser: { amd: false } })
     if (!isServer) {
       config.node = {
         fs: 'empty',
