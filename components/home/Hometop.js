@@ -3,6 +3,7 @@
 import { themeContextUser } from 'context/contextUser';
 import Link from 'next/link'
 import {useState, useEffect} from 'react'
+import Menu from './Menu'
 import { motion } from 'framer-motion';
 import {
     Container,
@@ -137,16 +138,7 @@ const Hometop = ({state = '', connect}) => {
       <themeContextUser.Consumer>
         {({userConnected}) => (
           <>
-                <a
-                  className={`
-                  ${isMobileMenu ? "menuBurgerMobile": "menuBurgerDesktop"} menuB
-                  ${isToggle ? "isOpen" : "isClosed"}
-                  `}
-                  onClick={toggleMenu}
-                >
-                  <span className="mTop"></span>
-                  <span className="mBottom"></span>
-                </a>
+
                 <div className="homeWrapper">
                   <div style={{
                     position: 'absolute',
@@ -154,63 +146,11 @@ const Hometop = ({state = '', connect}) => {
                     left: 0,
                     width: "100%"
                   }}>
-                  <div className="mainHeader">
-                    <motion.div variants={backVariants} className="divHeader">
-                        <h2 className={`
-                          ${utilStyles.headingLg}
-                          ${isMobileMenu ? "activeMobileMenu": "activeDesktopMenu"}
-                          ${isToggle ? "isOpen" : "isClosed"}
-                        `}>
-                          <Link href="/">
-                            <a className={`txtLogo ${utilStyles.colorInherit}`}>{state.nameSite}</a>
-                          </Link>
-                        </h2>
-                      </motion.div>
-                      {state.menuCategoryLink &&
-                        <motion.div variants={backVariants}
-                        data-ismobile={isMobileMenu}
-                        style={isMobileMenu ? {backgroundColor: isBackground} : {backgroundColor: "transparent"}}
-                        className={`mainMenu ${isMobileMenu} ${isMobileMenu ? "activeMobile": "activeDesktop"} ${isToggle ? "isOpen" : "isClosed"}`}>
-                          <ul>
-                            {state.menuCategoryLink.map((item, i) => (
-                              <li key={i}>
-                                <Link href={item.url} scroll={false}>
-                                  <a className="menuLink">{item.name}</a>
-                                </Link>
-                              </li>
-                            ))}
-                            {isUserAdmin &&
-                            <>
-                            <li key="ezrze">
-                              <Link href="/admin/config">
-                                <a className="menuLink">Manage globales</a>
-                              </Link>
-                            </li>
-                            <li key="eaze">
-                              <Link href="/admin/project">
-                                <a className="menuLink">Create project</a>
-                              </Link>
-                            </li>
-                            </>
-                            }
-                            {!isUserAdmin &&
-                            <>
-                            <li key="ezr">
-                              <Link href="/login">
-                                <a className="menuLink">Login</a>
-                              </Link>
-                            </li>
-                            <li key="ezrerze">
-                              <Link href="/register">
-                                <a className="menuLink">register</a>
-                              </Link>
-                            </li>
-                            </>
-                            }
-                          </ul>
-                          </motion.div>
-                      }
-                    </div>
+                      <Menu
+                        state={state}
+                        connect={connect}
+                        classMenu="mainMenuHomePage"
+                    />
                     <motion.div variants={backVariants} className="titleBlockHome">
                       <h3>
                         {state.titleMain}

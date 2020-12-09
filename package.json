@@ -33,6 +33,7 @@
     "next": "^9.3.4",
     "next-cookies": "^2.0.3",
     "next-fonts": "^1.4.0",
+    "nprogress": "^0.2.0",
     "os": "^0.1.1",
     "path": "^0.12.7",
     "postcss-flexbugs-fixes": "^4.2.1",

@@ -41,6 +41,7 @@ export default function Login({ connect }) {
 
     useEffect(() => {
         console.log('test', connect, typeof (connect))
+        router.prefetch('/')
         setIsUserAdmin(connect)
     }, [])
 

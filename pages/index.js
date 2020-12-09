@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
+import {useRouter, Router} from 'next/router'
 import { getSortedPostsData, getPostFromDataBase} from '../lib/posts'
 import Sections from './../components/home/Section'
 import About from './../components/home/About'
@@ -13,7 +14,9 @@ import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 import { motion } from 'framer-motion';
 
+
 import { getPostConfig, getAllPosts} from './api/home'
+import NProgress from 'nprogress'
 
 export async function getStaticProps() {
   const config = await getPostConfig()
@@ -72,6 +75,9 @@ export default function Home({config, posts, connect}) {
   const [title, setTitle] = useState();
   const [urlImage, setUrlImage] = useState();
   const [configs, setConfigs] = useState(config)
+  const [onLoadingPage, setOnLoadingPage] = useState(false)
+  //const router = useRouter()
+
   const submitForm = async () => {
     event.preventDefault();
 
@@ -80,17 +86,61 @@ export default function Home({config, posts, connect}) {
     const addingPost = await getPostFromDataBase({
       "title" : title,
       "urlImage" : urlImage});
-
      return addingPost
   }
 
-  return (
+  useEffect(() => {
+
+    Router.events.on('routeChangeStart', (url) => {
+      console.log(`Loading: ${url}`)
+      setOnLoadingPage(true)
+      NProgress.start()
+    })
+    Router.events.on('routeChangeComplete', () => {
+      NProgress.done()
+      setOnLoadingPage(false)
+    })
+    Router.events.on('routeChangeError', () => NProgress.done())
+
+  //   console.log("onChangeLoading", onLoadingPage)
+
+  //   const handleRouteStart = () => {
+  //     console.log("route begin to change")
+  //     setOnLoadingPage(false)
+  //     console.log("route Start",onLoadingPage)
+  //   }
+
+  //   const handleRouteComplete = () => {
+  //     console.log("route end of route")
+  //     setOnLoadingPage(true)
+  //     console.log("",onLoadingPage)
+  //   }
+
+  //  // router.events.on('routeChangeStart', handleRouteStart)
+  //   router.events.on('routeChangeComplete', () => { handleRouteComplete()})
+
+  //   console.log("onChangeLoadingEnd", onLoadingPage)
+
+  //   return () => {
+  //    // router.events.off('routeChangeStart', handleRouteStart)
+  //     router.events.off('routeChangeComplete', handleRouteComplete)
+  //   }
+
+  }, [])
+
+  // if(onLoadingPage){
+  //   return (<></>)
+  // }
+
+  return (<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
     <Layout none>
-          <motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
       <Head>
         <title>{siteTitle}</title>
       </Head>
-        <Hometop state={config} connect={connect} />
+        <Hometop
+          state={config}
+          connect={connect}
+      />
       <motion.div variants={backVariants}>
           <Sections
             data={posts}
@@ -176,7 +226,7 @@ export default function Home({config, posts, connect}) {
           ))}
         </ul>
       </section> */}
-      </motion.div>
     </Layout>
+    </motion.div>
   )
 }

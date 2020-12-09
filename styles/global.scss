@@ -111,12 +111,16 @@ img {
   box-sizing: border-box;
   align-items: center;
   position: relative;
-  z-index: 2;
   @include mobileView{
     padding: 0 24px;
+    z-index: 20001;
   }
   .divHeader {
     width:30%;
+    @include mobileView{
+      position: relative;
+      z-index: 2000001;
+    }
     .isOpen {
       position: fixed;
       z-index:10000;
@@ -185,6 +189,12 @@ img {
     padding-bottom: 0;
     .txtLogo{
       color:#090909;
+      @include mobileView{
+        color: #090909;
+      }
+      .homeWrapper & {
+        color: #fff;
+      }
     }
   }
   .mainMenu {
@@ -194,7 +204,7 @@ img {
     align-self: flex-end;
     justify-content: flex-end;
     @include mobileView{
-      display: none;
+      //display: none;
       &.activeMobile {
         width:100%;
         height:100vh;
@@ -203,15 +213,29 @@ img {
         left:0;
         background:#000;
         z-index: 2000;
+        &.isOpen{
+          left: 0;
+        }
       }
     }
     ul {
       li{
         a{
           color: #090909;
+
           @include mobileView{
             color: #fff;
           }
+        }
+      }
+    }
+  }
+
+  &.mainMenuHomePage {
+    .mainMenu {
+      ul li {
+        a{
+          color: #FFF;
         }
       }
     }
@@ -224,9 +248,10 @@ img {
     display:block;
   }
   @include mobileView{
-    display:none;
+    // display:none;
+    // left:-100vw;
     &.activeMobile {
-      width:100%;
+      width:100vw;
       height:100%;
       position: fixed;
       top:0;
@@ -768,7 +793,9 @@ html .loadDiv {
     position: absolute;
     .mainMenuNoHome &{
       background:#000;
-
+      .homeWrapper & {
+        background: #fff;
+      }
     }
     &.mtop {
       top: 0;
@@ -1221,7 +1248,7 @@ html{
       padding-bottom: 96px;
       @include mobileView{
         text-align: left;
-        padding: 0;
+        padding: 0 40px 48px;
       }
     }
   }
@@ -2113,4 +2140,92 @@ html {
 .motionWrapper {
   width:100%;
   overflow: hidden;
+}
+
+
+// ngProgress
+
+/* Make clicks pass-through */
+
+$colorProgress: #FF4000;
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: $colorProgress;
+
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 2px;
+}
+
+/* Fancy blur effect */
+#nprogress .peg {
+  display: none;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  box-shadow: 0 0 10px $colorProgress, 0 0 5px $colorProgress;
+  opacity: 1;
+
+  -webkit-transform: rotate(3deg) translate(0px, -4px);
+  -ms-transform: rotate(3deg) translate(0px, -4px);
+  transform: rotate(3deg) translate(0px, -4px);
+}
+
+/* Remove these to get rid of the spinner */
+#nprogress .spinner {
+  display: block;
+  position: fixed;
+  z-index: 1031;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)
+}
+
+#nprogress .spinner-icon {
+  width: 120px;
+  height: 120px;
+  box-sizing: border-box;
+
+  border: solid 2px transparent;
+  border-top-color: $colorProgress;
+  border-left-color: $colorProgress;
+  border-radius: 50%;
+
+  -webkit-animation: nprogress-spinner 400ms linear infinite;
+  animation: nprogress-spinner 400ms linear infinite;
+}
+
+.nprogress-custom-parent {
+  overflow: hidden;
+  position: relative;
+}
+
+.nprogress-custom-parent #nprogress .spinner,
+.nprogress-custom-parent #nprogress .bar {
+  position: absolute;
+}
+
+@-webkit-keyframes nprogress-spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes nprogress-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

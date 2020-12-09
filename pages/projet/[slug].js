@@ -83,7 +83,7 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
                     </li>
                 }
                 <li key="peiroi">
-                    <img class="imgMainPost" src={post.imageMainPrincipal} width="auto" height="auto" />
+                    <img className="imgMainPost" src={post.imageMainPrincipal} width="auto" height="auto" />
                 </li>
                 <li key="eiopzieop">
                     <Container className="descriptionPost">

@@ -13,7 +13,7 @@ import {
     Content
 } from 'react-bulma-components';
 import utilStyles from '../../styles/utils.module.css'
-import { motion } from 'framer-motion';
+import { motion, useCycle } from 'framer-motion';
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
@@ -39,20 +39,101 @@ const textVariants = {
 
 const backVariants = {
   exit: {
-    x: 100,
-    opacity: 0,
+    x: [400, 0, 0, 0],
+    opacity: [0, 0, 0.5, 1],
     transition: {
-      duration: 0.5,
+      duration: 2,
       ease: easing
     }
   },
   enter: {
-    x: 0,
+    x: [0, 200, 400, 400, 200, 0],
+    opacity: [0, 0, 0.5, 0.5, 0.8, 1],
+    transition: {
+      duration: 2,
+      ease: easing
+    }
+  }
+};
+
+const bgrMenu = {
+  exit: {
+    x: [50, -100, 0],
+    rotate: [0, 270, 0],
+    opacity : [0.5, 0, 1],
+    transition: {
+      duration: 2,
+      ease: easing
+    }
+  },
+  enter: {
+    x: [-100, 50, 0],
+    rotate: [0, 270, 0],
+    opacity : [0, 0, 1],
+    transition: {
+      duration: 2,
+      ease: easing
+    }
+  }
+};
+
+const spring = {
+  type: "spring",
+  stiffness: 700,
+  damping: 100
+};
+
+// const variants = {
+//   open: { opacity: 1, x: 0 },
+//   closed: { opacity: 0, x: "-100%" },
+// }
+
+const variantsUl = {
+  open: {
+    transition: { staggerChildren: 0.07, delayChildren: 0.2 }
+  },
+  closed: {
+    transition: { staggerChildren: 0.05, staggerDirection: -1 }
+  }
+}
+
+const variants = {
+  open: {
     opacity: 1,
+    x:0,
+    transition: {
+      type: "spring",
+      stiffness: 20,
+      restDelta: 2,
+      x: { stiffness: 1000, velocity: -100 },
+      opacity: { stiffness: 1000, velocity: -100 }
+    }
+  },
+  closed: {
+    opacity: 0,
+    x:-1000,
     transition: {
       delay: 0.5,
-      duration: 0.5,
-      ease: easing
+      type: "spring",
+      stiffness: 400,
+      damping: 40,
+      x: { stiffness: 1000 },
+    }
+  }
+}
+const variantsItem = {
+  open: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      y: { stiffness: 1000, velocity: -100 }
+    }
+  },
+  closed: {
+    y: 50,
+    opacity: 0,
+    transition: {
+      y: { stiffness: 1000 }
     }
   }
 };
@@ -61,9 +142,10 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
     const [isUserAdmin, setIsUserAdmin] = useState()
     const [isMobile, setIsMobile] = useState(768)
     const [isMobileMenu, setIsMobileMenu] = useState(false)
-    const [isToggle, setIsToggle] = useState(false)
+    const [isToggle, setIsToggle] = useCycle(false, true);
     const [isBackground, setIsBackground] = useState(state.colorBackgroundMenu)
     const [isInnerWidth, setIsInnerWidth] = useState()
+    //const [isOpen, toggleOpen] = useCycle(false, true);
     const viewPortDetection = () => {
         console.log(window.innerWidth)
         if(window.innerWidth < isMobile){
@@ -77,7 +159,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
 
     const toggleMenu = (e) => {
       e.preventDefault()
-      setIsToggle(!isToggle)
+      setIsToggle()
       console.log("console.log toggle", isToggle)
     }
     const scrollToTheView = () => {
@@ -127,27 +209,31 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
         viewPortDetection()
 
         console.log("isBackground", typeof(isBackground))
-    }, [])
+    }, [isInnerWidth])
 
     return (<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
       <themeContextUser.Consumer>
         {({userConnected}) => (
           <div className={`${classMenu} mainMenuNoHome`}>
             <Link href="" >
-                <a
+                <motion.a
+                animate={isToggle ? "enter" : "exit"}
+                variants={bgrMenu}
                   className={`
                   ${isMobileMenu ? "menuBurgerMobile": "menuBurgerDesktop"} menuB
                   ${isToggle ? "isOpen" : "isClosed"}
                   `}
-                  onClick={toggleMenu}
+                  onClick={setIsToggle}
                 >
                   <span className="mTop"></span>
                   <span className="mBottom"></span>
-                </a>
+                </motion.a>
               </Link>
                   <div className="contentMenu">
                   <div className="mainHeader">
-                      <motion.div variants={backVariants} className="divHeader">
+                      <motion.div
+                      animate={isToggle ? "enter" : "exit"}
+                      variants={backVariants} className="divHeader">
                         <h2 className={`
                         ${utilStyles.headingLg}
                         ${isMobileMenu ? "activeMobileMenu": "activeDesktopMenu"}
@@ -158,49 +244,114 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                           </Link>
                         </h2>
                       </motion.div>
-                      {state.menuCategoryLink &&
-                        <motion.div variants={backVariants}
+                      {state.menuCategoryLink && isMobileMenu &&
+                        <motion.div
+                        variants={variants}
                         data-ismobile={isMobileMenu}
                         style={isMobileMenu ? {backgroundColor: isBackground} : {backgroundColor: "transparent"}}
-                        className={`mainMenu ${isMobileMenu} ${isMobileMenu ? "activeMobile": "activeDesktop"} ${isToggle ? "isOpen" : "isClosed"}`}>
+                        className={`mainMenu ${isMobileMenu} ${isMobileMenu ? "activeMobile": "activeDesktop"} ${isToggle ? "isOpen" : "isClosed"}`}
+                        animate={isToggle ? "open" : "closed"}
+                        initial={false}
+                        // transition={{ duration: 1 }}
+                        >
+                          <motion.ul variants={variantsUl}>
+                            {state.menuCategoryLink.map((item, i) => (
+                              <motion.li
+                              variants={variantsItem} key={i}>
+                                <Link href={item.url}>
+                                  <a className="menuLink"
+                                    onClick={isMobileMenu ? setIsToggle : ''}
+                                  >{item.name}</a>
+                                </Link>
+                              </motion.li>
+                            ))}
+                            {isUserAdmin &&
+                            <React.Fragment>
+                            <motion.li
+                              variants={variantsItem} key="izeoirere">
+                              <Link href="/admin/config">
+                                <a className="menuLink">Manage globales</a>
+                              </Link>
+                              </motion.li>
+                            <motion.li
+                              variants={variantsItem} key="izeoireze">
+                              <Link href="/admin/project">
+                                <a className="menuLink">Create project</a>
+                              </Link>
+                              </motion.li>
+                            </React.Fragment>
+                            }
+                            {!isUserAdmin &&
+                            <React.Fragment>
+                            <motion.li
+                              variants={variantsItem} key="izeeroire">
+                              <Link href="/login">
+                                <a className="menuLink">Login</a>
+                              </Link>
+                              </motion.li>
+                            <motion.li
+                              variants={variantsItem} key="izeoifdfre">
+                              <Link href="/register">
+                                <a className="menuLink">register</a>
+                              </Link>
+                              </motion.li>
+                            </React.Fragment>
+                            }
+                          </motion.ul>
+                        </motion.div>
+                      }
+                      {state.menuCategoryLink && !isMobileMenu &&
+                        <div
+                        data-ismobile={isMobileMenu}
+                        style={isMobileMenu ? {backgroundColor: isBackground} : {backgroundColor: "transparent"}}
+                        className={`mainMenu ${isMobileMenu} ${isMobileMenu ? "": "activeDesktop"} ${isToggle ? "isOpen" : "isClosed"}`}
+                        // transition={{ duration: 1 }}
+                        >
                           <ul>
                             {state.menuCategoryLink.map((item, i) => (
-                              <li key={i}>
+                              <li
+                              key={i}>
                                 <Link href={item.url}>
-                                  <a className="menuLink">{item.name}</a>
+                                  <a className="menuLink"
+                                    onClick={isMobileMenu ? setIsToggle : ''}
+                                  >{item.name}</a>
                                 </Link>
                               </li>
                             ))}
                             {isUserAdmin &&
                             <React.Fragment>
-                            <li key="ezrze">
+                            <li
+                              key="izeoirere">
                               <Link href="/admin/config">
                                 <a className="menuLink">Manage globales</a>
                               </Link>
-                            </li>
-                            <li key="eaze">
+                              </li>
+                            <li
+                               key="izeoireze">
                               <Link href="/admin/project">
                                 <a className="menuLink">Create project</a>
                               </Link>
-                            </li>
+                              </li>
                             </React.Fragment>
                             }
                             {!isUserAdmin &&
                             <React.Fragment>
-                            <li key="ezr">
+                            <li
+                              key="izeeroire">
                               <Link href="/login">
                                 <a className="menuLink">Login</a>
                               </Link>
-                            </li>
-                            <li key="ezrerze">
+                              </li>
+                            <li
+                               key="izeoifdfre">
                               <Link href="/register">
                                 <a className="menuLink">register</a>
                               </Link>
-                            </li>
+                              </li>
                             </React.Fragment>
                             }
                           </ul>
-                        </motion.div>
+                        </div>
                       }
                     </div>
                     <div>

@@ -18,9 +18,9 @@ import { motion } from 'framer-motion';
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
-  exit: { y: 150, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  exit: { x: 55, opacity: 0.4, transition: { duration: 0.5, ease: easing } },
   enter: {
-    y: 0,
+    x: 0,
     opacity: 1,
     transition: {
       duration: 0.5,
@@ -74,17 +74,19 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                     {i === 0 &&
                         <Container breakpoint="fullhd" fluid className="mainProject onTopView" key={`${i}${post._id}`}>
                         <Columns.Column className="columnProject" size={12}>
+                            <motion.div variants={imageVariants} className="">
                             <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
+                            </motion.div>
                             <Content className="info">
-                            <Tag.Group className="tagGroupPost">
-                                <Tag className="recentDate">
-                                    {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
-                                    <span className="nbItem">{`0${i+1}`}</span>
-                                </Tag>
-                                {post.listCategory.map((tag, j) => (
-                                    <Tag  key={`${j}${post._id}`}>{tag}</Tag>
-                                ))}
-                            </Tag.Group>
+                                <Tag.Group className="tagGroupPost">
+                                    <Tag className="recentDate">
+                                        {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
+                                        <span className="nbItem">{`0${i+1}`}</span>
+                                    </Tag>
+                                    {post.listCategory.map((tag, j) => (
+                                        <Tag  key={`${j}${post._id}`}>{tag}</Tag>
+                                    ))}
+                                </Tag.Group>
                             <motion.div  variants={backVariants} className="center-category">
                                 <Heading className="subTitleMainProject" size={1}>
                                 {post.title}
@@ -107,12 +109,15 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                         >
                                             <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
                                         </Link>
+                                        <>
                                         {
                                             isadmin &&
                                             <Link href={'/admin/manageproject/[id]'} as={`/admin/manageproject/${post._id}`}>
                                                 <a className="updatePost">View Post</a>
                                             </Link>
+
                                         }
+                                        </>
                                     </div>
                                 </div>
                                 </Content>
