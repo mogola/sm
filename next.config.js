@@ -7,6 +7,15 @@ module.exports = withFonts({
   // Target must be serverless
   enableSvg: true,
   target: 'serverless',
+  module: {
+    rules: [
+      {
+        parser: {
+          amd: false
+        }
+      }
+    ]
+  },
   env: {
     production: process.env.NEXT_PUBLIC_URL_PRODUCTION,
     development: "http://localhost:9000/",
