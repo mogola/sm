@@ -7,8 +7,11 @@ import fetch from 'isomorphic-unfetch'
 import Menu from './../components/home/Menu'
 import Footer from './../components/home/Footer'
 import Prestation from './../components/home/Prestation'
+import {RouterTracking} from './../components/router/ngprogress'
 import {getPostConfig, getAllPosts } from './api/home'
+import {useRouter} from 'next/router'
 import Masonry from './../components/Masonry'
+
 import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
 const {Field, Control, Label} = Form;
 
@@ -36,9 +39,10 @@ export default function About({post, data, config, allPost, connect}) {
 const [getData, setGetData] = useState(data)
 const [configs, setConfigs] = useState(config)
 const [posts, setPosts] = useState(allPost)
+const router = useRouter()
 
     useEffect(()=> {
-        console.log(getData, posts)
+     //   RouterTracking(router)
     }, [data])
 
   return (

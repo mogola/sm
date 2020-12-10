@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import {useRouter} from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
 import InputField from '../components/InputField'
 import Layout, { siteTitle } from '../components/layout'
+import {RouterTracking} from '../components/router/ngprogress'
 import baseUrl from '../helpers/baseUrl'
 
 import utilStyles from '../styles/utils.module.css'
@@ -32,6 +34,10 @@ const [validatorPwd, setValidatorPwd] = useState(true)
 const [errorMessage, setErrorMessage] = useState(false)
 const [matchPwd, setMatchPwd] = useState(false)
 const [emailExisting, setEmailExisting] = useState(false)
+
+    useEffect(() => {
+        RouterTracking(router)
+    }, [])
 
     const submitForm = async (e) => {
         e.preventDefault();

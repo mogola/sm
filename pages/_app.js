@@ -8,6 +8,7 @@ import baseUrl from './../helpers/baseUrl'
 import fetch from 'isomorphic-unfetch'
 import { useRouter } from 'next/router'
 import { AnimatePresence } from 'framer-motion';
+import {RouterTracking} from './../components/router/ngprogress'
 
 export async function getServerSideProps() {
   const config = await getPostConfig()
@@ -20,6 +21,11 @@ export async function getServerSideProps() {
   }
 
 export default function App({ Component, pageProps, config, router }) {
+  const routering = useRouter()
+  useEffect(() => {
+    console.log(routering, router)
+      RouterTracking(routering.route)
+  }, [routering.route])
     return (
         <themeContextUser.Provider value={{
             getToken: tokenStorage,

@@ -10,6 +10,7 @@ import Menu from './../../components/home/Menu'
 import Footer from './../../components/home/Footer'
 import Masonry from './../../components/Masonry'
 import moment from 'moment'
+import {RouterTracking} from './../../components/router/ngprogress'
 import {
     Container,
     Columns,
@@ -27,7 +28,6 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
     const router = useRouter()
     const [getNextId, setGetNextId] = useState(nextPost)
     const [getPrevId, setGetPrevId] = useState(prevPost)
-    console.log(router)
     const {id} = router.query
     //console.log("id of post", router.isFallback, getNextId, getPrevId)
 
@@ -38,10 +38,7 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
     }
 
     useEffect(() => {
-        const handleRouteChange = (url) => {
-            console.log('App is changing to: ', url)
-          }
-        router.events.on('beforeHistoryChange', handleRouteChange)
+       // RouterTracking(router)
     }, [])
 
     return(

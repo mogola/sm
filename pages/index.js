@@ -13,10 +13,10 @@ import Footer from './../components/home/Footer'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 import { motion } from 'framer-motion';
-
+import {RouterTracking} from './../components/router/ngprogress'
 
 import { getPostConfig, getAllPosts} from './api/home'
-import NProgress from 'nprogress'
+
 
 export async function getStaticProps() {
   const config = await getPostConfig()
@@ -91,46 +91,9 @@ export default function Home({config, posts, connect}) {
 
   useEffect(() => {
 
-    Router.events.on('routeChangeStart', (url) => {
-      console.log(`Loading: ${url} router Pathname :  ${router.pathname}`)
-      setOnLoadingPage(true)
-      NProgress.start()
-    })
-    Router.events.on('routeChangeComplete', () => {
-      NProgress.done()
-      setOnLoadingPage(false)
-    })
-    Router.events.on('routeChangeError', () => NProgress.done())
-
-  //   console.log("onChangeLoading", onLoadingPage)
-
-  //   const handleRouteStart = () => {
-  //     console.log("route begin to change")
-  //     setOnLoadingPage(false)
-  //     console.log("route Start",onLoadingPage)
-  //   }
-
-  //   const handleRouteComplete = () => {
-  //     console.log("route end of route")
-  //     setOnLoadingPage(true)
-  //     console.log("",onLoadingPage)
-  //   }
-
-  //  // router.events.on('routeChangeStart', handleRouteStart)
-  //   router.events.on('routeChangeComplete', () => { handleRouteComplete()})
-
-  //   console.log("onChangeLoadingEnd", onLoadingPage)
-
-  //   return () => {
-  //    // router.events.off('routeChangeStart', handleRouteStart)
-  //     router.events.off('routeChangeComplete', handleRouteComplete)
-  //   }
+  //  RouterTracking(router)
 
   }, [])
-
-  // if(onLoadingPage){
-  //   return (<></>)
-  // }
 
   return (<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
     <Layout none>

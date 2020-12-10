@@ -7,12 +7,14 @@ import fetch from 'isomorphic-unfetch'
 import Menu from './../components/home/Menu'
 import Footer from './../components/home/Footer'
 import Prestation from './../components/home/Prestation'
+import {RouterTracking} from './../components/router/ngprogress'
 import {getPostConfig, getAllPosts } from './api/home'
 import Masonry from './../components/Masonry'
 import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
 const {Field, Control, Label} = Form;
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
+import {useRouter} from 'next/router'
 
 export async function getServerSideProps() {
     const getData = await fetch(`${baseUrl}/api/about`, {method:"GET"})
@@ -39,12 +41,15 @@ export default function Contact({post, data, config, allPost, connect}) {
     const [state, changeState] = useState({})
     const [btndisabled, setBtnDisabled] = useState(false)
     const [errorsField, setErrorsField] = useState()
+    const [validError, setValidError] = useState(["","","","",""])
+
     let refEmail = useRef()
     let refName = useRef()
     let refLastname = useRef()
     let refMessage = useRef()
     let refPhone = useRef()
 
+    const router = useRouter()
     const errorsForm = () => {
         let getErrors = document.querySelectorAll('.error')
         if(!getErrors.length){
@@ -77,18 +82,45 @@ export default function Contact({post, data, config, allPost, connect}) {
     }
 
   useEffect(() =>{
+    //  RouterTracking(router)
       if(refLastname.current !== undefined && refLastname.current.value === ""){
             refLastname.current.focus()
         }
         errorsForm()
         setErrorsField(document.querySelectorAll('.error'))
         console.log("errorsField", errorsField)
+
+        // document.querySelectorAll('.required').forEach((item, i) =>{
+        //     console.log("i", i)
+        //     let objArray = validError.push("valid")
+        //     console.log(objArray)
+        //     setValidError(objArray)
+        // })
+
+        // console.log('validError', validError)
+
   }, [state])
   const onChange = ({target}) => {
     const {name, value} = target
+    const indexInput = parseInt(document.querySelectorAll(`[name="${name}"]`)[0].getAttribute("index"))
+
     changeState({...state, [name] : value})
-    console.log("state change", state)
+    console.log("state change",indexInput, typeof indexInput, state)
+    displayError(indexInput, value)
   }
+
+  const displayError = (targetIndex, refValue) => {
+      console.log("target", targetIndex)
+      let arrayO = validError
+    if(refValue === "") {
+        arrayO[targetIndex] = "error"
+        setValidError(arrayO)
+    }else {
+        arrayO[targetIndex] = "valid"
+        setValidError(arrayO)
+    }
+  }
+
   return (
     <Layout post>
       <Head>
@@ -117,22 +149,24 @@ export default function Contact({post, data, config, allPost, connect}) {
                         <Field>
                             <Label>Prénom</Label>
                             <input ref={refLastname}
-                            className={`input required ${(refLastname.current && !state[refLastname.current["name"]]) ? "error" : "valid"}`}
+                            className={`input required ${validError[0]}`}
                             type="text"
+                            index={0}
                             onChange={onChange}
                             defaultValue={refLastname.current === undefined ? "" : refLastname.current.value} name="lastname" />
-                            {(refLastname.current && !state[refLastname.current["name"]])  && <Content className="errorsText">
+                            {validError[0] === "error" && <Content className="errorsText">
                                 <p> Veuillez remplir le champs</p>
                             </Content>}
                         </Field>
                         <Field>
                             <Label>Nom</Label>
                             <input ref={refName}
-                            className={`input required ${(refName.current && !state[refName.current["name"]]) ? "error" : "valid"}`}
+                            className={`input required ${validError[1]}`}
                             type="text"
+                            index={1}
                             onChange={onChange}
                             defaultValue={refName.current === undefined ? "" : refName.current.value} name="name" />
-                            {(refEmail.current && !state[refEmail.current["name"]])  && <Content className="errorsText">
+                            {validError[1] === "error" && <Content className="errorsText">
                                 <p> Veuillez remplir le champs</p>
                             </Content>}
                         </Field>
@@ -143,6 +177,7 @@ export default function Contact({post, data, config, allPost, connect}) {
                             <input ref={refEmail}
                             className={`input required ${!regexEmail.test(state["email"]) ? "error" : "valid"}`}
                             type="email"
+                            index={2}
                             onChange={onChange}
                             defaultValue={refEmail.current === undefined ? "" : refEmail.current.value} name="email" />
                             {(refEmail.current && !state[refEmail.current["name"]])  && <Content className="errorsText">
@@ -152,11 +187,12 @@ export default function Contact({post, data, config, allPost, connect}) {
                         <Field>
                             <Label>Téléphone</Label>
                             <input ref={refPhone}
-                            className={`input required ${(refPhone.current && !state[refPhone.current["name"]]) ? "error" : "valid"}`}
+                            className={`input required ${validError[3]}`}
                             type="phone"
+                            index={3}
                             onChange={onChange}
                             defaultValue={refPhone.current === undefined ? "" : refPhone.current.value} name="phone" />
-                            {(refPhone.current && !state[refPhone.current["name"]])  && <Content className="errorsText">
+                            {validError[3] === "error"  && <Content className="errorsText">
                                 <p> Veuillez remplir le champs</p>
                             </Content>}
                         </Field>
@@ -165,10 +201,11 @@ export default function Contact({post, data, config, allPost, connect}) {
                         <Field>
                             <Label>Message</Label>
                             <textarea ref={refMessage}
-                            className={`textarea required ${(refMessage.current && !state[refMessage.current["name"]]) ? "error" : "valid"}`}
+                            className={`textarea input required ${validError[4]}`}
                             onChange={onChange}
+                            index={4}
                             defaultValue={refMessage.current === undefined ? "" : refMessage.current.value } name="message" />
-                            {(refMessage.current && !state[refMessage.current["name"]])  && <Content className="errorsText">
+                            {validError[4] === "error" && <Content className="errorsText">
                                 <p> Veuillez remplir le champs</p>
                             </Content>}
                         </Field>

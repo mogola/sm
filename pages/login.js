@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import InputField from '../components/InputField'
 import Layout, { siteTitle } from '../components/layout'
+import {RouterTracking} from '../components/router/ngprogress'
 import baseUrl from '../helpers/baseUrl'
 import { themeContextUser } from './../context/contextUser'
 import { useRouter } from 'next/router'
@@ -41,6 +42,7 @@ export default function Login({ connect }) {
 
     useEffect(() => {
         console.log('test', connect, typeof (connect))
+       // RouterTracking(router)
         router.prefetch('/')
         setIsUserAdmin(connect)
     }, [])
