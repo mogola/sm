@@ -223,7 +223,9 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                   ${isMobileMenu ? "menuBurgerMobile": "menuBurgerDesktop"} menuB
                   ${isToggle ? "isOpen" : "isClosed"}
                   `}
-                  onClick={setIsToggle}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setIsToggle()}}
                 >
                   <span className="mTop"></span>
                   <span className="mBottom"></span>
