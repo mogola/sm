@@ -39,8 +39,8 @@ const textVariants = {
 
 const backVariants = {
   exit: {
-    x: [-400, 0, 400, 0],
-    opacity: [1,0, 0, 1],
+    x: [0, 0, 0, 400, 400, 0, 0, 0],
+    opacity: [1, 0.6, 0.3, 0, 0, 0.3, 0.6, 1],
     transition: {
       duration: 2,
       ease: easing
@@ -58,7 +58,7 @@ const backVariants = {
 
 const bgrMenu = {
   exit: {
-    x: [-50, -100, 0],
+    x: [-100 , -50, 0],
     rotate: [0, 270, 0],
     opacity : [0.5, 0, 1],
     transition: {
