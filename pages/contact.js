@@ -42,6 +42,7 @@ export default function Contact({post, data, config, allPost, connect}) {
     const [btndisabled, setBtnDisabled] = useState(false)
     const [errorsField, setErrorsField] = useState()
     const [validError, setValidError] = useState(["","","","",""])
+    const [firstFocus, setFirstFocus] = useState(false)
 
     let refEmail = useRef()
     let refName = useRef()
@@ -83,7 +84,7 @@ export default function Contact({post, data, config, allPost, connect}) {
 
   useEffect(() =>{
     //  RouterTracking(router)
-      if(refLastname.current !== undefined && refLastname.current.value === ""){
+      if(!firstFocus){
             refLastname.current.focus()
         }
         errorsForm()
@@ -101,6 +102,7 @@ export default function Contact({post, data, config, allPost, connect}) {
 
   }, [state])
   const onChange = ({target}) => {
+      setFirstFocus(true)
     const {name, value} = target
     const indexInput = parseInt(document.querySelectorAll(`[name="${name}"]`)[0].getAttribute("index"))
 
