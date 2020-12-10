@@ -2142,6 +2142,9 @@ html {
   overflow: hidden;
   position: relative;
   z-index: 2;
+  +.motionWrapper{
+    z-index: 1;
+  }
 }
 
 
