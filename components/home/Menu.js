@@ -56,6 +56,25 @@ const backVariants = {
   }
 };
 
+const backVariantsDesktop = {
+  exit: {
+    x: [-400, 0, 0, 0],
+    opacity: [0, 0.3, 0.6, 1],
+    transition: {
+      duration: 2,
+      ease: easing
+    }
+  },
+  enter: {
+    x: [400, 0],
+    opacity: [0, 1],
+    transition: {
+      duration: 2,
+      ease: easing
+    }
+  }
+};
+
 const bgrMenu = {
   exit: {
     x: [-100 , -50, 0],
@@ -235,7 +254,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                   <div className="mainHeader">
                       <motion.div
                       animate={isToggle ? "enter" : "exit"}
-                      variants={backVariants} className="divHeader">
+                      variants={isMobileMenu ? backVariants : backVariantsDesktop} className="divHeader">
                         <h2 className={`
                         ${utilStyles.headingLg}
                         ${isMobileMenu ? "activeMobileMenu": "activeDesktopMenu"}

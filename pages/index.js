@@ -76,7 +76,7 @@ export default function Home({config, posts, connect}) {
   const [urlImage, setUrlImage] = useState();
   const [configs, setConfigs] = useState(config)
   const [onLoadingPage, setOnLoadingPage] = useState(false)
-  //const router = useRouter()
+  const router = useRouter()
 
   const submitForm = async () => {
     event.preventDefault();
@@ -92,7 +92,7 @@ export default function Home({config, posts, connect}) {
   useEffect(() => {
 
     Router.events.on('routeChangeStart', (url) => {
-      console.log(`Loading: ${url}`)
+      console.log(`Loading: ${url} router Pathname :  ${router.pathname}`)
       setOnLoadingPage(true)
       NProgress.start()
     })
