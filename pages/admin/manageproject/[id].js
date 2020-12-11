@@ -137,7 +137,7 @@ export default function Updateproject({dataProjects, posts, currentPost}) {
     console.log("Form>", state);
 }
 
-  const saveAllImage= () => {
+  const saveAllImage=() => {
     console.log("imagesArrayState", state.imageArray)
     let imagesDetails = new Array()
    let images = state.imageArray
@@ -316,6 +316,42 @@ const notifySuccess = () => {
     //console.log('target', target.getContent(), target)
   }
 
+  const onChangeTop = (e, index) => {
+    e.preventDefault()
+    let reorder = postToUpdate[0].imageArray
+    if(index !== 0){
+      let tmp = reorder[index]
+      let tmpReplace = reorder[index - 1]
+      console.log(tmp,tmpReplace, index - 1)
+      let endReorder = reorder.splice(index - 1, 1, tmp)
+      let resort =  reorder.splice(index, 1, endReorder[0])
+      console.log(tmpReplace, index - 1)
+      console.log("resort", resort)
+      console.log(postToUpdate[0].imageArray)
+      changeState({...state, "imageArray" : postToUpdate[0].imageArray, _id:id})
+  }else {
+    return false
+  }
+}
+
+  const onChangeBottom = (e, index) => {
+    e.preventDefault()
+    let reorder = postToUpdate[0].imageArray
+    console.log('index', index, reorder.length)
+    if(index !== reorder.length -1){
+      let tmp = reorder[index]
+      let tmpReplace = reorder[index + 1]
+      console.log(tmp,tmpReplace, index + 1)
+      let endReorder = reorder.splice(index + 1, 1, tmp)
+      let resort =  reorder.splice(index, 1, endReorder[0])
+      console.log(tmpReplace, index + 1)
+      console.log("resort", resort)
+      console.log(postToUpdate[0].imageArray)
+      changeState({...state, "imageArray" : postToUpdate[0].imageArray, _id:id})
+  }else {
+    return false
+  }
+  }
   useEffect(() => {
     console.log("update state", state, imageDownloaded)
     let selectAll = document.querySelectorAll('select')
@@ -434,6 +470,8 @@ const notifySuccess = () => {
                       onSaveImages={saveAllImage}
                       numbers={3}
                       update={post[item["name"]]}
+                      onTopImage={onChangeTop}
+                      onBottomImage={onChangeBottom}
                     />
                   }
                   {

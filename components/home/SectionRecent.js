@@ -18,13 +18,14 @@ import { motion } from 'framer-motion';
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
-  exit: { x: 55, opacity: 0.4, transition: { duration: 0.5, ease: easing } },
+  exit: { scale: 1, opacity: 0, transition: { type: "spring", duration: 0.5, easeOut: easing } },
   enter: {
-    x: 0,
+   scale: 1.5,
     opacity: 1,
     transition: {
+        type: "spring",
       duration: 0.5,
-      ease: easing
+      easeOut: easing
     }
   }
 };
@@ -75,7 +76,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                         <Container breakpoint="fullhd" fluid className="mainProject onTopView" key={`${i}${post._id}`}>
                         <Columns.Column className="columnProject" size={12}>
                             <motion.div variants={imageVariants} className="">
-                            <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
+                            <Image className="mainImageCategory" loading="lazy" rounded={false} src={post.imageMainPrincipal} />
                             </motion.div>
                             <Content className="info">
                                 <Tag.Group className="tagGroupPost">
@@ -138,7 +139,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                     ))}
                                 </Tag.Group>
                                     <motion.div className="center-category">
-                                        <Image className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
+                                        <Image loading="lazy" className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
                                     </motion.div>
                                     <div className="indexZone">
                                         <div className="contentZone">

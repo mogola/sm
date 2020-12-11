@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import cookies from 'next-cookies'
 
 import { Form } from 'react-bulma-components';
+import { motion } from 'framer-motion';
 
 var CryptoJS = require("crypto-js");
 import { ToastContainer } from 'react-toastify';
@@ -22,6 +23,20 @@ export async function getStaticProps() {
         revalidate: 1, // In secondes
     }
 }
+
+let easing = [0.175, 0.85, 0.42, 0.96];
+
+const imageVariants = {
+  exit: { y: 150, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
 
 export default function Login({ connect }) {
     const router = useRouter()
@@ -190,6 +205,7 @@ export default function Login({ connect }) {
     return (
         <themeContextUser.Consumer>
             {({ getToken }) => (
+                <motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
                 <Layout home>
                     <Head>
                         <title>{siteTitle}</title>
@@ -231,7 +247,8 @@ export default function Login({ connect }) {
                             </Control>
                         </Field>
                     </form>
-                </Layout>)}
+                </Layout>
+                </motion.div>)}
         </themeContextUser.Consumer>
     )
 }

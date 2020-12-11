@@ -45,6 +45,17 @@ const ImageUploads = (props, {name = "", numbers}) => {
     return dataImageFromProject
   }
 
+  const onChangeTop= (e, index) => {
+    e.preventDefault();
+    props.onTopImage(e, index)
+   // console.log(target.value)
+  }
+
+  const onChangeBottom= (e, index) => {
+    e.preventDefault();
+    props.onBottomImage(e, index)
+    //console.log(target.value)
+  }
   return (
     <Box>
       <Label>{props.name}</Label>
@@ -115,6 +126,15 @@ const ImageUploads = (props, {name = "", numbers}) => {
               <Control key={index} className="image-item">
                 <Box style={{width: "100%", display: "flex"}}>
                   <img style={{maxWidth:"200px"}} src={image} alt="" width="100%" max-width="150" height="auto" />
+                  <input type="submit"value="top"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    onChangeTop(e, index)
+                    }}/>
+                  <input type="submit" value="bottom" onClick={(e) => {
+                    e.preventDefault()
+                    onChangeBottom(e, index)
+                  }} />
                 </Box>
               </Control>
             ))}

@@ -14,6 +14,7 @@ import fetch from 'node-fetch'
 import PropTypes from 'prop-types';
 import {RouterTracking}from './../../components/router/ngprogress'
 import {useRouter} from 'next/router'
+import {motion} from 'framer-motion'
 
 import { getPostConfig, getAllPosts} from './../api/home'
 
@@ -28,6 +29,20 @@ export async function getStaticProps() {
   }
 }
 
+let easing = [0.175, 0.85, 0.42, 0.96];
+
+const imageVariants = {
+  exit: { x: 150, opacity: 0.6, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
+
 export default function Home({config, posts, connect}) {
   const [configs, setConfigs] = useState(config)
   const [isAdmin, setIsAdmin] = useState(connect)
@@ -35,26 +50,27 @@ export default function Home({config, posts, connect}) {
   useEffect(() => {
    // RouterTracking(router)
   }, [])
-  return (
-    <Layout none>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      <Menu
-        state={config}
-        connect={connect}
-    />
-        <SectionsRecent
-          data={posts}
-          className="section-category"
-          isadmin={isAdmin === true ? true : false}
-        />
-        <Footer
-          menu={configs.menuCategoryLink}
-          data={configs}
-          className="section-footer"
-        />
-    </Layout>
+  return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
+      <Layout none>
+        <Head>
+          <title>{siteTitle}</title>
+        </Head>
+        <Menu
+          state={config}
+          connect={connect}
+      />
+          <SectionsRecent
+            data={posts}
+            className="section-category"
+            isadmin={isAdmin === true ? true : false}
+          />
+          <Footer
+            menu={configs.menuCategoryLink}
+            data={configs}
+            className="section-footer"
+          />
+      </Layout>
+    </motion.div>
   )
 }
 

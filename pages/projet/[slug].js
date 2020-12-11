@@ -11,6 +11,7 @@ import Footer from './../../components/home/Footer'
 import Masonry from './../../components/Masonry'
 import moment from 'moment'
 import {RouterTracking} from './../../components/router/ngprogress'
+import {motion, useViewportScroll } from 'framer-motion'
 import {
     Container,
     Columns,
@@ -23,6 +24,29 @@ import {
     Content
 } from 'react-bulma-components';
 
+const imageVariants = {
+    exit: { scale: 1, opacity: 0.8, transition: { type: "spring", duration: 1} },
+    enter: {
+     scale: 1.5,
+      opacity: 1,
+      transition: {
+          type: "spring",
+            duration: 1
+      }
+    }
+  };
+
+  const imageMainVariants = {
+    exit: { scale: 0.6, opacity: 0.8, transition: { type: "spring", duration: 1} },
+    enter: {
+     scale: 1,
+      opacity: 1,
+      transition: {
+          type: "spring",
+            duration: 1
+      }
+    }
+  };
 const Post = ({post, config, connect, nextPost, prevPost})=>{
     const [configs, setConfigs] = useState(config)
     const router = useRouter()
@@ -39,17 +63,17 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
 
     useEffect(() => {
        // RouterTracking(router)
+
     }, [])
 
-    return(
+    return(<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
         <Layout post>
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <>
-        <div className="postBgSingle"
-        style={{backgroundImage: `url("${post.imageMainPrincipal}")`, backgroundColor:config.backgroudPost}}></div>
-        </>
+      <motion.div variants={imageVariants} className="postBgSingle"
+        style={{backgroundImage: `url("${post.imageMainPrincipal}")`, backgroundColor:config.backgroudPost}}>
+    </motion.div>
       <Menu
             state={config}
             connect={connect}
@@ -84,7 +108,7 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
                     </li>
                 }
                 <li key="peiroi">
-                    <img className="imgMainPost" src={post.imageMainPrincipal} width="auto" height="auto" />
+                    <motion.img variants={imageMainVariants} className="imgMainPost" src={post.imageMainPrincipal} width="auto" height="auto" />
                 </li>
                 <li key="eiopzieop">
                     <Container className="descriptionPost">
@@ -94,7 +118,7 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
                 </li>
             </ul>
             </Container>
-            {post.imageArray.length === 0 && <Container className="listImagesPost" fluid>
+            {post.imageArray.length !== 0 && <Container className="listImagesPost" fluid>
                 <Container>
                     <Columns>
                     <Masonry children={post.imageArray} />
@@ -110,10 +134,10 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
             </Container>
             }
             <div className="navigationPost">
-                <Link prefetch={false}  href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(nextPost)}`}>
+                <Link href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(nextPost)}`}>
                     <a className="linkSee nextProjectLink"><span className="txtLinkNav">Voir le projet suivant</span><span className="icoRight" width={26}></span></a>
                 </Link>
-                <Link prefetch={false} href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(prevPost)}`}>
+                <Link href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(prevPost)}`}>
                     <a className="linkSee prevProjectLink"><span className="icoRight" width={26}></span> <span className="txtLinkNav">Voir le projet précédent</span></a>
                 </Link>
             </div>
@@ -124,6 +148,7 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
           className="section-footer"
         />
         </Layout>
+        </motion.div>
     )
 }
 
