@@ -25,25 +25,37 @@ import {
 } from 'react-bulma-components';
 
 const imageVariants = {
-    exit: { scale: 1, opacity: 0.8, transition: { type: "spring", duration: 1} },
+    exit: {
+        scale: 1,
+        opacity: 0.8,
+        transition: {
+            type: "spring",
+            duration: 1,
+            staggerChildren: 0.05} },
     enter: {
      scale: 1.5,
       opacity: 1,
       transition: {
           type: "spring",
-            duration: 1
+            duration: 1,
+            staggerChildren: 0.05
       }
     }
   };
 
   const imageMainVariants = {
-    exit: { scale: 0.6, opacity: 0.8, transition: { type: "spring", duration: 1} },
+    exit: { scale: 0.6, opacity: 0.8,
+        transition: {
+            type: "spring",
+            duration: 1,
+            staggerChildren: 0.05} },
     enter: {
      scale: 1,
       opacity: 1,
       transition: {
           type: "spring",
-            duration: 1
+            duration: 1,
+            staggerChildren: 0.05
       }
     }
   };

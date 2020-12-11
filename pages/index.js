@@ -58,7 +58,8 @@ const backVariants = {
     opacity: 0,
     transition: {
       duration: 0.5,
-      ease: easing
+      ease: easing,
+      staggerChildren: 0.05
     }
   },
   enter: {
@@ -67,7 +68,8 @@ const backVariants = {
     transition: {
       delay: 0.5,
       duration: 0.5,
-      ease: easing
+      ease: easing,
+      staggerChildren: 0.05
     }
   }
 };

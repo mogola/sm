@@ -18,14 +18,14 @@ import { motion } from 'framer-motion';
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
-  exit: { scale: 1, opacity: 0, transition: { type: "spring", duration: 0.5, easeOut: easing } },
+  exit: { scale: 1, opacity: 0, transition: { type: "spring", duration: 0.5, staggerChildren: 0.05} },
   enter: {
    scale: 1.5,
     opacity: 1,
     transition: {
         type: "spring",
       duration: 0.5,
-      easeOut: easing
+      staggerChildren: 0.05
     }
   }
 };
@@ -35,7 +35,7 @@ const textVariants = {
   enter: {
     y: 0,
     opacity: 1,
-    transition: { delay: 0.1, duration: 0.5, ease: easing }
+    transition: { delay: 0.1, duration: 0.5, ease: easing}
   }
 };
 
@@ -45,7 +45,8 @@ const backVariants = {
     opacity: 0,
     transition: {
       duration: 0.5,
-      ease: easing
+      ease: easing,
+      staggerChildren: 0.05
     }
   },
   enter: {
@@ -54,7 +55,8 @@ const backVariants = {
     transition: {
       delay: 0.5,
       duration: 0.5,
-      ease: easing
+      ease: easing,
+      staggerChildren: 0.05
     }
   }
 };
