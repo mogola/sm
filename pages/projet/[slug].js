@@ -46,6 +46,10 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
       <Head>
         <title>{siteTitle}</title>
       </Head>
+      <>
+        <div className="postBgSingle"
+        style={{backgroundImage: `url("${post.imageMainPrincipal}")`, backgroundColor:config.backgroudPost}}></div>
+        </>
       <Menu
             state={config}
             connect={connect}
@@ -90,7 +94,7 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
                 </li>
             </ul>
             </Container>
-            <Container className="listImagesPost" fluid>
+            {post.imageArray.length && <Container className="listImagesPost" fluid>
                 <Container>
                     <Columns>
                     <Masonry children={post.imageArray} />
@@ -102,8 +106,9 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
                             ))
                         } */}
                     </Columns>
-                    </Container>
+                </Container>
             </Container>
+            }
             <div className="navigationPost">
                 <Link prefetch={false}  href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(nextPost)}`}>
                     <a className="linkSee nextProjectLink"><span className="txtLinkNav">Voir le projet suivant</span><span className="icoRight" width={26}></span></a>

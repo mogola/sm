@@ -128,12 +128,12 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
                 </h1>
               </>
             )
-            : (none || post) ? (
-              <>
-                {post &&
-                <div className="postBgSingle"
-                style={{backgroundColor:state.backgroudPost}}></div>}
-              </>
+            : (none || post) ? (<></>
+              // <>
+              //   {post &&
+              //   <div className="postBgSingle"
+              //   style={{backgroundColor:state.backgroudPost}}></div>}
+              // </>
             )
             : portfolio ? (
               <>
