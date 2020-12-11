@@ -94,7 +94,7 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
                 </li>
             </ul>
             </Container>
-            {post.imageArray.length && <Container className="listImagesPost" fluid>
+            {post.imageArray.length === 0 && <Container className="listImagesPost" fluid>
                 <Container>
                     <Columns>
                     <Masonry children={post.imageArray} />

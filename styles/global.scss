@@ -878,6 +878,18 @@ html {
     color: #FF4000;
   }
 }
+
+html {
+  .section-category {
+    .mainProject {
+      .content {
+        &.info {
+          background: #090909;
+        }
+      }
+    }
+  }
+}
 html{
   .section-category, .wrapperPost {
     padding: 0;
