@@ -2263,3 +2263,9 @@ $colorProgress: #FF4000;
     transform: rotate(360deg);
   }
 }
+
+.dragItemImage {
+  position: relative;
+  cursor: grabbing;
+  z-index: 0;
+}

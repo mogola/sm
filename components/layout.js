@@ -3,7 +3,7 @@ import Head from 'next/head'
 import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
-import { themeContextUser } from 'context/contextUser'
+import { themeContextUser } from '../context/contextUser'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 
@@ -20,6 +20,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   const [textScrollTop, setTextScrollTop] = useState()
   const [state, changeState] = useState({});
   const [textAvailable, setTextAvailable] = useState([])
+
   let compareStorage = (initialStorage, newStorage) => {
     if(initialStorage === JSON.stringify(newStorage))
     return true

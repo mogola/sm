@@ -78,7 +78,14 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                         <Container breakpoint="fullhd" fluid className="mainProject onTopView" key={`${i}${post._id}`}>
                         <Columns.Column className="columnProject" size={12}>
                             <motion.div variants={imageVariants} className="">
-                            <Image className="mainImageCategory" loading="lazy" rounded={false} src={post.imageMainPrincipal} />
+                            <Link
+                                href={'/projet/[slug]'}
+                                as={`/projet/${encodeURIComponent(post.title)}`}
+                            >
+                                <a>
+                                    <Image className="mainImageCategory" loading="lazy" rounded={false} src={post.imageMainPrincipal} />
+                                </a>
+                            </Link>
                             </motion.div>
                             <Content className="info">
                                 <Tag.Group className="tagGroupPost">
@@ -141,7 +148,14 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                     ))}
                                 </Tag.Group>
                                     <motion.div className="center-category">
+                                    <Link
+                                        href={'/projet/[slug]'}
+                                        as={`/projet/${encodeURIComponent(post.title)}`}
+                                    >
+                                    <a>
                                         <Image loading="lazy" className="mainImageCategory" rounded={false} src={post.imageMainPrincipal} />
+                                        </a>
+                                    </Link>
                                     </motion.div>
                                     <div className="indexZone">
                                         <div className="contentZone">

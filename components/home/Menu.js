@@ -1,4 +1,4 @@
-import { themeContextUser } from 'context/contextUser';
+import { themeContextUser } from './../../context/contextUser';
 import Link from 'next/link'
 import React, {useState, useEffect} from 'react'
 import {

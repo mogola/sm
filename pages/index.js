@@ -32,13 +32,22 @@ export async function getStaticProps() {
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
-  exit: { x: 150, opacity: 0.6, transition: { duration: 0.5, ease: easing } },
+  exit: { x: -300, opacity: 0.9,
+    transition: {
+      duration: 0.5,
+      type: "tween",
+      stiffness:100,
+      bounce: 0.5,
+      when: "afterChildren"
+    } },
   enter: {
     x: 0,
     opacity: 1,
     transition: {
       duration: 0.5,
-      ease: easing
+      type: "tween",
+      stiffness: 100,
+      bounce: 0.5
     }
   }
 };
@@ -58,7 +67,7 @@ const backVariants = {
     opacity: 0,
     transition: {
       duration: 0.5,
-      ease: easing,
+      type: "spring",
       staggerChildren: 0.05
     }
   },
@@ -68,11 +77,12 @@ const backVariants = {
     transition: {
       delay: 0.5,
       duration: 0.5,
-      ease: easing,
+      type: "spring",
       staggerChildren: 0.05
     }
   }
 };
+
 export default function Home({config, posts, connect}) {
   const [title, setTitle] = useState();
   const [urlImage, setUrlImage] = useState();
@@ -80,21 +90,25 @@ export default function Home({config, posts, connect}) {
   const [onLoadingPage, setOnLoadingPage] = useState(false)
   const router = useRouter()
 
-  const submitForm = async () => {
-    event.preventDefault();
-
-    console.log('title :', title, '', 'url Image', urlImage);
-
-    const addingPost = await getPostFromDataBase({
-      "title" : title,
-      "urlImage" : urlImage});
-     return addingPost
+  let compareStorage = (initialStorage, newStorage) => {
+    initialStorage = JSON.parse(initialStorage)
+    // console.log("==================", newStorage.__v, typeof newStorage.__v)
+    // console.log("xxxxxxxxxxxxxxxxxx", initialStorage.__v,typeof initialStorage.__v)
+    // compare version data
+    if(initialStorage !== null && initialStorage.__v === newStorage.__v)
+    return true
+    else
+    return false
   }
 
   useEffect(() => {
-
-  //  RouterTracking(router)
-
+    if(compareStorage(localStorage.getItem("info"), config)) {
+      console.log('from localStorage')
+      setConfigs(JSON.parse(localStorage.getItem('info')))
+    }else {
+      console.log('from server')
+      return ''
+    }
   }, [])
 
   return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
@@ -103,7 +117,7 @@ export default function Home({config, posts, connect}) {
         <title>{siteTitle}</title>
       </Head>
         <Hometop
-          state={config}
+          state={configs}
           connect={connect}
       />
       <motion.div variants={backVariants}>

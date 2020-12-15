@@ -1,6 +1,6 @@
 
 
-import { themeContextUser } from 'context/contextUser';
+import { themeContextUser } from './../../context/contextUser';
 import Link from 'next/link'
 import {useState, useEffect} from 'react'
 import Menu from './Menu'

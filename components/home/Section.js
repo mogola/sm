@@ -69,7 +69,15 @@ const Sections = ({title = "", data = [], ...rest}) => {
             {data.map((post, i) => (
                 <Columns.Column key={i} size="half">
                     <motion.div variants={backVariants}>
+                    <Link
+                        href={'/projet/[slug]'}
+                        as={`/projet/${encodeURIComponent(post.title)}`}
+                      >
+                      <a>
                         <Image rounded={false} src={post.imageMainPrincipal} />
+                      </a>
+                      </Link>
+
                     </motion.div>
                     <Tag.Group className="tagGroupPost">
                         <Tag className="recentDate">

@@ -29,16 +29,18 @@ export async function getStaticProps() {
   }
 }
 
-let easing = [0.175, 0.85, 0.42, 0.96];
-
 const imageVariants = {
-  exit: { x: 150, opacity: 0.6, transition: { duration: 0.5, ease: easing } },
+  exit: { x: -150, opacity: 0.6,
+    transition: {
+      duration: 0.5,
+      type:"spring",
+      when: "afterChildren" } },
   enter: {
     x: 0,
     opacity: 1,
     transition: {
       duration: 0.5,
-      ease: easing,
+      type:"spring",
     }
   }
 };
@@ -50,7 +52,7 @@ export default function Home({config, posts, connect}) {
   useEffect(() => {
    // RouterTracking(router)
   }, [])
-  return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
+  return (<motion.div variants={imageVariants} className="motionWrapper" initial="enter" animate="enter" exit="exit">
       <Layout none>
         <Head>
           <title>{siteTitle}</title>
