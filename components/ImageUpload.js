@@ -1,6 +1,8 @@
 import React , {useState, useRef, useEffect} from "react";
 import { Form, Box, Button } from 'react-bulma-components';
-import { findIndex } from "./find-index";
+//import { findIndex } from "./find-index";
+import { usePositionReorder } from "./use-position-reorder";
+import { useMeasurePosition } from "./use-measure-position";
 import { motion, useMotionValue } from 'framer-motion'
 import move from "array-move"
 const {Field, Control, Label, Help } = Form;
@@ -14,84 +16,60 @@ const flat = {
   transition: { delay: 0.3 }
 };
 // const positions = useRef().current;
-const ImageItem = ({ setPosition, image, moveItem, i, onChangeBottom, onChangeTop}) => {
+const ImageItem = ({ i, height, updatePosition, updateOrder, onChangeBottom, onChangeTop, onDragArray}) => {
   const [isDraggingDrag, setDraggingDrag] = useState(false);
-  const [heights, setHeights] = useState()
   // We'll use a `ref` to access the DOM element that the `motion.li` produces.
   // This will allow us to measure its height and position, which will be useful to
   // decide when a dragging element should switch places with its siblings.
-  const ref = useRef(null);
+  const ref = useMeasurePosition((pos) => updatePosition(i, pos));
 
-  // By manually creating a reference to `dragOriginY` we can manipulate this value
-  // if the user is dragging this DOM element while the drag gesture is active to
-  // compensate for any movement as the items are re-positioned.
-  const dragOriginY = useMotionValue(0);
-
-  // Update the measured position of the item so we can calculate when we should rearrange.
   useEffect(() => {
-    setPosition(i, {
-      height: ref.current.offsetHeight,
-      top: ref.current.offsetTop
-    });
-
-    setHeights(ref.current.offsetHeight)
-
-    console.log("isDraggindDrag", isDraggingDrag)
-  }, [image]);
-
+    console.log("ref", ref)
+  }, [ref])
   return (
+    <div
+      style={{
+        padding: 0,
+        height,
+        position: "relative",
+        // height : ref.current ? ref.current.offsetHeight : "",
+        // If we're dragging, we want to set the zIndex of that item to be on top of the other items.
+        zIndex: isDraggingDrag ? 3 : 1
+      }}
+    >
     <motion.div
         className="dragItemImage"
         ref={ref}
+        layout
         initial={false}
-        // If we're dragging, we want to set the zIndex of that item to be on top of the other items.
-        animate={isDraggingDrag ? onTop : flat}
-        style={{height: heights, zIndex: isDraggingDrag ? 1 : 0 }}
-        // dragConstraints={constraintsRef}
-        dragPropagation
-        dragConstraints={{ top: 0, bottom: 0 }}
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 1.12 }}
-        whileTap={{ cursor: "grabbing" }}
+        style={{
+          background: "white",
+          height,
+          borderRadius: 5
+        }}
+        whileHover={{
+          scale: 1.03,
+          boxShadow: "0px 3px 3px rgba(0,0,0,0.15)"
+        }}
+        whileTap={{
+          scale: 1.12,
+          boxShadow: "0px 5px 5px rgba(0,0,0,0.1)"
+        }}
         drag="y"
-        dragOriginY={dragOriginY}
-        dragElastic={0.5}
-        onDragStart={(e) => {
-          e.stopPropagation()
-          e.preventDefault()
-          console.log(isDraggingDrag)
-          setDraggingDrag(true)
-          setHeights(ref.current.offsetHeight)
-        }}
-        onDragEnd={(e) => {
-          e.stopPropagation()
-          e.preventDefault()
+        onDragStart={() => setDraggingDrag(true)}
+        onDragEnd={() => {
           setDraggingDrag(false)
+          onDragArray()
         }}
-        onDrag={(e, info) => {
-          setDraggingDrag(true)
-          setHeights(ref.current.offsetHeight)
-          console.log('point y ',info,  info.offset.y)
-          moveItem(i, info.offset.y)}}
-        positionTransition={({ delta }) => {
-          console.log("===========================================", isDraggingDrag)
-          if (isDraggingDrag) {
-            // If we're dragging, we want to "undo" the items movement within the list
-            // by manipulating its dragOriginY. This will keep the item under the cursor,
-            // even though it's jumping around the DOM.
-            dragOriginY.set(dragOriginY.get() + delta.y);
-            console.log("referre", ref[i].current)
+        onViewportBoxUpdate={(_viewportBox, delta) => {
+          if(isDraggingDrag){
+            updateOrder(i, delta.y.translate);
           }
-
-          // If `positionTransition` is a function and returns `false`, it's telling
-          // Motion not to animate from its old position into its new one. If we're
-          // dragging, we don't want any animation to occur.
-          return !isDraggingDrag;
         }}
         >
         <Control className="image-item">
           <Box style={{width: "100%", display: "flex"}}>
-            <img style={{maxWidth:"200px"}} src={image} alt="" width="100%" max-width="150" height="auto" />
+            <img style={{maxWidth:"200px"}} src={height} alt="" width="100%" max-width="150" height="auto" />
             <input type="submit"value="top"
             onClick={(e) => {
               e.preventDefault()
@@ -104,6 +82,7 @@ const ImageItem = ({ setPosition, image, moveItem, i, onChangeBottom, onChangeTo
           </Box>
         </Control>
         </motion.div>
+        </div>
   )
 }
 
@@ -113,23 +92,15 @@ const ImageUploads = (props, {name = "", numbers }) => {
   const [urlMainImage, setUrlMainImage] = useState(props.singleimage)
   const [imgs, setImgs] = useState(props.update);
   const [position, setPos] = useState([])
-
-  let positions = position;
-  //const positions = useRef([]).current;
-  console.log(position)
-  const setPosition = (i, offset) => (positions[i] = offset);
-  // Spring configs
-
-
-  const moveItem = (i, dragOffset) => {
-    const targetIndex = findIndex(i, dragOffset, position);
-    if (targetIndex !== i) setUrlImageUpdate(move(urlImageUdate, i, targetIndex));
-  };
-
+  const [order, updatePosition, updateOrder] = usePositionReorder(urlImageUdate);
   // let positions = position;
 
   const maxNumber = props.numbers;
-  console.log("urlImageUdate", urlImageUdate)
+
+  useEffect(() => {
+    console.log("urlImageUdate", urlImageUdate)
+  }, [urlImageUdate])
+
   const handleChange = (imageList, addUpdateIndex) => {
     // data for submit
     console.log("props", props)
@@ -176,7 +147,10 @@ const ImageUploads = (props, {name = "", numbers }) => {
     props.onBottomImage(e, index)
     //console.log(target.value)
   }
-  const constraintsRef = useRef(null)
+
+  const onDragArray = () => {
+    props.onDragArray(order)
+  }
   return (
     <Box>
       <Label>{props.name}</Label>
@@ -243,16 +217,17 @@ const ImageUploads = (props, {name = "", numbers }) => {
             ))}
 
             <Label>Image Actuel</Label>
-            <motion.div ref={constraintsRef}>
-            {urlImageUdate !== undefined && urlImageUdate.map((image, index) => (
+            <motion.div>
+            {urlImageUdate !== undefined && order.map((image, index) => (
                 <ImageItem
-                  key={index}
+                  key={image}
+                  height={image}
                   i={index}
-                  image={image}
-                  setPosition={setPosition}
-                  moveItem={moveItem}
+                  updatePosition={updatePosition}
+                  updateOrder={updateOrder}
                   onChangeBottom={(e) => {onChangeBottom(e, index)}}
                   onChangeTop={(e) => {onChangeTop(e, index)}}
+                  onDragArray={onDragArray}
                 />
             ))}
           </motion.div>
@@ -272,5 +247,7 @@ const ImageUploads = (props, {name = "", numbers }) => {
       </Box>
   );
 }
+
+const items = [290, 290, 290, 100];
 
 export default ImageUploads

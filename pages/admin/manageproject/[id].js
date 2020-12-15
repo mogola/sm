@@ -353,6 +353,12 @@ const notifySuccess = () => {
     return false
   }
   }
+
+  const onDragArray = (ordering) => {
+    console.log("onDragArray", ordering)
+    changeState({...state, "imageArray" : ordering, _id:id})
+  }
+
   useEffect(() => {
     console.log("update state", state, imageDownloaded)
     let selectAll = document.querySelectorAll('select')
@@ -360,7 +366,7 @@ const notifySuccess = () => {
         let currentSelector = document.querySelectorAll('select')[i]
         currentSelector.setAttribute("value", currentSelector.options[0].text)
       }
-  }, [state, imageDownloaded])
+  }, [state])
 
   return (
     <Layout dashboard>
@@ -473,6 +479,7 @@ const notifySuccess = () => {
                       update={post[item["name"]]}
                       onTopImage={onChangeTop}
                       onBottomImage={onChangeBottom}
+                      onDragArray={onDragArray}
                     />
                   }
                   {
