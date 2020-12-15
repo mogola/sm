@@ -3,7 +3,6 @@ import ProjectsSchema from '../../models/Projects'
 import RegisterModel from '../../models/RegisterModel'
 import Homeconfig from '../../models/Homeconfig'
 import mongoose from 'mongoose'
-import { projectConfig } from 'services/jsonProjects'
 const { decode } = require('../../helpers/jwt')
 
 initDB()
