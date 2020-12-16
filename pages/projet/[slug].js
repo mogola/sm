@@ -169,8 +169,11 @@ export async function getStaticProps({params:{slug}}) {
     const config = await getPostConfig()
     const postData = await getAllPosts()
     const posts = JSON.parse(JSON.stringify(postData))
-    const getPostData = posts.find(post => post.title == slug)
-    const findindex = posts.findIndex(post => post.title === slug)
+    const getPostData = await posts.find(post => post.title == slug)
+    const findindex = await posts.findIndex(post => {
+        console.log(post.title === slug)
+        return post.title === slug
+    })
     console.log("index post", findindex)
     let getPrev = posts[findindex + 1]
     let getNext = posts[findindex - 1]
@@ -179,15 +182,16 @@ export async function getStaticProps({params:{slug}}) {
 
     console.log(getNext, getPrev )
     if(getNext === undefined) {
-        console.log("pas de post existant")
+        console.log("pas de post existant 2")
         getNext = posts[findindex]
+        console.log(getNext)
         idnext = getNext.title
     }else {
         idnext = getNext.title
     }
 
     if(getPrev === undefined) {
-        console.log("pas de post existant")
+        console.log("pas de post existant 1")
         getPrev = posts[findindex]
 
         idprev = getPrev.title

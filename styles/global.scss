@@ -1578,6 +1578,7 @@ html {
     padding-bottom: 104px;
     @include mobileView{
       padding: 50px 40px;
+      background: #fff;
     }
     .contentDescription {
       color: #090909;
@@ -2268,4 +2269,58 @@ $colorProgress: #FF4000;
   position: relative;
   cursor: grabbing;
   z-index: 0;
+}
+
+.loginWrapper {
+  width: 100%;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.contentLogin {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  max-height: 80vh;
+  flex-direction: column;
+  justify-content: center;
+  .field.is-grouped {
+    justify-content: center;
+    padding-top: 24px;
+  }
+}
+
+.innerLoginContent {
+  background-color: #fff;
+  padding: 24px;
+  max-width:520px;
+  width: 100%;
+
+  @include mobileView{
+    max-width: 360px;
+  }
+}
+
+.txtInfoConnected {
+  text-align: center;
+  font-weight: bold;
+}
+
+.innerWrapperLogin {
+  padding: 24px;
+  max-width:520px;
+  width: 100%;
+}
+html .titleMainLogin {
+  color: #fff;
+  font-family: Overpass;
+  font-size: 67px !important;
+  width: 100%;
+  text-align: center;
+}
+
+.controlsButton {
+  margin: 30px;
 }

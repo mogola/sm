@@ -317,9 +317,9 @@ const notifySuccess = () => {
     //console.log('target', target.getContent(), target)
   }
 
-  const onChangeTop = (e, index) => {
+  const onChangeTop = (e, index, order) => {
     e.preventDefault()
-    let reorder = postToUpdate[0].imageArray
+    let reorder = order
     if(index !== 0){
       let tmp = reorder[index]
       let tmpReplace = reorder[index - 1]
@@ -328,16 +328,16 @@ const notifySuccess = () => {
       let resort =  reorder.splice(index, 1, endReorder[0])
       console.log(tmpReplace, index - 1)
       console.log("resort", resort)
-      console.log(postToUpdate[0].imageArray)
-      changeState({...state, "imageArray" : postToUpdate[0].imageArray, _id:id})
+      console.log(order)
+      changeState({...state, "imageArray" : order, _id:id})
   }else {
     return false
   }
 }
 
-  const onChangeBottom = (e, index) => {
+  const onChangeBottom = (e, index, order) => {
     e.preventDefault()
-    let reorder = postToUpdate[0].imageArray
+    let reorder = order
     console.log('index', index, reorder.length)
     if(index !== reorder.length -1){
       let tmp = reorder[index]
@@ -348,7 +348,7 @@ const notifySuccess = () => {
       console.log(tmpReplace, index + 1)
       console.log("resort", resort)
       console.log(postToUpdate[0].imageArray)
-      changeState({...state, "imageArray" : postToUpdate[0].imageArray, _id:id})
+      changeState({...state, "imageArray" : order, _id:id})
   }else {
     return false
   }
@@ -545,8 +545,10 @@ const notifySuccess = () => {
              setIdPost(post._id)
            }}>Supprimer</Card.Footer.Item>
           <Card.Footer.Item>
-            <Link href={'/admin/manageproject/[id]'} as={`/admin/manageproject/${post._id}`}>
-              <a href={`/admin/manageproject/${post._id}`}>View Post</a>
+            <Link
+              href={'/projet/[slug]'}
+              as={`/projet/${encodeURIComponent(post.title)}`}>
+              <a>View Post</a>
             </Link>
           </Card.Footer.Item>
           <Card.Footer.Item renderAs="a" href="#Maybe">Update</Card.Footer.Item>

@@ -9,7 +9,7 @@ import fetch from 'isomorphic-unfetch'
 import { useRouter } from 'next/router'
 import { AnimatePresence } from 'framer-motion';
 import {RouterTracking} from './../components/router/ngprogress'
-
+import { ToastContainer } from 'react-toastify';
 export async function getServerSideProps(ctx) {
   console.log(ctx.req)
   const config = await getPostConfig()
@@ -90,6 +90,7 @@ export default function App({ Component, pageProps, config, router }) {
             <themeContextUser.Consumer>
                 {({userConnected}) => (
                     <AnimatePresence exitBeforeEnter>
+                      <ToastContainer />
                       <Component key={router.route} config={localStorageData} connect={userConnected()} {...pageProps} />
                     </AnimatePresence>
                 )}

@@ -3,72 +3,50 @@ import Homeconfig from '../../models/Homeconfig'
 import RegisterModel from '../../models/RegisterModel'
 import mongoose from 'mongoose'
 const { decode } = require('../../helpers/jwt')
+import nextConnect from 'next-connect'
+import mylogger from '../../helpers/mylogger';
+const handler = nextConnect();
+handler.use(mylogger)
 
 initDB()
 
-export default async (req,res)=>{
-  switch (req.method)
-    {
-        case "GET":
-            await getAllConfig(req,res)
-            break
-        case "POST":
-            await saveConfig(req,res)
-            break
-        case "PUT":
-            await updateConfig(req,res)
-            break
-        case "DELETE":
-            await deleteConfig(req,res)
-            break
-    }
-}
+// export default async (req,res)=>{
+//   switch (req.method)
+//     {
+//         case "GET":
+//             await getAllConfig(req,res)
+//             break
+//         case "POST":
+//             await saveConfig(req,res)
+//             break
+//         case "PUT":
+//             await updateConfig(req,res)
+//             break
+//         case "DELETE":
+//             await deleteConfig(req,res)
+//             break
+//     }
+// }
 
 
-const getAllConfig = async (req,res)=>{
+handler.get(async (req, res) => {
     try{
-        let {headers} = req
-        console.log("cookie headers", headers['cookie'])
-        let getTokenUser;
+    const posts = await Homeconfig
+    .find()
+    .sort({"_id": 1})
 
-        if(headers['cookie'] !== undefined){
-            getTokenUser = req.headers['cookie'].split('token=')[1]
-            console.log(decode(getTokenUser))
-        }
-
-        if(getTokenUser !== undefined || decode(getTokenUser) !== null){
-            let {payload} = decode(getTokenUser)
-        console.log('get req-header-x-auth', decode(getTokenUser))
-
-        await RegisterModel.findOne({email: payload.email})
-        .then(async (account) => {
-            if(account.role !== "admin"){
-                console.log('role :', account.role)
-                res.status(300).json({"message": "not authorized"})
-            }else {
-                console.log(account)
-                const posts = await Homeconfig
-                .find()
-                .sort({"_id": 1})
-
-                if(posts){
-                    res.json(JSON.stringify(posts[0]))
-                }else{
-                    res.status(200).json([])
-                }
-            }
-        })
+    if(posts){
+        res.json(JSON.stringify(posts[0]))
     }else{
-        res.status(300).json({"message": "not authorized"})
+        res.status(200).json([])
     }
   }
   catch(err){
     console.log(err)
   }
+})
 
-}
-
-const saveConfig = async (req,res)=>{
+handler.post(async (req, res) => {
   const {config} =  req.body
   console.log(config)
   try{
@@ -87,10 +65,10 @@ const saveConfig = async (req,res)=>{
     res.status(500).json({error:"internal server error"})
     console.log(err)
   }
-}
+})
 
 
-const deleteConfig = async (req,res)=>{
+handler.delete(async (req, res) => {
     try{
         await Homeconfig.remove({ _id: req.body.id })
         .exec()
@@ -110,9 +88,9 @@ const deleteConfig = async (req,res)=>{
     catch(err){
         console.log('error during the process the deletion')
     }
-}
+})
 
-const updateConfig = async(req, res) => {
+handler.put(async (req, res) => {
     const {config} = req.body;
     console.log('current post', config._id)
     config.__v++
@@ -131,4 +109,6 @@ const updateConfig = async(req, res) => {
     catch (err) {
         console.log('no registration', err)
     }
-}
+})
+
+export default handler;

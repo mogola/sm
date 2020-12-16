@@ -6,9 +6,15 @@ import InputField from '../components/InputField'
 import Layout, { siteTitle } from '../components/layout'
 import {RouterTracking} from '../components/router/ngprogress'
 import baseUrl from '../helpers/baseUrl'
-
+import {getPostConfig } from './api/home'
+import Menu from './../components/home/Menu'
+import Footer from './../components/home/Footer'
+import Prestation from './../components/home/Prestation'
+import { motion } from 'framer-motion';
 import utilStyles from '../styles/utils.module.css'
-import { Form } from 'react-bulma-components';
+
+import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
+const {Field, Control, Label, Help} = Form;
 
 var CryptoJS = require("crypto-js");
 import { ToastContainer } from 'react-toastify';
@@ -17,14 +23,54 @@ const {sign, verify, decode } = require('../helpers/jwt')
 
 
 export async function getStaticProps() {
-  return {
-    props: {}
-  }
+    const config = await getPostConfig()
+
+    return {
+        props: {
+            config: JSON.parse(JSON.stringify(config[0])),
+        },
+        revalidate: 1, // In secondes
+    }
 }
 
-export default function Register({}) {
+let easing = [0.175, 0.85, 0.42, 0.96];
 
-const {Field, Control, Label, Help } = Form;
+const imageVariants = {
+    exit: { x: -300, opacity: 0.9,
+      transition: {
+        duration: 0.5,
+        type: "tween",
+        stiffness:100,
+        bounce: 0.5,
+        when: "afterChildren"
+      } },
+    enter: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        type: "tween",
+        stiffness: 100,
+        bounce: 0.5
+      }
+    }
+  };
+
+const loginVariants = {
+    exit: { x: -150, opacity: 0.8, transition: { duration: 0.5, ease: easing } },
+    enter: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: easing,
+        staggerChildren : 0.05
+      }
+    }
+  };
+
+export default function Register({ connect, config}) {
+
 const [emailValue, setEmailValue] = useState();
 const [obj, setObj] = useState({});
 const [regexEmail, setRegexEmail] = useState(new RegExp('^[a-z0-9.-]+@[a-z.]{2,}\.[a-z]$'))
@@ -36,7 +82,7 @@ const [matchPwd, setMatchPwd] = useState(false)
 const [emailExisting, setEmailExisting] = useState(false)
 
     useEffect(() => {
-        RouterTracking(router)
+        // RouterTracking(router)
     }, [])
 
     const submitForm = async (e) => {
@@ -177,11 +223,30 @@ const notifySuccess = () => {
 }
 
   return (
-    <Layout home>
+    <motion.div
+        style={{backgroundImage: `url(${config.logoSiteUrl})`}}
+        variants={imageVariants}
+        className="motionWrapper loginWrapper"
+        initial="exit"
+        animate="enter"
+        exit="exit">
+    <Layout post>
       <Head>
         <title>{siteTitle}</title>
       </Head>
       <ToastContainer />
+      <Menu
+            state={config}
+            connect={connect}
+            classMenu="fixedMenu"
+        />
+        <motion.div
+        variants={loginVariants}
+        initial="enter"
+        animate="enter"
+        exit="exit">
+        <Container className="contentLogin" fluid>
+            <Control className="innerLoginContent">
       <form>
       {emailExisting &&
       <Field kind="group"><Help style={{fontSize: "19px", fontWeight: "bold"}} className={"is-danger"}>Email déjà utilisé</Help></Field>}
@@ -222,6 +287,20 @@ const notifySuccess = () => {
             </Control>
         </Field>
       </form>
+      </Control>
+      </Container>
+      </motion.div>
+      <Prestation
+            data={config.textContentServices}
+            title={config.textCategoryServices}
+            className="section-prestation"
+        />
+        <Footer
+            menu={config.menuCategoryLink}
+            data={config}
+            className="section-footer"
+        />
     </Layout>
+    </motion.div>
   )
 }

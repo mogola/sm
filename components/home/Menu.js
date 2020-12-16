@@ -1,6 +1,7 @@
 import { themeContextUser } from './../../context/contextUser';
 import Link from 'next/link'
 import React, {useState, useEffect} from 'react'
+import {useRouter} from 'next/router'
 import {
     Container,
     Columns,
@@ -14,6 +15,8 @@ import {
 } from 'react-bulma-components';
 import utilStyles from '../../styles/utils.module.css'
 import { motion, useCycle } from 'framer-motion';
+import baseUrl from '../../helpers/baseUrl';
+import {notify} from '../notify'
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
@@ -164,6 +167,8 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
     const [isToggle, setIsToggle] = useCycle(false, true);
     const [isBackground, setIsBackground] = useState(state.colorBackgroundMenu)
     const [isInnerWidth, setIsInnerWidth] = useState()
+    const [isDisconnect, setIsDisconnect] = useState(false)
+    const router = useRouter()
     //const [isOpen, toggleOpen] = useCycle(false, true);
     const viewPortDetection = () => {
         console.log(window.innerWidth)
@@ -228,7 +233,27 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
         viewPortDetection()
 
         console.log("isBackground", typeof(isBackground))
-    }, [isInnerWidth])
+    }, [isInnerWidth, ])
+
+    const disconnect = async (e, callback) => {
+      e.preventDefault()
+      setIsDisconnect(true)
+      setIsUserAdmin(false)
+      notify("error", "vous avez été déconnecté")
+      callback()
+      localStorage.removeItem('userIsConnected')
+      localStorage.removeItem('token')
+      await fetch(`${baseUrl}/api/disconnect`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token':''
+      },
+      }).then( data => {
+        console.log("vous êtes désormais déconnecté", data)
+        router.push(`/`)
+      })
+    }
 
     return (<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
       <themeContextUser.Consumer>
@@ -261,7 +286,9 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                         ${isToggle ? "isOpen" : "isClosed"}
                         `}>
                           <Link href="/">
-                            <a className={`txtLogo ${utilStyles.colorInherit}`}>{state.nameSite}</a>
+                            <a
+                              className={`txtLogo ${utilStyles.colorInherit}`}
+                            >{state.nameSite}</a>
                           </Link>
                         </h2>
                       </motion.div>
@@ -291,14 +318,31 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                             <motion.li
                               variants={variantsItem} key="izeoirere">
                               <Link href="/admin/config">
-                                <a className="menuLink">Manage globales</a>
+                                <a
+                                  onClick={(e) => {
+                                    setIsToggle()}}
+                                  className="menuLink">Manage globales</a>
                               </Link>
                               </motion.li>
                             <motion.li
                               variants={variantsItem} key="izeoireze">
                               <Link href="/admin/project">
-                                <a className="menuLink">Create project</a>
+                                <a
+                                  className="menuLink"
+                                  onClick={(e) => {
+                                    setIsToggle()}}
+                                >Create project</a>
                               </Link>
+                              </motion.li>
+                              <motion.li
+                                variants={variantsItem} key="izeoifdrefre">
+                                <Link href="/">
+                                  <a onClick={(e) => {
+                                      disconnect(e, setIsToggle)
+                                  }}
+                                  className="menuLink"
+                                  >logout</a>
+                                </Link>
                               </motion.li>
                             </React.Fragment>
                             }
@@ -307,13 +351,20 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                             <motion.li
                               variants={variantsItem} key="izeeroire">
                               <Link href="/login">
-                                <a className="menuLink">Login</a>
+                                <a
+                                onClick={(e) => {
+                                    setIsToggle()}}
+                                    className="menuLink">Login</a>
                               </Link>
                               </motion.li>
                             <motion.li
                               variants={variantsItem} key="izeoifdfre">
                               <Link href="/register">
-                                <a className="menuLink">register</a>
+                                <a
+                                  className="menuLink"
+                                  onClick={(e) => {
+                                    setIsToggle()}}
+                                >register</a>
                               </Link>
                               </motion.li>
                             </React.Fragment>
@@ -351,6 +402,11 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                                key="izeoireze">
                               <Link href="/admin/project">
                                 <a className="menuLink">Create project</a>
+                              </Link>
+                              </li>
+                              <li key="izeoifdrefre">
+                              <Link href="/">
+                                <a onClick={(e) => { disconnect(e)}} className="menuLink">logout</a>
                               </Link>
                               </li>
                             </React.Fragment>

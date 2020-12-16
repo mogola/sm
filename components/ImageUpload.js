@@ -70,16 +70,32 @@ const ImageItem = ({ i, height, updatePosition, updateOrder, onChangeBottom, onC
         <Control className="image-item">
           <Box style={{width: "100%", display: "flex"}}>
             <img style={{maxWidth:"200px"}} src={height} alt="" width="100%" max-width="150" height="auto" />
-            <input type="submit"value="top"
-            onClick={(e) => {
-              e.preventDefault()
-              onChangeTop(e, i)
-              }}/>
-            <input type="submit" value="bottom" onClick={(e) => {
-              e.preventDefault()
-              onChangeBottom(e, i)
-            }} />
-          </Box>
+            <Control>
+              <Button
+                className="controlsButton"
+                type="submit"
+              onClick={(e) => {
+                e.preventDefault()
+                onChangeTop(e, i)
+                }}> Tops
+                </Button>
+              <Button
+                className="controlsButton"
+                type="submit"
+                onClick={(e) => {
+                e.preventDefault()
+                onChangeBottom(e, i)
+              }}>Bottom</Button>
+              <Button
+              onClick={(e) => {
+                e.preventDefault()
+                console.log("index img", i)
+              }}
+              className="controlsButton deletedButton">
+                Delete
+              </Button>
+              </Control>
+            </Box>
         </Control>
         </motion.div>
         </div>
@@ -138,13 +154,15 @@ const ImageUploads = (props, {name = "", numbers }) => {
 
   const onChangeTop= (e, index) => {
     e.preventDefault();
-    props.onTopImage(e, index)
+    props.onTopImage(e, index, order)
+    setUrlImageUpdate(order)
    // console.log(target.value)
   }
 
   const onChangeBottom= (e, index) => {
     e.preventDefault();
-    props.onBottomImage(e, index)
+    props.onBottomImage(e, index, order)
+    setUrlImageUpdate(order)
     //console.log(target.value)
   }
 

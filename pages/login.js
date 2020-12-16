@@ -7,19 +7,29 @@ import {RouterTracking} from '../components/router/ngprogress'
 import baseUrl from '../helpers/baseUrl'
 import { themeContextUser } from './../context/contextUser'
 import { useRouter } from 'next/router'
+import {getPostConfig } from './api/home'
+import Menu from './../components/home/Menu'
+import Footer from './../components/home/Footer'
+import Prestation from './../components/home/Prestation'
 import cookies from 'next-cookies'
-
-import { Form } from 'react-bulma-components';
 import { motion } from 'framer-motion';
 
 var CryptoJS = require("crypto-js");
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
+
+import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
+const {Field, Control, Label} = Form;
+
 const { sign, verify, decode } = require('../helpers/jwt')
 
 export async function getStaticProps() {
+    const config = await getPostConfig()
+
     return {
-        props: {},
+        props: {
+            config: JSON.parse(JSON.stringify(config[0])),
+        },
         revalidate: 1, // In secondes
     }
 }
@@ -27,18 +37,40 @@ export async function getStaticProps() {
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
-  exit: { y: 150, opacity: 0, transition: { duration: 0.5, ease: easing } },
-  enter: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-      ease: easing
+    exit: { x: -300, opacity: 0.9,
+      transition: {
+        duration: 0.5,
+        type: "tween",
+        stiffness:100,
+        bounce: 0.5,
+        when: "afterChildren"
+      } },
+    enter: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        type: "tween",
+        stiffness: 100,
+        bounce: 0.5
+      }
     }
-  }
-};
+  };
 
-export default function Login({ connect }) {
+const loginVariants = {
+    exit: { x: -150, opacity: 0.8, transition: { duration: 0.5, ease: easing } },
+    enter: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: easing,
+        staggerChildren : 0.05
+      }
+    }
+  };
+
+export default function Login({ connect, config}) {
     const router = useRouter()
     const { Field, Control, Label, Help } = Form;
     const [emailValue, setEmailValue] = useState();
@@ -205,48 +237,85 @@ export default function Login({ connect }) {
     return (
         <themeContextUser.Consumer>
             {({ getToken }) => (
-                <motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
-                <Layout home>
+                <motion.div
+                    style={{backgroundImage: `url(${config.logoSiteUrl})`}}
+                    variants={imageVariants}
+                    className="motionWrapper loginWrapper"
+                    initial="exit"
+                    animate="enter"
+                    exit="exit">
+
+                <Layout post>
                     <Head>
                         <title>{siteTitle}</title>
                     </Head>
                     <ToastContainer />
-                    {isUserAdmin && <div>Vous êtes bien connecté</div>}
-                    {!isUserAdmin && <div>Vous n'êtes pas connecté</div>}
-                    <form onSubmit={(e) => {
-                        let compareToken = getToken(localStorage.getItem('token'), tokenUser, userBody)
-                        submitForm(e, compareToken)
-                    }}>
-                        <InputField
-                            onChange={onChange}
-                            labelName="email"
-                            name="email"
-                            type="email"
-                            placeholder="email"
-                            classValidator={validator ? "is-success" : "is-danger"}
-                        />
-                        <InputField
-                            onChange={onChange}
-                            labelName="Password"
-                            name="password"
-                            type="password"
-                            placeholder="password"
-                            booleanerror={errorMessage}
-                            classValidator={!errorMessage ? "is-success" : "is-danger"}
-                        />
-                        <Field kind="group">
-                            <Control>
-                                <button onClick={() => { }}
-                                    disabled={matchPwd ? false : true}
-                                    className="button"
-                                    tabIndex="0"
-                                    type="primary">Envoyer</button>
-                            </Control>
-                            <Control>
-                                <button className="is-link button" tabIndex="0" type="primary">Cancel</button>
-                            </Control>
-                        </Field>
-                    </form>
+                    <Menu
+                        state={config}
+                        connect={connect}
+                        classMenu="fixedMenu"
+                    />
+                    <motion.div
+                    variants={loginVariants}
+                    initial="enter"
+                    animate="enter"
+                    exit="exit">
+                    <Container className="contentLogin" fluid>
+                        <div className="innerWrapperLogin">
+                        <Heading className="titleMainLogin" size={3}>
+                            Login
+                        </Heading>
+                        <Control className="innerLoginContent">
+                            {isUserAdmin && <div className="txtInfoConnected">Vous êtes bien connecté</div>}
+                            {!isUserAdmin && <div className="txtInfoConnected">Vous n'êtes pas connecté</div>}
+                            <form onSubmit={(e) => {
+                                let compareToken = getToken(localStorage.getItem('token'), tokenUser, userBody)
+                                submitForm(e, compareToken)
+                            }}>
+                                <InputField
+                                    onChange={onChange}
+                                    labelName="email"
+                                    name="email"
+                                    type="email"
+                                    placeholder="email"
+                                    classValidator={validator ? "is-success" : "is-danger"}
+                                />
+                                <InputField
+                                    onChange={onChange}
+                                    labelName="Password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="password"
+                                    booleanerror={errorMessage}
+                                    classValidator={!errorMessage ? "is-success" : "is-danger"}
+                                />
+                                <Field kind="group">
+                                    <Control>
+                                        <button onClick={() => { }}
+                                            disabled={matchPwd ? false : true}
+                                            className="button"
+                                            tabIndex="0"
+                                            type="primary">Envoyer</button>
+                                    </Control>
+                                    <Control>
+                                        <button className="is-link button" tabIndex="0" type="primary">Cancel</button>
+                                    </Control>
+                                </Field>
+                            </form>
+                        </Control>
+                        </div>
+                    </Container>
+                    </motion.div>
+                    <Prestation
+                        data={config.textContentServices}
+                        title={config.textCategoryServices}
+                        className="section-prestation"
+                    />
+                    <Footer
+                        menu={config.menuCategoryLink}
+                        data={config}
+                        className="section-footer"
+                    />
                 </Layout>
                 </motion.div>)}
         </themeContextUser.Consumer>
