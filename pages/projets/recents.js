@@ -48,10 +48,39 @@ const imageVariants = {
 export default function Home({config, posts, connect}) {
   const [configs, setConfigs] = useState(config)
   const [isAdmin, setIsAdmin] = useState(connect)
+  const [onLoadingPage, setOnLoadingPage] = useState(false)
   const router = useRouter()
   useEffect(() => {
    // RouterTracking(router)
+  //  setOnLoadingPage(true)
   }, [])
+
+
+  // if(!onLoadingPage){
+  //   return <div className="loaderPage">
+  //     <motion.div
+  //       animate={{ y: -25, opacity: 0.4 }}
+  //       transition={{
+  //         repeat: Infinity,
+  //         repeatType: "reverse",
+  //         duration: 1
+  //       }}
+  //       className="visualLoader">
+  //         S
+  //       </motion.div>
+  //       <motion.div
+  //       animate={{ y: 25, opacity: 0.3 }}
+  //       transition={{
+  //         repeat: Infinity,
+  //         repeatType: "reverse",
+  //         duration: 1
+  //       }}
+  //       className="visualLoader">
+  //         M
+  //       </motion.div>
+  //   </div>
+  // }
+
   return (<motion.div variants={imageVariants} className="motionWrapper" initial="enter" animate="enter" exit="exit">
       <Layout none>
         <Head>

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { themeContextUser } from '../context/contextUser'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
+import { motion } from 'framer-motion';
 
 const name = 'Your Name'
 export const siteTitle = "Mogola Sangaré website"
@@ -20,7 +21,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   const [textScrollTop, setTextScrollTop] = useState()
   const [state, changeState] = useState({});
   const [textAvailable, setTextAvailable] = useState([])
-
+  const [onLoadingPage, setOnLoadingPage] = useState(false)
   let compareStorage = (initialStorage, newStorage) => {
     if(initialStorage === JSON.stringify(newStorage))
     return true
@@ -81,12 +82,39 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
         localStorage.setItem("info", JSON.stringify(result))
         setDataConfig(JSON.stringify(result))
       }
+
+      setOnLoadingPage(true)
     })
   }
 
   useEffect(() => {
       getData()
   }, [])
+
+  if(!onLoadingPage){
+    return <div className="loaderPage">
+      <motion.div
+        animate={{ y: -25, opacity: 0.4 }}
+        transition={{
+          repeat: Infinity,
+          repeatType: "reverse",
+          duration: 1
+        }}
+        className="visualLoader">
+          S
+        </motion.div>
+        <motion.div
+        animate={{ y: 25, opacity: 0.3 }}
+        transition={{
+          repeat: Infinity,
+          repeatType: "reverse",
+          duration: 1
+        }}
+        className="visualLoader">
+          M
+        </motion.div>
+    </div>
+  }
 
   return (
     <themeContextUser.Consumer>

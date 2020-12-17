@@ -62,6 +62,22 @@ const textVariants = {
   }
 };
 
+const loaderInfinity = {
+  exit: {
+    y: 10,
+    opacity: 0,
+    transition: {
+      duration: 1,
+      type: "spring",
+    } },
+  enter: {
+    y: -10,
+    opacity: 1,
+    repeat: Infinity,
+    transition: { delay: 0.1, duration: 1, type: "spring" }
+  }
+};
+
 const backVariants = {
   exit: {
     x: 100,
@@ -106,12 +122,38 @@ export default function Home({config, posts, connect}) {
     if(compareStorage(localStorage.getItem("info"), config)) {
       console.log('from localStorage')
       setConfigs(JSON.parse(localStorage.getItem('info')))
+      //setOnLoadingPage(true)
     }else {
       console.log('from server')
+      //setOnLoadingPage(true)
       return ''
     }
   }, [])
 
+  // if(!onLoadingPage){
+  //   return <div className="loaderPage">
+  //     <motion.div
+  //       animate={{ y: -25, opacity: 0.4 }}
+  //       transition={{
+  //         repeat: Infinity,
+  //         repeatType: "reverse",
+  //         duration: 1
+  //       }}
+  //       className="visualLoader">
+  //         S
+  //       </motion.div>
+  //       <motion.div
+  //       animate={{ y: 25, opacity: 0.3 }}
+  //       transition={{
+  //         repeat: Infinity,
+  //         repeatType: "reverse",
+  //         duration: 1
+  //       }}
+  //       className="visualLoader">
+  //         M
+  //       </motion.div>
+  //   </div>
+  // }
   return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
     <Layout none>
       <Head>

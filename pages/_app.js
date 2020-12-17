@@ -10,8 +10,7 @@ import { useRouter } from 'next/router'
 import { AnimatePresence } from 'framer-motion';
 import {RouterTracking} from './../components/router/ngprogress'
 import { ToastContainer } from 'react-toastify';
-export async function getServerSideProps(ctx) {
-  console.log(ctx.req)
+export async function getServerSideProps() {
   const config = await getPostConfig()
     return {
       props: {
@@ -25,8 +24,6 @@ export default function App({ Component, pageProps, config, router }) {
   const [localStorageData , setLocalStorageData] = useState(config)
 
   let compareStorage = (initialStorage, newStorage) => {
-    console.log("==================", initialStorage)
-    console.log("xxxxxxxxxxxxxxxxxx", newStorage)
     if(initialStorage === JSON.stringify(newStorage))
     return true
     else
@@ -41,45 +38,16 @@ export default function App({ Component, pageProps, config, router }) {
   }
 
   const fetchData = async () => {
-    console.log("getInfo", dataStorage(config))
-
-  //   new Promise((resolve) => {
-  //     resolve(dataStorage(config))
-  // }).then(result => {
-  //   console.log(result)
-  //   console.log(compareStorage(localStorage.getItem("info"),result))
-  //   if(compareStorage(localStorage.getItem("info"),result)){
-  //     console.log("from localstorage")
-  //     setLocalStorageData(localStorage.getItem("info"))
-  //   }else{
-  //     console.log("from server")
-  //     localStorage.setItem("info", JSON.stringify(result))
-  //     setLocalStorageData(JSON.stringify(result))
-  //   }
-  // })
-}
+      console.log("getInfo", dataStorage(config))
+  }
 
   useEffect(() => {
-  //  dataStorage(localStorageData)
-
-  Promise.resolve(localStorage.getItem("info")).then(result => console.log("resulting", result))
-  fetchData()
-
-
-
+    Promise.resolve(localStorage.getItem("info")).then(result => console.log("resulting", result))
+    fetchData()
     console.log(routering, router)
-      RouterTracking(routering.route)
-      console.log(localStorageData)
-      // if(localStorage.getItem("info") === null){
-      //   console.log("from server")
-      //   return ""
-      // }else {
-      //   console.log("from localstorage")
-      //   setLocalStorageData(localStorage.getItem("info"))
-      // }
-
-      // if(localStorage.getItem("info") != )
+    RouterTracking(routering.route)
   }, [])
+
     return (
         <themeContextUser.Provider value={{
             getToken: tokenStorage,
