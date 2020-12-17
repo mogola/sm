@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
+import {FacebookScript} from './../components/scripting'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 import {useRouter, Router} from 'next/router'
@@ -32,7 +33,7 @@ export async function getStaticProps() {
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
-  exit: { x: -300, opacity: 0.9,
+  exit: { x: -90, opacity: 0.9,
     transition: {
       duration: 0.5,
       type: "tween",
@@ -115,6 +116,7 @@ export default function Home({config, posts, connect}) {
     <Layout none>
       <Head>
         <title>{siteTitle}</title>
+        <FacebookScript />
       </Head>
         <Hometop
           state={configs}

@@ -139,12 +139,13 @@ const Hometop = ({state = '', connect}) => {
         {({userConnected}) => (
           <>
 
-                <div className="homeWrapper">
+                <motion.div variants={backVariants} className="homeWrapper">
                   <div style={{
                     position: 'absolute',
                     top: 0,
                     left: 0,
-                    width: "100%"
+                    width: "100%",
+                    zIndex: 20000
                   }}>
                       <Menu
                         state={state}
@@ -184,7 +185,7 @@ const Hometop = ({state = '', connect}) => {
                   <div className="homeImage" style={{backgroundImage: `url(${state.logoSiteUrl})`}}>
                     {/* <img data-img={state.menuCategoryLink} rel="preload" src={state.logoSiteUrl} width="100%" height="auto"/> */}
                   </div>
-                </div>
+                </motion.div>
                 </>
       )}
       </themeContextUser.Consumer>
