@@ -126,7 +126,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
              !slug &&
              <meta
               name="description"
-              content={`${state.nameSite} - ${state.titleMain} & ${state.subTitleImage}`}
+              content={`${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}
             />
            }
            {
@@ -137,10 +137,15 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
             />
            }
             <meta
-              property="og:image"
+              content="image"
               content={metaImage ? metaImage : "/app_visual_dewalgo.jpg"}
             />
-            <meta name="og:title" content={postTitle ? postTitle : siteTitle} />
+            <meta name="title" content={postTitle ? postTitle : siteTitle} />
+            <meta property="og:title" content={postTitle ? postTitle : siteTitle} />
+            <meta property="og:url" content={window.location.href} />
+            <meta property="og:description" content={postDescription ? postDescription.replace(/<[^>]+>/g, '') : `${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`} />
+            <meta  property="og:image" content={metaImage ? metaImage : "/app_visual_dewalgo.jpg"} />
+            <meta property="fb:app_id" content={3587318871321107} />
             <meta name="twitter:card" content="summary_large_image" />
           </Head>
           <header className={`header-portfolio ${styles.header}`}>

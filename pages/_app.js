@@ -45,7 +45,7 @@ export default function App({ Component, pageProps, config, router }) {
     Promise.resolve(localStorage.getItem("info")).then(result => console.log("resulting", result))
     fetchData()
     console.log(routering, router)
-    // RouterTracking(routering.route)
+     RouterTracking(routering.route)
   }, [])
 
     return (
