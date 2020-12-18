@@ -59,7 +59,7 @@ const imageVariants = {
       }
     }
   };
-const Post = ({post, config, connect, nextPost, prevPost})=>{
+const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
     const [configs, setConfigs] = useState(config)
     const router = useRouter()
     const [getNextId, setGetNextId] = useState(nextPost)
@@ -79,7 +79,13 @@ const Post = ({post, config, connect, nextPost, prevPost})=>{
     }, [])
 
     return(<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
-        <Layout post>
+        <Layout
+            post
+            slug={`${post.title}`}
+            metaImage={post.imageMainPrincipal ? post.imageMainPrincipal : "/app_visual_dewalgo.jpg"}
+            postTitle={`${post.title}`}
+            postDescription={`${post.description}`}
+        >
       <Head>
         <title>{siteTitle}</title>
       </Head>

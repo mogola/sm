@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 const name = 'Your Name'
 export const siteTitle = "Mogola Sangaré website"
 
-export default function Layout({ children, none, home, portfolio, dashboard, post}) {
+export default function Layout({ children, none, home, portfolio, dashboard, post, slug, metaImage, postTitle, postDescription}) {
   const [dataConfigs, setDataConfig] = useState([])
   const [naming, setNaming] = useState()
   const [menu, setMenu] = useState()
@@ -38,7 +38,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   const getData = async () => {
     const getData = await fetch(`${baseUrl}/api/info`)
     const data = await getData.json()
-
+    setOnLoadingPage(false)
     await new Promise((resolve) => {
         resolve(dataStorage(data))
     }).then(result => {
@@ -122,15 +122,25 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
         <div data={naming} className={portfolio || none || post ? "df-none" : styles.container}>
           <Head>
             <link rel="icon" href="/favicon.ico" />
-            <meta
+           {
+             !slug &&
+             <meta
               name="description"
-              content="Sangaré Mogola, illustrateur et designer textile"
+              content={`${state.nameSite} - ${state.titleMain} & ${state.subTitleImage}`}
             />
+           }
+           {
+             slug &&
+             <meta
+              name="description"
+              content={`${ postDescription.replace(/<[^>]+>/g, '')}`}
+            />
+           }
             <meta
               property="og:image"
-              content="/app_visual_dewalgo.jpg"
+              content={metaImage ? metaImage : "/app_visual_dewalgo.jpg"}
             />
-            <meta name="og:title" content={siteTitle} />
+            <meta name="og:title" content={postTitle ? postTitle : siteTitle} />
             <meta name="twitter:card" content="summary_large_image" />
           </Head>
           <header className={`header-portfolio ${styles.header}`}>

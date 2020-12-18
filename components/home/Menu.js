@@ -359,7 +359,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                               </motion.li>
                             <motion.li
                               variants={variantsItem} key="izeoifdfre">
-                              <Link href="/register">
+                              <Link href="/Register">
                                 <a
                                   className="menuLink"
                                   onClick={(e) => {
@@ -421,7 +421,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                               </li>
                             <li
                                key="izeoifdfre">
-                              <Link href="/register">
+                              <Link href="/Register">
                                 <a className="menuLink">register</a>
                               </Link>
                               </li>
