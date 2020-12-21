@@ -81,13 +81,6 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
     }, [])
 
     return(<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
-        <Layout
-            post
-            slug={`${post.title}`}
-            metaImage={post.imageMainPrincipal}
-            postTitle={`${post.title}`}
-            postDescription={`${post.description}`}
-        >
         <NextSeo
             facebook={{
                 appId: `${3587318871321107}`,
@@ -123,6 +116,13 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
                 cardType: 'summary_large_image',
                 }}
             />
+        <Layout
+            post
+            slug={`${post.title}`}
+            metaImage={post.imageMainPrincipal}
+            postTitle={`${post.title}`}
+            postDescription={`${post.description}`}
+        >
       <Head>
         <title>{siteTitle}</title>
       </Head>
