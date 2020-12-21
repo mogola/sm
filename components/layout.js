@@ -7,6 +7,7 @@ import { themeContextUser } from '../context/contextUser'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 import { motion } from 'framer-motion';
+import { NextSeo } from 'next-seo';
 
 const name = 'Your Name'
 export const siteTitle = "Mogola Sangaré website"
@@ -120,33 +121,44 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
     <themeContextUser.Consumer>
       {({ dataConfig }) => (
         <div data={naming} className={portfolio || none || post ? "df-none" : styles.container}>
+          <NextSeo
+          facebook={{
+              appId: `${3587318871321107}`,
+            }}
+              title={postTitle ? postTitle : siteTitle}
+              description={`${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}
+              canonical={window.location.href}
+              openGraph={{
+                url: `${window.location.href}`,
+                title: `${postTitle ? postTitle : siteTitle}`,
+                description: `${postDescription ? postDescription.replace(/<[^>]+>/g, '') : `${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}`,
+                images: [
+                  {
+                    url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}`,
+                    width: 800,
+                    height: 600,
+                    alt: 'Og Image Alt',
+                  },
+                  {
+                    url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}`,
+                    width: 900,
+                    height: 800,
+                    alt: 'Og Image Alt Second',
+                  },
+                  { url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}` },
+                  { url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}` },
+                ],
+                site_name: `${state.nameSite}`,
+              }}
+              twitter={{
+                handle: '@handle',
+                site: '@site',
+                cardType: 'summary_large_image',
+              }}
+            />
           <Head>
             <link rel="icon" href="/favicon.ico" />
-           {
-             !slug &&
-             <meta
-              name="description"
-              content={`${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}
-            />
-           }
-           {
-             slug &&
-             <meta
-              name="description"
-              content={`${ postDescription.replace(/<[^>]+>/g, '')}`}
-            />
-           }
-            <meta
-              content="image"
-              content={metaImage ? metaImage : "/app_visual_dewalgo.jpg"}
-            />
-            <meta name="title" content={postTitle ? postTitle : siteTitle} />
-            <meta property="og:title" content={postTitle ? postTitle : siteTitle} />
-            <meta property="og:url" content={window.location.href} />
-            <meta property="og:description" content={postDescription ? postDescription.replace(/<[^>]+>/g, '') : `${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`} />
-            <meta  property="og:image" content={metaImage ? metaImage : "/app_visual_dewalgo.jpg"} />
-            <meta property="fb:app_id" content={3587318871321107} />
-            <meta name="twitter:card" content="summary_large_image" />
+
           </Head>
           <header className={`header-portfolio ${styles.header}`}>
             {home ? (

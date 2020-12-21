@@ -84,7 +84,7 @@ export default function Contact({post, data, config, allPost, connect}) {
 
   useEffect(() =>{
     //  RouterTracking(router)
-      if(!firstFocus){
+      if(refLastname.current && !firstFocus){
             refLastname.current.focus()
         }
         errorsForm()

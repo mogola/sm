@@ -14,7 +14,7 @@ export default async (req,res)=>{
 }
 
 
-const getAllConfig = async (req,res)=>{
+const getAllConfig = async (req,res) => {
     try{
         const posts =  await Homeconfig
         .find({})
@@ -23,6 +23,7 @@ const getAllConfig = async (req,res)=>{
   }
   catch(err){
     console.log(err)
+    res.send(err)
   }
 
 }
