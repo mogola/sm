@@ -100,9 +100,9 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
           }}
             title={postTitle ? postTitle : siteTitle}
             description={`${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}
-            canonical={window.location.href}
+            canonical={`${baseUrl}`}
             openGraph={{
-              url: `${window.location.href}`,
+              url: `${baseUrl}`,
               title: `${postTitle ? postTitle : siteTitle}`,
               description: `${postDescription ? postDescription.replace(/<[^>]+>/g, '') : `${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}`,
               images: [
@@ -160,9 +160,9 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
       }}
         title={postTitle ? postTitle : siteTitle}
         description={`${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}
-        canonical={window.location.href}
+        canonical={`${baseUrl}`}
         openGraph={{
-          url: `${window.location.href}`,
+          url: `${baseUrl}`,
           title: `${postTitle ? postTitle : siteTitle}`,
           description: `${postDescription ? postDescription.replace(/<[^>]+>/g, '') : `${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}`,
           images: [
