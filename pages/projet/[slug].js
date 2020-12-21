@@ -12,6 +12,8 @@ import Masonry from './../../components/Masonry'
 import moment from 'moment'
 import {RouterTracking} from './../../components/router/ngprogress'
 import {motion, useViewportScroll } from 'framer-motion'
+import { NextSeo } from 'next-seo';
+
 import {
     Container,
     Columns,
@@ -82,10 +84,45 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
         <Layout
             post
             slug={`${post.title}`}
-            metaImage={post.imageMainPrincipal ? post.imageMainPrincipal : "/app_visual_dewalgo.jpg"}
+            metaImage={post.imageMainPrincipal}
             postTitle={`${post.title}`}
             postDescription={`${post.description}`}
         >
+        <NextSeo
+            facebook={{
+                appId: `${3587318871321107}`,
+            }}
+                title={post.title}
+                description={`${post.description.replace(/<[^>]+>/g, '')}`}
+                canonical={`${baseUrl}`}
+                openGraph={{
+                url: `${baseUrl}`,
+                title: `${post.title}`,
+                description: `${post.description.replace(/<[^>]+>/g, '')}`,
+                images: [
+                    {
+                    url: `${post.imageMainPrincipal}`,
+                    width: 800,
+                    height: 600,
+                    alt: 'Og Image Alt',
+                    },
+                    {
+                    url: `${post.imageMainPrincipal}`,
+                    width: 900,
+                    height: 800,
+                    alt: 'Og Image Alt Second',
+                    },
+                    { url: `${post.imageMainPrincipal}` },
+                    { url: `${post.imageMainPrincipal}` },
+                ],
+                site_name: `${config.nameSite}`,
+                }}
+                twitter={{
+                handle: '@handle',
+                site: '@site',
+                cardType: 'summary_large_image',
+                }}
+            />
       <Head>
         <title>{siteTitle}</title>
       </Head>

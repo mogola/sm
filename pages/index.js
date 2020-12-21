@@ -90,7 +90,7 @@ export default function Home({config, posts, connect}) {
   }, [])
 
   return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
-    <Layout none>
+    <Layout none homepage>
       <Head>
         <title>{siteTitle}</title>
         <FacebookScript />
