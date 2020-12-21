@@ -94,6 +94,41 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
 
   if(!onLoadingPage){
     return <div className="loaderPage">
+      <NextSeo
+        facebook={{
+            appId: `${3587318871321107}`,
+          }}
+            title={postTitle ? postTitle : siteTitle}
+            description={`${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}
+            canonical={window.location.href}
+            openGraph={{
+              url: `${window.location.href}`,
+              title: `${postTitle ? postTitle : siteTitle}`,
+              description: `${postDescription ? postDescription.replace(/<[^>]+>/g, '') : `${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}`,
+              images: [
+                {
+                  url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}`,
+                  width: 800,
+                  height: 600,
+                  alt: 'Og Image Alt',
+                },
+                {
+                  url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}`,
+                  width: 900,
+                  height: 800,
+                  alt: 'Og Image Alt Second',
+                },
+                { url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}` },
+                { url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}` },
+              ],
+              site_name: `${state.nameSite}`,
+            }}
+            twitter={{
+              handle: '@handle',
+              site: '@site',
+              cardType: 'summary_large_image',
+            }}
+          />
       <motion.div
         animate={{ y: -25, opacity: 0.4 }}
         transition={{
@@ -118,44 +153,45 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   }
 
   return (
+    <>
+    <NextSeo
+    facebook={{
+        appId: `${3587318871321107}`,
+      }}
+        title={postTitle ? postTitle : siteTitle}
+        description={`${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}
+        canonical={window.location.href}
+        openGraph={{
+          url: `${window.location.href}`,
+          title: `${postTitle ? postTitle : siteTitle}`,
+          description: `${postDescription ? postDescription.replace(/<[^>]+>/g, '') : `${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}`,
+          images: [
+            {
+              url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}`,
+              width: 800,
+              height: 600,
+              alt: 'Og Image Alt',
+            },
+            {
+              url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}`,
+              width: 900,
+              height: 800,
+              alt: 'Og Image Alt Second',
+            },
+            { url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}` },
+            { url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}` },
+          ],
+          site_name: `${state.nameSite}`,
+        }}
+        twitter={{
+          handle: '@handle',
+          site: '@site',
+          cardType: 'summary_large_image',
+        }}
+      />
     <themeContextUser.Consumer>
       {({ dataConfig }) => (
         <div data={naming} className={portfolio || none || post ? "df-none" : styles.container}>
-          <NextSeo
-          facebook={{
-              appId: `${3587318871321107}`,
-            }}
-              title={postTitle ? postTitle : siteTitle}
-              description={`${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}
-              canonical={window.location.href}
-              openGraph={{
-                url: `${window.location.href}`,
-                title: `${postTitle ? postTitle : siteTitle}`,
-                description: `${postDescription ? postDescription.replace(/<[^>]+>/g, '') : `${state.nameSite} - ${state.titleMain} ${state.subTitleImage}`}`,
-                images: [
-                  {
-                    url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}`,
-                    width: 800,
-                    height: 600,
-                    alt: 'Og Image Alt',
-                  },
-                  {
-                    url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}`,
-                    width: 900,
-                    height: 800,
-                    alt: 'Og Image Alt Second',
-                  },
-                  { url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}` },
-                  { url: `${metaImage ? metaImage : "/app_visual_dewalgo.jpg"}` },
-                ],
-                site_name: `${state.nameSite}`,
-              }}
-              twitter={{
-                handle: '@handle',
-                site: '@site',
-                cardType: 'summary_large_image',
-              }}
-            />
           <Head>
             <link rel="icon" href="/favicon.ico" />
 
@@ -274,5 +310,6 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
         </div>
       )}
     </themeContextUser.Consumer>
+    </>
   )
 }
