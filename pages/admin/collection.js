@@ -34,12 +34,13 @@ const [collectionName, setCollectioName] = useState('')
 const [stringifyManyData, setStringifyManyData] = useState('')
 const [arrModel, setArrModel] = useState([])
 const [objModel, setObjModel] = useState({})
+const [valueCategory, setValueCategory] = useState()
 const [addObj, setAddObj] = useState()
 const refCategory = useRef(null)
 const refValue = useRef(null)
 const refKey = useRef(null)
 const refCollection = useRef(null)
-
+const refCategoryName = useRef(null)
   const submitForm = async (name) => {
     event.preventDefault
     let newList = [...getCollections]
@@ -145,25 +146,27 @@ const refCollection = useRef(null)
   const addManyIndex =  async () => {
     try{
       event.preventDefault()
-      let newDataItem = {[refKey.current.name]:refKey.current.value, [refValue.current.name]:refValue.current.value}
-    // setObjModel({...objModel, newDataItem})
-      setArrModel([...arrModel, newDataItem])
-      // console.log("objModel", objModel)
-      // console.log("arrModel", arrModel)
-      await arrModel.forEach((keys) => {
-        setAddObj({...addObj, [keys["fieldProp"]] : keys["valueProp"]})
-      // console.log("addObj", addObj)
-        //setObjModel({...dataModel, [keys["fieldProp"]] : keys["valueProp"]})
-        //console.log('obj model',{[keys["fieldProp"]] : keys["valueProp"]}, objModel)
+        if(refKey.current){
+          let newDataItem = {[refKey.current.name]:refKey.current.value, [refValue.current.name]:refValue.current.value}
+        // setObjModel({...objModel, newDataItem})
+          setArrModel([...arrModel, newDataItem])
+          // console.log("objModel", objModel)
+          // console.log("arrModel", arrModel)
+          await arrModel.forEach((keys) => {
+            setAddObj({...addObj, [keys["fieldProp"]] : keys["valueProp"]})
+          // console.log("addObj", addObj)
+            //setObjModel({...dataModel, [keys["fieldProp"]] : keys["valueProp"]})
+            //console.log('obj model',{[keys["fieldProp"]] : keys["valueProp"]}, objModel)
 
-        // for (const [key, value] of Object.entries(keys)){
-        //   console.log(`${key}: ${value}`);
-        // }
-      })
+            // for (const [key, value] of Object.entries(keys)){
+            //   console.log(`${key}: ${value}`);
+            // }
+          })
 
-        setObjModel(addObj)
-        setStringifyManyData(JSON.stringify(addObj))
-        console.log("addObj", objModel)
+            setObjModel(addObj)
+            setStringifyManyData(JSON.stringify(addObj))
+            console.log("addObj", objModel)
+      }
     }
     catch(err){
       console.log(err)
@@ -176,6 +179,26 @@ const refCollection = useRef(null)
     setStringifyData(JSON.stringify(modelData))
   }
 
+  const onchangeCategoryName = () => {
+    setValueCategory(refCategoryName.current.value)
+  }
+
+  const submitFormCategory = async (nameCat) => {
+    try{
+      await fetch(`${baseUrl}/api/category`, {
+        method: "POST",
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          nameCategory: nameCat
+        })
+      })
+    }
+    catch(err){
+      console.log(err, "not connected")
+    }
+  }
   useEffect(() => {
     addManyIndex()
   }, [])
@@ -291,6 +314,19 @@ const refCollection = useRef(null)
             ))}
           </ul>
         </div>
+        <form>
+          <Label>Nom de la category</Label>
+          <input ref={refCategoryName} onChange={() => {
+            onchangeCategoryName()
+          }} type="text" value={valueCategory} name="nameCategory" />
+          <Button className="submitCategory" onClick={(e) => {
+            e.preventDefault()
+            console.log(refCategoryName.current.value)
+            submitFormCategory(refCategoryName.current.value)
+          }}>
+            Submit
+          </Button>
+        </form>
     </Layout>
   )
 }

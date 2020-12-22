@@ -6,6 +6,7 @@ const mylogger = async (req, res, next) => {
     let {headers} = req
     let getTokenUser;
 
+    console.log(headers['cookie'])
     if(headers['cookie'] !== undefined){
         getTokenUser = req.headers['cookie'].split('token=')[1]
         console.log(decode(getTokenUser))

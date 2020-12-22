@@ -831,12 +831,19 @@ html {
       text-align: right;
       padding: 40px 0 64px 24px;
       display: block;
+
+      @include mobileView {
+        text-align: left;
+      }
     }
 
     &.prevProjectLink {
       text-align: left;
       padding: 40px 24px 64px 0;
       display: block;
+      @include mobileView {
+        text-align: right;
+      }
       .icoRight {
         transform: rotate(180deg);
         margin-right: 9px;
@@ -2343,6 +2350,57 @@ html .titleMainLogin {
     transform: translate(-50%, -50%);
     font-family: 'brotherhoodregular';
     font-size: 64px;
+    color: #000;
+  }
+}
+
+.prestationWrapper {
+  padding-top: 130px;
+  padding-bottom: 130px;
+  @include mobileView{
+    padding: 84px 24px 54px;
+  }
+
+  .title {
+    font-size: 38px;
+    font-family: Overpass;
+    color: #000;
+  }
+
+  .field {
+    + .field {
+      padding-top: 50px;
+    }
+  }
+}
+html {
+  .is-orange {
+    background: #FA4000;
+    font-weight: bold;
+    color: #fff;
+    border: 0 none;
+    a {
+      color: #fff;
+      text-transform: uppercase;
+
+      &:hover {
+        text-decoration: none !important;
+        border: 0 none;
+      }
+    }
+  }
+}
+
+.otherTxtBlock {
+  text-align: center;
+  padding: 40px;
+  background: #fff;
+
+  .title {
+    color: #000;
+  }
+
+  .content {
     color: #000;
   }
 }

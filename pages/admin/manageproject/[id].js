@@ -22,7 +22,9 @@ const {Field, Control} = Form;
 
 export async function getServerSideProps(context) {
     console.log("data id id id id", context.query.id)
-    const posts = await fetch(`${baseUrl}/api/detailproject`, {method: "GET"})
+    const posts = await fetch(`${baseUrl}/api/detailproject`, {
+      method: "GET",
+    })
     const idPost = await posts.json()
     const getPostData = idPost.filter(post => post._id === context.query.id)
     console.log("==============", getPostData)

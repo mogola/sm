@@ -51,7 +51,8 @@ let ProjectsSchema = new Schema({
     date : {
         type: Date,
         default: Date.now
-    }
+    },
+    categoryArray: [{ type: Schema.Types.ObjectId, ref: 'Category' }]
 })
 
 // create a model for reference
