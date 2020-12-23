@@ -11,6 +11,7 @@ import {RouterTracking} from './../components/router/ngprogress'
 import {getPostConfig, getAllPosts } from './api/home'
 import {useRouter} from 'next/router'
 import Masonry from './../components/Masonry'
+import {motion} from 'framer-motion'
 
 import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
 const {Field, Control, Label} = Form;
@@ -35,6 +36,32 @@ return {
   }
 }
 
+
+const variants = {
+  enter: {
+      opacity: 1,
+      x:0,
+      transition: {
+      type: "spring",
+      stiffness: 20,
+      restDelta: 2,
+        x: { stiffness: 1000, velocity: -100 },
+        opacity: { stiffness: 1000, velocity: -100 }
+      }
+  },
+  exit: {
+      opacity: 0,
+      x:-1000,
+      transition: {
+      delay: 0.5,
+      type: "spring",
+      stiffness: 400,
+      damping: 40,
+      x: { stiffness: 1000 },
+      }
+  }
+}
+
 export default function About({post, data, config, allPost, connect}) {
 const [getData, setGetData] = useState(data)
 const [configs, setConfigs] = useState(config)
@@ -45,7 +72,12 @@ const router = useRouter()
      //   RouterTracking(router)
     }, [data])
 
-  return (
+  return (<motion.div
+    variants={variants}
+    className="motionWrapper loginWrapper"
+    initial="exit"
+    animate="enter"
+    exit="exit">
     <Layout post>
       <Head>
         <title>{siteTitle}</title>
@@ -110,5 +142,6 @@ const router = useRouter()
           className="section-footer"
         />
     </Layout>
+    </motion.div>
   )
 }

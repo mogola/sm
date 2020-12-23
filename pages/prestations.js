@@ -16,7 +16,7 @@ const {Field, Control, Label} = Form;
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
 const config = await getPostConfig()
 return {
     props: {
@@ -27,7 +27,7 @@ return {
 
 
 const variants = {
-    open: {
+    enter: {
         opacity: 1,
         x:0,
         transition: {
@@ -38,7 +38,7 @@ const variants = {
         opacity: { stiffness: 1000, velocity: -100 }
         }
     },
-    closed: {
+    exit: {
         opacity: 0,
         x:-1000,
         transition: {
@@ -73,23 +73,23 @@ const imageVariants = {
 };
 
 const variantsUl = {
-    open: {
+    enter: {
         transition: { staggerChildren: 0.07, delayChildren: 0.2 }
     },
-    closed: {
+    exit: {
         transition: { staggerChildren: 0.05, staggerDirection: -1 }
     }
 }
 
 const variantsItem = {
-    open: {
+    enter: {
       x: 0,
       opacity: 1,
       transition: {
         x: { stiffness: 1000, velocity: -100 }
       }
     },
-    closed: {
+    exit: {
       x: 100,
       opacity: 0,
       transition: {
@@ -128,9 +128,9 @@ const router = useRouter()
             <Columns className="homeCategory">
 
                 <Columns.Column size="half">
-                <motion.div variants={variants}>
+                <motion.div variants={variantsItem}>
                     <Card className="post">
-                    <Card.Image src="/illustration_presta.png" />
+                    <Card.Image rel="preload" src="/illustration_presta.png" />
                         <Card.Content>
                             <Heading>
                                 Illustration
@@ -154,9 +154,9 @@ const router = useRouter()
 
 
                     <Columns.Column size="half">
-                    <motion.div variants={variants}>
+                    <motion.div variants={variantsItem}>
                             <Card className="post">
-                            <Card.Image src="/textile_presta.png" />
+                            <Card.Image rel="preload" src="/textile_presta.png" />
                             <Card.Content>
                                 <Heading>
                                     Design textile
@@ -179,6 +179,7 @@ const router = useRouter()
                     </Columns.Column>
                 </Columns>
                 </motion.div>
+                <motion.div variants={variantsItem}>
                 <Field className="otherTxtBlock">
                     <Heading>
                         Vous avez d'autres idées ?
@@ -192,17 +193,18 @@ const router = useRouter()
                         </Link>
                     </Button>
                 </Field>
+                </motion.div>
             </Container>
 
             <Prestation
-            data={configs.textContentServices}
-            title={configs.textCategoryServices}
-            className="section-prestation"
+                data={configs.textContentServices}
+                title={configs.textCategoryServices}
+                className="section-prestation"
             />
             <Footer
-            menu={configs.menuCategoryLink}
-            data={configs}
-            className="section-footer"
+                menu={configs.menuCategoryLink}
+                data={configs}
+                className="section-footer"
             />
         </Layout>
     </motion.div>
