@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import Link from 'next/link'
 import moment from 'moment'
 import arrowRight from './../../public/images/right-arrow.svg'
@@ -16,6 +17,30 @@ import {
 
 let easing = [0.175, 0.85, 0.42, 0.96];
 
+const variants = {
+  enter: {
+      opacity: 1,
+      x:0,
+      transition: {
+      type: "spring",
+      stiffness: 20,
+      restDelta: 2,
+      x: { stiffness: 1000, velocity: -100 },
+      opacity: { stiffness: 1000, velocity: -100 }
+      }
+  },
+  exit: {
+      opacity: 0,
+      x:-1000,
+      transition: {
+      delay: 0.5,
+      type: "spring",
+      stiffness: 400,
+      damping: 40,
+      x: { stiffness: 1000 },
+      }
+  }
+}
 const imageVariants = {
   exit: { y: 150, opacity: 0, transition: { duration: 0.5, ease: easing } },
   enter: {
@@ -56,8 +81,37 @@ const backVariants = {
     }
   }
 };
+
+const variantsUl = {
+  enter: {
+      transition: { staggerChildren: 0.07, delayChildren: 0.2 }
+  },
+  exit: {
+      transition: { staggerChildren: 0.05, staggerDirection: -1 }
+  }
+}
+
+const variantsItem = {
+  enter: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      x: { stiffness: 1000, velocity: -100 }
+    }
+  },
+  exit: {
+    x: 100,
+    opacity: 0,
+    transition: {
+      x: { stiffness: 1000 }
+    }
+  }
+};
+
+
 const Sections = ({title = "", data = [], ...rest}) => {
-    return(<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
+  const [animBool, setAnimBool] = useState(true)
+    return(<motion.div variant={variants} className="motionWrapper" initial="exit" animate={animBool ? "enter" : "exit"} exit="exit">
     <Section {...rest}>
         <Container className="containerTitleSection">
         <Heading className="titleMainCategory" size={1}>
@@ -65,10 +119,11 @@ const Sections = ({title = "", data = [], ...rest}) => {
         </Heading>
         </Container>
         <Container>
+        <motion.div variants={variantsUl}>
             <Columns className="homeCategory">
             {data.map((post, i) => (
                 <Columns.Column key={i} size="half">
-                    <motion.div variants={backVariants}>
+                    <motion.div variants={variantsItem}>
                     <Link
                         href={'/projet/[slug]'}
                         as={`/projet/${encodeURIComponent(post.title)}`}
@@ -77,8 +132,6 @@ const Sections = ({title = "", data = [], ...rest}) => {
                         <Image rounded={false} src={post.imageMainPrincipal} />
                       </a>
                       </Link>
-
-                    </motion.div>
                     <Tag.Group className="tagGroupPost">
                         <Tag className="recentDate">
                             {moment(post.date).locale('fr').format('LL', 'fr')}
@@ -101,11 +154,15 @@ const Sections = ({title = "", data = [], ...rest}) => {
                             href={'/projet/[slug]'}
                             as={`/projet/${encodeURIComponent(post.title)}`}
                         >
-                            <a className="linkSee">Voir le projet <span className="icoRight" width={26}></span></a>
+                            <a className="linkSee" onClick={() => {
+                                setAnimBool(false)
+                            }}>Voir le projet <span className="icoRight" width={26}></span></a>
                         </Link>
+                        </motion.div>
                 </Columns.Column>
                 ))}
             </Columns>
+            </motion.div>
             <Container className="containLink">
                 <Link
                     href={'/projets/[slug]'}
