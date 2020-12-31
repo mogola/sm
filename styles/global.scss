@@ -443,6 +443,7 @@ img {
   left: 50px;
   text-transform: uppercase;
   position: absolute;
+  z-index:1;
 
   @include mobileView(){
     left: initial;

@@ -22,6 +22,8 @@ const getAllProjects = async (req,res)=>{
        const posts =  await ProjectsSchema
                 .find()
                 .sort({"_id": 1})
+                .populate({path:'categoryArray'}).
+                exec();
 
       if(posts){
           res.json(JSON.stringify(posts))

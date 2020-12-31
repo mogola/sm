@@ -25,6 +25,7 @@ export async function getServerSideProps(context) {
     const posts = await fetch(`${baseUrl}/api/detailproject`, {
       method: "GET",
     })
+
     const idPost = await posts.json()
     const getPostData = idPost.filter(post => post._id === context.query.id)
     console.log("==============", getPostData)
@@ -65,7 +66,8 @@ export async function getServerSideProps(context) {
         props: {
             posts: JSON.parse(JSON.stringify(idPost)),
             currentPost: JSON.parse(JSON.stringify(getPostData)),
-            dataProjects: JSON.parse(JSON.stringify(projectConfig))
+            dataProjects: JSON.parse(JSON.stringify(projectConfig)),
+            // getCategoryAllList: JSON.parse(JSON.stringify(allCategory))
         },
     }
 }
@@ -90,7 +92,7 @@ export async function getServerSideProps(context) {
 //     }
 //}
 
-export default function Updateproject({dataProjects, posts, currentPost}) {
+export default function Updateproject({dataProjects, posts, currentPost, getCategoryAllList}) {
     const [state, changeState] = useState({});
   const [value, setValue] = useState('');
   const [imageDownloaded, setImageDownloaded] = useState();
@@ -105,6 +107,8 @@ export default function Updateproject({dataProjects, posts, currentPost}) {
   console.log(id)
   const [postToUpdate, setPostToUpdate] = useState(currentPost)
   const [updatePost, setUpdatePost] = useState([postToUpdate])
+  const [allCategoryList, setAllCategoryList] = useState([])
+  const [chooseCategory, setChooseCategory] = useState([])
 
 //   console.log("idsingle Post", posts.filter(post =>{return post._id === id }), currentPost)
     const onChange = ({target}) => {
@@ -361,8 +365,39 @@ const notifySuccess = () => {
     changeState({...state, "imageArray" : ordering, _id:id})
   }
 
+  const chooseCat = (e, item) => {
+    e.preventDefault()
+    console.log(e.target.getAttribute('name'))
+    console.log(item._id)
+    let arrayCat = [...chooseCategory]
+    arrayCat.push(item._id)
+    arrayCat = [...new Set(arrayCat)]
+    console.log(arrayCat)
+    setChooseCategory(arrayCat)
+  }
+
   useEffect(() => {
     console.log("update state", state, imageDownloaded)
+     async function getCatAll() {
+      const getCategoryList = await fetch(`${baseUrl}/api/category`, {
+        method: "GET",
+      })
+
+      const allCategory = await getCategoryList.json()
+      console.log(allCategory)
+
+
+      console.log("allCategoryList", allCategoryList)
+
+      setAllCategoryList(JSON.parse(JSON.stringify(allCategory)))
+    }
+
+    getCatAll()
+
+    console.log("allCategory", allCategoryList)
+
+
+
     let selectAll = document.querySelectorAll('select')
       for(var i = 0; i < selectAll.length; i++){
         let currentSelector = document.querySelectorAll('select')[i]
@@ -383,6 +418,18 @@ const notifySuccess = () => {
               <img width={200} key={i} src={image} />
           ))}
           </div>}
+          <Heading>Choose your Category</Heading>
+          {allCategoryList && allCategoryList.map((item, i) => (
+            <div key={i}>
+              <Tag
+                name={item.nameCategory}
+                onClick={(e) => {
+                  chooseCat(e, item)
+              }}>
+                {item.nameCategory}
+              </Tag>
+            </div>
+          ))}
           {postToUpdate.map((post, j) => (
             <div key={j}>
               {dataProjects.map((item, i) => (
