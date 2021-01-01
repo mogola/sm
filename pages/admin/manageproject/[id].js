@@ -365,13 +365,35 @@ const notifySuccess = () => {
     changeState({...state, "imageArray" : ordering, _id:id})
   }
 
+  const checkCategory = (item) => {
+    const someArr = chooseCategory.some((currentValue) => currentValue === item._id)
+    return someArr
+  }
+
   const chooseCat = (e, item) => {
+
+
+    // every method
+
     e.preventDefault()
     console.log(e.target.getAttribute('name'))
     console.log(item._id)
     let arrayCat = [...chooseCategory]
-    arrayCat.push(item._id)
-    arrayCat = [...new Set(arrayCat)]
+    const filterArr = (currentValue) => currentValue !== item._id;
+    const someArr = chooseCategory.some((currentValue) => currentValue === item._id)
+    if(someArr){
+      arrayCat = arrayCat.filter(filterArr)
+    }else {
+      arrayCat.push(item._id)
+      arrayCat = [...new Set(arrayCat)]
+    }
+
+    const isBelowThreshold = (currentValue) => currentValue === item._id;
+
+    console.log("filter array", arrayCat.filter(filterArr))
+    console.log("if item index", arrayCat.every(isBelowThreshold))
+    console.log("arr", someArr)
+
     console.log(arrayCat)
     setChooseCategory(arrayCat)
   }
@@ -422,6 +444,7 @@ const notifySuccess = () => {
           {allCategoryList && allCategoryList.map((item, i) => (
             <div key={i}>
               <Tag
+                className={`tagCatAdmin ${checkCategory(item) ? "selected": "unselected"}`}
                 name={item.nameCategory}
                 onClick={(e) => {
                   chooseCat(e, item)

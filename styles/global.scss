@@ -2405,3 +2405,9 @@ html {
     color: #000;
   }
 }
+
+.tagCatAdmin {
+  &.selected {
+    border: 2px solid #FA4000;
+  }
+}
