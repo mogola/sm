@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import Projects from './Projects'
+
 const { Schema } = mongoose;
 
 // Define a schema

@@ -4,6 +4,7 @@ import Layout, { siteTitle } from '../components/layout'
 import {FacebookScript} from './../components/scripting'
 import Link from 'next/link'
 import Sections from './../components/home/Section'
+
 import About from './../components/home/About'
 import Prestation from './../components/home/Prestation'
 import Hometop from './../components/home/Hometop'
@@ -13,6 +14,7 @@ import fetch from 'node-fetch'
 import { motion } from 'framer-motion';
 
 import { getPostConfig, getAllPosts} from './api/home'
+import Arrayjs from '../components/array'
 
 export async function getStaticProps() {
   const config = await getPostConfig()
@@ -99,6 +101,7 @@ export default function Home({config, posts, connect}) {
           state={configs}
           connect={connect}
       />
+      <Arrayjs />
       <motion.div variants={backVariants}>
           <Sections
             data={posts}

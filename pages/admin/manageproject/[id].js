@@ -110,7 +110,7 @@ export default function Updateproject({ dataProjects, posts, currentPost, getCat
   const [tempCategory, setTempCategory] = useState([])
   const [defaultCategory, setDefaultCategory] = useState([])
   const [booleanCat, setBooleanCat] = useState(false)
-  const [chooseCategory, setChooseCategory] = useState([])
+  const [excludeCategory, setExcludeCategory] = useState([])
 
   //   console.log("idsingle Post", posts.filter(post =>{return post._id === id }), currentPost)
   const onChange = ({ target }) => {
@@ -262,6 +262,7 @@ export default function Updateproject({ dataProjects, posts, currentPost, getCat
       })
     })
 
+    console.log("excludeeeeeeeeeeeeee categorrrrrrrrrryyyyyyyyyyyy", excludeCategory)
     fetch(`${baseUrl}/api/category`, {
       method: "PUT",
       headers: {
@@ -269,7 +270,8 @@ export default function Updateproject({ dataProjects, posts, currentPost, getCat
       },
       body: JSON.stringify({
         category: state.categoryArray,
-        id: id
+        id: id,
+        idExclude: excludeCategory,
       })
     })
   }
@@ -401,8 +403,13 @@ export default function Updateproject({ dataProjects, posts, currentPost, getCat
     }
   }
 
-  Array.prototype.diff = function (arr3) {
-    return this.filter(j => !arr3.includes(j))
+  Array.prototype.diff = function (arr3, x) {
+    if(x === 1){
+      return this.filter(j => !arr3.includes(j))
+    }else {
+      return this.filter(j => arr3.includes(j))
+    }
+
   }
 
   const chooseCat = (e, item, i) => {
@@ -423,30 +430,37 @@ export default function Updateproject({ dataProjects, posts, currentPost, getCat
     allCategoryList.map((items, i) => {
       allCat.push(items._id)
     })
-
+    let exclude = allCat.diff(arrayCat, 1)
 
     if (defaultCategory.some(element => element === item._id)) {
       console.log("exiiiiisssssssssssssssssssssss", true)
       console.log("arrayCat", arrayCat, allCat)
 
-      let exclude = allCat.diff(arrayCat)
+
 
       console.log("exclude before concatenation", exclude)
       exclude = [...exclude, item._id]
       console.log("exclude", exclude)
+      setExcludeCategory(exclude)
+      console.log("exclude category", excludeCategory)
 
       let newX = allCat.filter(z => !exclude.includes(z))
       console.log("newX", newX)
 
       setDefaultCategory(newX)
+      changeState({ ...state, "categoryArray": newX, _id: id })
 
     } else {
       console.log("addd item to array last ", defaultCategory)
       let temporar = defaultCategory
       temporar.push(item._id)
 
+      const newExclude = allCat.diff(temporar, 1)
+      //exclude = [...newExclude, item._id]
+      console.log("newExclude", newExclude)
       setDefaultCategory(temporar)
-      changeState({ ...state, "categoryArray": defaultCategory })
+      setExcludeCategory(newExclude)
+      changeState({ ...state, "categoryArray": defaultCategory, _id: id })
     }
 
     checkCategory(item)
@@ -458,7 +472,7 @@ export default function Updateproject({ dataProjects, posts, currentPost, getCat
 
     // let arrayCat = []
     // let defaultCat = []
-    // // return array of item not selected 
+    // // return array of item not selected
     // const filterArr = (currentValue) => currentValue !== item._id;
 
     // // if not category choose by default we return initial array of category

@@ -1,6 +1,8 @@
 import initDB from '../../helpers/initDB'
 import Category from '../../models/Category'
 import mongoose from 'mongoose'
+var mongodb = require("mongodb")
+var ObjectID = mongodb.ObjectID
 import nextConnect from 'next-connect'
 import mylogger from '../../helpers/mylogger';
 import { db, database, getCollectionData } from '../../helpers/connectToMongo'
@@ -12,6 +14,7 @@ handler.get(async (req, res) => {
         const posts = await Category
             .find()
             .sort({ "_id": 1 })
+            .populate({path:'posts'}).exec()
 
         if (posts) {
             res.json(JSON.stringify(posts))
@@ -25,8 +28,9 @@ handler.get(async (req, res) => {
 })
 
 handler.post(async (req, res) => {
-    const { nameCategory } = req.body
-    console.log("nameCateory", req.body)
+    const { nameCategory, idExclude } = req.body
+    console.log("nameCateory", req.body, idExclude)
+
     try {
         if (!nameCategory) {
             return res.status(422).json({ error: "Please add all the fields" })
@@ -70,20 +74,43 @@ handler.delete(async (req, res) => {
     }
 })
 
+Array.prototype.diff = function (arr3) {
+    return this.filter(j => !arr3.includes(j))
+  }
+
 handler.put(async (req, res) => {
-    const { config } = req.body;
+    const { config, idExclude } = req.body;
+    let idpost = req.body.id
     console.log('category updating', req.body)
+
     try {
         await Category.updateMany({ _id: { $in: req.body.category } },
-            { $push: { posts: req.body.id } },
+            { $addToSet: { posts:  req.body.id } },
             function (err, object) {
                 if (err) {
                     console.log(err.message);  // returns error if no matching object found
                 } else {
                     console.log(object);
+                    // =============================================================================
+
+                    console.log("length of exclude", idExclude.length,ObjectID(idpost))
+                    Category.updateMany({_id: {$in: idExclude}},
+                        {
+                            $pull: {
+                                posts: { $in: [ObjectID(idpost)] }
+                            }
+                        },
+                        { multi: true }).then((async (result) => {
+                            console.log("result", result)
+                            const updateCategoryExclude = await Category.find()
+                            console.log("updatepost =======================", updateCategoryExclude)
+                        }))
+
                     res.json(object)
                 }
             })
+
+
     }
     catch (err) {
         console.log('category updating', err)
