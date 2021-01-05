@@ -2407,6 +2407,7 @@ html {
 }
 
 .tagCatAdmin {
+  cursor: pointer;
   &.selected {
     border: 2px solid #FA4000;
   }

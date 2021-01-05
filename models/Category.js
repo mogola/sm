@@ -8,6 +8,7 @@ let CategorySchema = new Schema({
         type: String,
         default: "default text"
     },
+    posts: [{ type: Schema.Types.ObjectId, ref: 'projects' }]
 })
 
 
