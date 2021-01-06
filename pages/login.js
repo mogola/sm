@@ -85,14 +85,14 @@ export default function Login({ connect, config}) {
     const [tokenUser, setTokenUser] = useState()
     const [userBody, setUserBody] = useState()
     const [userIsConnected, setUserIsConnected] = useState(false)
-    const [isUserAdmin, setIsUserAdmin] = useState()
+    const [isUserAdmin, setIsUserAdmin] = useState(false)
 
     useEffect(() => {
         console.log('test', connect, typeof (connect))
        // RouterTracking(router)
-        router.prefetch('/')
+        //router.prefetch('/')
         setIsUserAdmin(connect)
-    }, [])
+    }, [isUserAdmin])
 
     const submitForm = async (e, callback) => {
         e.preventDefault();

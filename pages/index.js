@@ -101,7 +101,6 @@ export default function Home({config, posts, connect}) {
           state={configs}
           connect={connect}
       />
-      <Arrayjs />
       <motion.div variants={backVariants}>
           <Sections
             data={posts}

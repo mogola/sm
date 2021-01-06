@@ -27,6 +27,15 @@ export async function getServerSideProps(context) {
   })
 
   const idPost = await posts.json()
+
+  const getCategoryList = await fetch(`${baseUrl}/api/categories`, {
+    method: "GET",
+  })
+
+  const allCategory = await getCategoryList.json()
+
+  console.log("========================",allCategory)
+
   const getPostData = idPost.filter(post => post._id === context.query.id)
   console.log("==============", getPostData)
   const projectConfig = [
@@ -67,6 +76,7 @@ export async function getServerSideProps(context) {
       posts: JSON.parse(JSON.stringify(idPost)),
       currentPost: JSON.parse(JSON.stringify(getPostData)),
       dataProjects: JSON.parse(JSON.stringify(projectConfig)),
+      categories: allCategory
       // getCategoryAllList: JSON.parse(JSON.stringify(allCategory))
     },
   }
@@ -92,7 +102,7 @@ export async function getServerSideProps(context) {
 //     }
 //}
 
-export default function Updateproject({ dataProjects, posts, currentPost, getCategoryAllList }) {
+export default function Updateproject({ dataProjects, posts, currentPost, categories }) {
   const [state, changeState] = useState({});
   const [value, setValue] = useState('');
   const [imageDownloaded, setImageDownloaded] = useState();
@@ -509,23 +519,23 @@ export default function Updateproject({ dataProjects, posts, currentPost, getCat
 
   useEffect(() => {
     console.log("update state", state, imageDownloaded)
-    async function getCatAll() {
-      const getCategoryList = await fetch(`${baseUrl}/api/category`, {
-        method: "GET",
-      })
+    // async function getCatAll() {
+    //   const getCategoryList = await fetch(`${baseUrl}/api/category`, {
+    //     method: "GET",
+    //   })
 
-      const allCategory = await getCategoryList.json()
-      console.log(allCategory)
+    //   const allCategory = await getCategoryList.json()
+    //   console.log(allCategory)
 
 
-      console.log("allCategoryList", allCategoryList)
+    //   console.log("allCategoryList", allCategoryList)
 
-      if (booleanCat === false) {
-        setAllCategoryList(JSON.parse(JSON.stringify(allCategory)))
-      }
-    }
+    //   if (booleanCat === false) {
+    //     setAllCategoryList(JSON.parse(JSON.stringify(allCategory)))
+    //   }
+    // }
 
-    getCatAll()
+    // getCatAll()
 
     console.log("allCategory", allCategoryList)
 
@@ -565,7 +575,7 @@ export default function Updateproject({ dataProjects, posts, currentPost, getCat
           ))}
         </div>}
         <Heading>Choose your Category</Heading>
-        {allCategoryList && allCategoryList.map((item, i) => (
+        {categories.map((item, i) => (
           <div key={i}>
             <Tag
               data-id={item._id}
