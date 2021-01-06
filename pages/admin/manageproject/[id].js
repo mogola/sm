@@ -116,7 +116,7 @@ export default function Updateproject({ dataProjects, posts, currentPost, catego
   const { id } = router.query
   const [postToUpdate, setPostToUpdate] = useState(currentPost)
   const [updatePost, setUpdatePost] = useState([postToUpdate])
-  const [allCategoryList, setAllCategoryList] = useState([])
+  const [allCategoryList, setAllCategoryList] = useState(categories)
   const [tempCategory, setTempCategory] = useState([])
   const [defaultCategory, setDefaultCategory] = useState([])
   const [booleanCat, setBooleanCat] = useState(false)

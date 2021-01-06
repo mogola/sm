@@ -19,10 +19,17 @@ import Arrayjs from '../components/array'
 export async function getStaticProps() {
   const config = await getPostConfig()
   const posts = await getAllPosts(4)
+  const getCategoryList = await fetch(`${baseUrl}/api/categories`, {
+    method: "GET",
+  })
+
+  const allCategory = await getCategoryList.json()
+
   return {
     props: {
       config: JSON.parse(JSON.stringify(config[0])),
-      posts: JSON.parse(JSON.stringify(posts))
+      posts: JSON.parse(JSON.stringify(posts)),
+      categories: allCategory
     }
   }
 }
@@ -70,7 +77,7 @@ const backVariants = {
   }
 };
 
-export default function Home({config, posts, connect}) {
+export default function Home({config, posts, connect, categories}) {
   const [configs, setConfigs] = useState(config)
 
   let compareStorage = (initialStorage, newStorage) => {
@@ -106,6 +113,7 @@ export default function Home({config, posts, connect}) {
             data={posts}
             title={configs.titleCategoryRecent}
             className="section-home"
+            getcategories={categories}
           />
         </motion.div>
         <motion.div variants={backVariants}>

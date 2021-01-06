@@ -963,7 +963,7 @@ html{
           color: #FA4000;
           border: 1px solid #FA4000;
           z-index: 2;
-          bottom: 85px;
+          bottom: 72px;
           @include mobileView{
             color: #000;
             border-color: #000;
@@ -2410,5 +2410,66 @@ html {
   cursor: pointer;
   &.selected {
     border: 2px solid #FA4000;
+  }
+}
+
+
+.section-category {
+  .containerTitleSection {
+    overflow:visible;
+    position: relative;
+    z-index: 30;
+    width:100%;
+    text-align: center;
+  }
+  .filterCategory {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform:translate(-50%, -50%);
+    color: #fff !important;
+    .tag{
+      display: inline-block;
+      height: auto;
+      padding: 10px;
+      margin: 0 10px 0 10px;
+    }
+    .tagCatAdmin {
+      &.active {
+        border: 2px solid #FA4000;
+        color: #FA4000;
+      }
+    }
+  }
+}
+
+
+
+.section-home {
+  .containerTitleSection {
+    overflow:visible;
+    position: relative;
+    z-index: 30;
+    width:100%;
+    text-align: left;
+  }
+  .filterCategory {
+    position: absolute;
+    color: #fff !important;
+    right:0;
+    top: 50%;
+    transform: translateY(-50%);
+    .tag{
+      display: inline-block;
+      height: auto;
+      padding: 10px;
+      margin: 0 10px 0 10px;
+    }
+    .tagCatAdmin {
+      &.active {
+        border: 2px solid #FA4000;
+        color: #FA4000;
+      }
+    }
   }
 }

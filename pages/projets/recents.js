@@ -21,10 +21,16 @@ import { getPostConfig, getAllPosts} from './../api/home'
 export async function getStaticProps() {
   const config = await getPostConfig()
   const posts = await getAllPosts()
+  const getCategoryList = await fetch(`${baseUrl}/api/categories`, {
+    method: "GET",
+  })
+
+  const allCategory = await getCategoryList.json()
   return {
     props: {
       config: JSON.parse(JSON.stringify(config[0])),
-      posts: JSON.parse(JSON.stringify(posts))
+      posts: JSON.parse(JSON.stringify(posts)),
+      categories: allCategory
     }
   }
 }
@@ -45,7 +51,7 @@ const imageVariants = {
   }
 };
 
-export default function Home({config, posts, connect}) {
+export default function Home({config, posts, connect, categories}) {
   const [configs, setConfigs] = useState(config)
   const [isAdmin, setIsAdmin] = useState(connect)
   const [onLoadingPage, setOnLoadingPage] = useState(false)
@@ -91,9 +97,11 @@ export default function Home({config, posts, connect}) {
           connect={connect}
       />
           <SectionsRecent
+            title="Mes Projets"
             data={posts}
             className="section-category"
             isadmin={isAdmin === true ? true : false}
+            getcategories={categories}
           />
           <Footer
             menu={configs.menuCategoryLink}

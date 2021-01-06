@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import moment from 'moment'
 import arrowRight from './../../public/images/right-arrow.svg'
@@ -13,8 +13,9 @@ import {
     Tag,
     Content
 } from 'react-bulma-components';
-
+import { ToastContainer, toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { get } from 'mongoose';
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
@@ -61,18 +62,113 @@ const backVariants = {
   }
 };
 
-const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
+const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...rest}) => {
+    const [categoriesDefault, setCategoriesDefault] = useState(getcategories)
+    const [postsFilter, setPostsFilter] = useState(data)
+    const [catSelected, setCatSelected] = useState([])
+
+    const selectedCategories = (itemid) => {
+        console.log(catSelected)
+        if(catSelected.some(value => value === itemid)){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    const filterData = (itemid, i) => {
+        console.log(itemid)
+        const findCategoryPost = getcategories.filter(value => value._id === itemid)
+
+        console.log(findCategoryPost.length, findCategoryPost[0].posts.length)
+
+        console.log("itemid Category", [...catSelected, itemid])
+        let lengthCat = [...catSelected, itemid]
+
+        if(findCategoryPost[0].posts.length === 0){
+            notifySuccess()
+            return ''
+        }else {
+            console.log(findCategoryPost[0].posts)
+            if(catSelected.some(value => value === itemid)){
+                let cloneCatSelected =[...catSelected]
+                cloneCatSelected.splice(itemid, 1)
+                console.log("cloneSelected", cloneCatSelected)
+                if(cloneCatSelected.length === 0) {
+                    setPostsFilter(data)
+                }else {
+                    console.log("rest", cloneCatSelected)
+                    let multipleCatSelected = [...cloneCatSelected]
+                    let concatPosts = []
+
+                    for(let i = 0; i < multipleCatSelected.length; i++){
+                        let filterCats = getcategories.filter(value => value._id === multipleCatSelected[i])
+                        console.log("get post array", filterCats[0].posts)
+                         concatPosts.push(filterCats[0].posts)
+                        console.log("concatpost", concatPosts)
+                    }
+
+                    setPostsFilter(concatPosts[0])
+                }
+
+                setCatSelected(cloneCatSelected)
+
+            }else{
+
+                if(lengthCat.length > 1){
+                    console.log("rest", lengthCat)
+                    let concatPostsMultiple = []
+
+                    for(let i = 0; i < lengthCat.length; i++){
+                        let filterCats = getcategories.filter(value => value._id === lengthCat[i])
+                        console.log("get post array multiple", filterCats[0].posts)
+                        concatPostsMultiple.push(filterCats[0].posts)
+                        console.log("concatpost multiple", concatPostsMultiple.flat())
+                        concatPostsMultiple = concatPostsMultiple.flat()
+                    }
+
+                    console.log('coooliei', concatPostsMultiple)
+
+                    setPostsFilter(concatPostsMultiple)
+                    setCatSelected([...catSelected, itemid])
+                } else {
+                    setPostsFilter(findCategoryPost[0].posts)
+                    setCatSelected([...catSelected, itemid])
+                    console.log(selectedCategories(itemid))
+                }
+            }
+
+        }
+
+        // if(selectedCategories(itemid)){
+
+        // }else {
+        //     notifySuccess()
+        // }
+    }
+
+    const notifySuccess = () => {
+        toast.success("aucun post", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          onOpen: () => {
+            console.log("aucun post")
+          }
+        })
+      }
     return(<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
+        <ToastContainer />
     <Section {...rest}>
         <Container breakpoint="fullhd" fluid className="containerTitleSection">
-        {title &&
-            <Heading className="titleMainCategory" size={1}>
-             {title}
-            </Heading>
-        }
+
         </Container>
             <Columns className="homeCategory">
-            {data.map((post, i) => (
+            {postsFilter.map((post, i) => (
                 <React.Fragment key={i}>
                     {i === 0 &&
                         <Container breakpoint="fullhd" fluid className="mainProject onTopView" key={`${i}${post._id}`}>
@@ -86,6 +182,26 @@ const SectionsRecent = ({title = "", data = [], isadmin, ...rest}) => {
                                     <Image className="mainImageCategory" loading="lazy" rounded={false} src={post.imageMainPrincipal} />
                                 </a>
                             </Link>
+                            {title &&
+                                <Heading className="titleMainCategory filterCategory" size={1}>
+                                {title}
+                                <div>
+                                {getcategories.map((item, i) => (
+                                        <Tag key={i}
+                                        data-id={item._id}
+                                        className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
+                                        name={item.nameCategory}
+                                        style={{opacity:`${selectedCategories(item._id) ? 1 : 0.7 }`}}
+                                        onClick={(e) => {
+                                        e.preventDefault()
+                                        filterData(item._id, i)
+                                        }}>
+                                        {item.nameCategory}
+                                        </Tag>
+                                    ))}
+                                    </div>
+                                </Heading>
+                            }
                             </motion.div>
                             <Content className="info">
                                 <Tag.Group className="tagGroupPost">
