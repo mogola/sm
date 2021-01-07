@@ -79,7 +79,7 @@ const backVariants = {
 
 export default function Home({config, posts, connect, categories}) {
   const [configs, setConfigs] = useState(config)
-
+  const [valueScreen, setValueScreen] = useState()
   let compareStorage = (initialStorage, newStorage) => {
     initialStorage = JSON.parse(initialStorage)
     if(initialStorage !== null && initialStorage.__v === newStorage.__v)
@@ -89,6 +89,11 @@ export default function Home({config, posts, connect, categories}) {
   }
 
   useEffect(() => {
+    console.log(window)
+    if(window){
+      setValueScreen(window.innerWidth)
+    }
+
     if(compareStorage(localStorage.getItem("info"), config)) {
       console.log('from localStorage')
       setConfigs(JSON.parse(localStorage.getItem('info')))
@@ -114,6 +119,7 @@ export default function Home({config, posts, connect, categories}) {
             title={configs.titleCategoryRecent}
             className="section-home"
             getcategories={categories}
+            device={valueScreen && valueScreen }
           />
         </motion.div>
         <motion.div variants={backVariants}>

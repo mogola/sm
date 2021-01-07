@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import Link from 'next/link'
 import moment from 'moment'
 import arrowRight from './../../public/images/right-arrow.svg'
@@ -42,6 +42,28 @@ const variants = {
       }
   }
 }
+
+const bgrMenu = {
+  exit: {
+    x: [-100 , -50, 0],
+    rotate: [0, 270, 0],
+    opacity : [0.5, 0, 1],
+    transition: {
+      duration: 2,
+      ease: easing
+    }
+  },
+  enter: {
+    x: [-100, -50, 0],
+    rotate: [0, 270, 0],
+    opacity : [0, 0, 1],
+    transition: {
+      duration: 2,
+      ease: easing
+    }
+  }
+};
+
 const imageVariants = {
   exit: { y: 150, opacity: 0, transition: { duration: 0.5, ease: easing } },
   enter: {
@@ -60,26 +82,6 @@ const textVariants = {
     y: 0,
     opacity: 1,
     transition: { delay: 0.1, duration: 0.5, ease: easing }
-  }
-};
-
-const backVariants = {
-  exit: {
-    x: 100,
-    opacity: 0,
-    transition: {
-      duration: 0.5,
-      ease: easing
-    }
-  },
-  enter: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      delay: 0.5,
-      duration: 0.5,
-      ease: easing
-    }
   }
 };
 
@@ -110,12 +112,12 @@ const variantsItem = {
 };
 
 
-const Sections = ({title = "", data = [], getcategories = [], ...rest}) => {
+const Sections = ({title = "", data = [], getcategories = [], device, ...rest}) => {
   const [animBool, setAnimBool] = useState(true)
   const [categoriesDefault, setCategoriesDefault] = useState(getcategories)
   const [postsFilter, setPostsFilter] = useState(data)
   const [catSelected, setCatSelected] = useState([])
-
+  const [filterToggle, setFilterToggle] = useState(false)
   const selectedCategories = (itemid) => {
     console.log(catSelected)
     if(catSelected.some(value => value === itemid)){
@@ -140,6 +142,32 @@ const notifySuccess = () => {
   })
 }
 
+const toggleFilter = () => {
+  setFilterToggle(!filterToggle)
+}
+
+const backVariants = {
+  enter: {
+    x: [device, 0],
+    opacity: [0, 1],
+    transition: {
+      duration: 0.8,
+      ease: easing
+    }
+  },
+  exit: {
+    x: [0, 0, 0, device],
+    opacity: [1, 0.6, 0.3, 0],
+    transition: {
+      duration: 0.8,
+      ease: easing
+    }
+  }
+}
+
+useEffect(() => {
+ console.log('filterToggle', filterToggle, device)
+}, [])
 const filterData = (itemid, i) => {
     console.log(itemid)
     const findCategoryPost = getcategories.filter(value => value._id === itemid)
@@ -155,14 +183,15 @@ const filterData = (itemid, i) => {
     }else {
         console.log(findCategoryPost[0].posts)
         if(catSelected.some(value => value === itemid)){
-            let cloneCatSelected =[...catSelected]
-            cloneCatSelected.splice(itemid, 1)
-            console.log("cloneSelected", cloneCatSelected)
+          console.log("before cloneSelected array", [...catSelected])
+            let cloneCatSelected = [...catSelected]
+            let itemidcat = cloneCatSelected.filter(value => value !== itemid)
+            console.log("cloneSelected", itemidcat)
             if(cloneCatSelected.length === 0) {
                 setPostsFilter(data)
             }else {
-                console.log("rest", cloneCatSelected)
-                let multipleCatSelected = [...cloneCatSelected]
+                console.log("rest", itemidcat)
+                let multipleCatSelected = [...itemidcat]
                 let concatPosts = []
 
                 for(let i = 0; i < multipleCatSelected.length; i++){
@@ -172,16 +201,22 @@ const filterData = (itemid, i) => {
                     console.log("concatpost", concatPosts)
                 }
 
-                setPostsFilter(concatPosts[0])
+                if(multipleCatSelected.length === 0){
+                  setPostsFilter(data)
+                } else {
+                  setPostsFilter(concatPosts[0].flat())
+                }
             }
 
-            setCatSelected(cloneCatSelected)
+            setCatSelected(itemidcat)
 
         }else{
 
             if(lengthCat.length > 1){
                 console.log("rest", lengthCat)
                 let concatPostsMultiple = []
+
+
 
                 for(let i = 0; i < lengthCat.length; i++){
                     let filterCats = getcategories.filter(value => value._id === lengthCat[i])
@@ -191,7 +226,15 @@ const filterData = (itemid, i) => {
                     concatPostsMultiple = concatPostsMultiple.flat()
                 }
 
-                console.log('coooliei', concatPostsMultiple)
+                let filterValueDuplicate = []
+                for (let i = 0; i < concatPostsMultiple.length; i++){
+                  console.log('value filter', filterValueDuplicate.some(value => value !== concatPostsMultiple[i]._id))
+                  filterValueDuplicate.push(concatPostsMultiple[i]._id)
+                }
+
+                let arrayCloneNotDuplicate = filterValueDuplicate.filter((v, i, a) => a.indexOf(v) === i)
+
+                console.log('coooliei', concatPostsMultiple, arrayCloneNotDuplicate)
 
                 setPostsFilter(concatPostsMultiple)
                 setCatSelected([...catSelected, itemid])
@@ -204,35 +247,58 @@ const filterData = (itemid, i) => {
 
     }
   }
-    return(<motion.div variant={variants} className="motionWrapper" initial="exit" animate={animBool ? "enter" : "exit"} exit="exit">
+    return(<>
+    <motion.div
+      className={`${filterToggle ? "filterVisible" : "filterHidden"} filterCategory homesFilter`}
+      initial="enter"
+      animate={filterToggle ? "enter" : "exit"}
+      exit="exit"
+      variants={backVariants}
+      data-id={filterToggle}
+    >
+      <motion.ul variants={variantsUl}>
+        {getcategories.map((item, i) => (
+          <motion.li
+          variants={variantsItem}
+          key={i}>
+              <Tag
+                data-id={item._id}
+                className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
+                name={item.nameCategory}
+                style={{opacity:`${selectedCategories(item._id) ? 1 : 0.7 }`}}
+                onClick={(e) => {
+                e.preventDefault()
+                filterData(item._id, i)
+                toggleFilter()
+                }}>
+                {item.nameCategory}
+              </Tag>
+          </motion.li>
+          ))}
+        </motion.ul>
+      </motion.div>
+    <motion.div variant={variants} className="motionWrapper" initial="exit" animate={animBool ? "enter" : "exit"} exit="exit">
       <ToastContainer />
     <Section {...rest}>
         <Container className="containerTitleSection">
         <Heading className="titleMainCategory" size={1}>
           {title}
         </Heading>
-        <div className="filterCategory">
-        {getcategories.map((item, i) => (
-              <Tag key={i}
-              data-id={item._id}
-              className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
-              name={item.nameCategory}
-              style={{opacity:`${selectedCategories(item._id) ? 1 : 0.7 }`}}
-              onClick={(e) => {
-              e.preventDefault()
-              filterData(item._id, i)
-              }}>
-              {item.nameCategory}
-              </Tag>
-          ))}
-          </div>
+        <a
+          onClick={(e) => {
+            e.preventDefault()
+            toggleFilter()
+          }}
+          className="filterMobileIcon">
+          filtrer
+        </a>
         </Container>
         <Container>
-        <motion.div variants={variantsUl}>
+        <motion.div variants={variantsUl} animate={!filterToggle ? "enter" : "exit" }>
             <Columns className="homeCategory">
             {postsFilter.map((post, i) => (
                 <Columns.Column key={i} size="half">
-                    <motion.div variants={variantsItem}>
+                    <motion.div variants={variantsItem} animate={!filterToggle ? "enter" : "exit"}>
                     <Link
                         href={'/projet/[slug]'}
                         as={`/projet/${encodeURIComponent(post.title)}`}
@@ -281,7 +347,7 @@ const filterData = (itemid, i) => {
             </Container>
         </Container>
     </Section>
-    </motion.div>)
+    </motion.div></>)
 }
 
 export default Sections;

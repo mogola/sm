@@ -29,6 +29,13 @@ $tablet: 769px !default;
   }
 }
 
+@mixin desktopView($widthMobile: $tablet){
+  @media screen and (min-width: $widthMobile - 1px){
+   @content;
+  }
+}
+$brotherhood:'brotherhoodregular';
+
 html strong{
   color: inherit;
 }
@@ -2445,31 +2452,133 @@ html {
 
 
 
-.section-home {
-  .containerTitleSection {
-    overflow:visible;
-    position: relative;
-    z-index: 30;
-    width:100%;
-    text-align: left;
-  }
-  .filterCategory {
+.homesFilter, .section-category{
+  &.filterCategory, .filterCategory {
     position: absolute;
     color: #fff !important;
     right:0;
     top: 50%;
     transform: translateY(-50%);
+    @include mobileView{
+      &.filterVisible {
+        display: flex;
+        left:0;
+      }
+
+      &.filterHidden {
+        display: flex;
+      }
+
+      position: fixed;
+      top: 0;
+      right: initial;
+      // left:1000px;
+      text-align: center;
+      background: #FA4000;
+      width:100%;
+      height: 100vh;
+      z-index: 4000000;
+      transform: translateY(0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    @include desktopView{
+      &.filterVisible {
+        display: flex;
+        left:0;
+      }
+
+      &.filterHidden {
+        display: flex;
+      }
+
+      position: fixed;
+      top: 0;
+      right: initial;
+      // left:1000px;
+      text-align: center;
+      background: #FA4000;
+      width:100%;
+      height: 100vh;
+      z-index: 4000000;
+      transform: translateY(0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
     .tag{
       display: inline-block;
       height: auto;
       padding: 10px;
       margin: 0 10px 0 10px;
+      font-family: $brotherhood;
+      @include mobileView{
+        background: none !important;
+        font-size: 30px;
+        color: #FAFAFA;
+      }
+
+      @include desktopView{
+        background: none !important;
+        font-size: 30px;
+        color: #FAFAFA;
+      }
     }
+
     .tagCatAdmin {
       &.active {
         border: 2px solid #FA4000;
         color: #FA4000;
+        @include mobileView{
+          color: #fff;
+          border: 0 none;
+        }
+
+        @include desktopView{
+          color: #fff;
+          border: 0 none;
+        }
       }
     }
   }
+}
+
+.filterMobileIcon {
+  display: none;
+  padding: 5px 0;
+  background: #FA4000;
+  color: #fff !important;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 13px;
+  right: 0;
+  cursor: pointer;
+  text-decoration: none !important;
+  text-align: center;
+  text-transform: uppercase;
+
+  &:hover {
+    text-decoration: none;
+    color: #FAFAFA;
+  }
+  @include mobileView{
+    display: inline-block;
+    min-width: 130px;
+  }
+
+  @include desktopView{
+    display: block;
+    bottom: 57px;
+    font-family: overpass;
+    font-weight: bold;
+    min-width: 150px;
+    height: 48px;
+    line-height: 43px;
+  }
+
 }
