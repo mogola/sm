@@ -56,6 +56,10 @@ body {
   box-sizing: border-box;
 }
 
+html .Toastify__toast--warning {
+  background-color: $msOrange;
+}
+
 a {
   color: #0070f3;
   text-decoration: none;
@@ -325,7 +329,7 @@ img {
           position: absolute;
           bottom: -6px;
           left: 0;
-          background: #FF4000;
+          background: $msOrange;
           width: 100%;
           height: 3px;
         }
@@ -624,7 +628,7 @@ html .tagGroupPost.tags {
     height: auto;
     padding:0;
     margin: 0 24px 0 0 !important;
-    color:#FF4000;
+    color:$msOrange;
     display: inline-block;
     background: none;
 
@@ -881,7 +885,7 @@ html {
   z-index:30000;
   padding:20px;
   background: #fff;
-  border: #FF4000;
+  border: $msOrange;
   border-radius: 10px;
 }
 
@@ -891,7 +895,7 @@ html {
     text-align: left;
   }
   .getOrange {
-    color: #FF4000;
+    color: $msOrange;
   }
 }
 
@@ -998,7 +1002,7 @@ html{
           font-weight: normal;
           text-transform:uppercase;
           strong{
-            color:#FF4000;
+            color:$msOrange;
           }
 
         }
@@ -1327,7 +1331,7 @@ html {
     }
 
     .icon {
-      border: 1px solid #FF4000;
+      border: 1px solid $msOrange;
       margin-bottom: 24px;
       height: 48px;
       width: 48px;
@@ -1409,12 +1413,12 @@ html {
     }
     .containerTitleSection {
       .titleMainCategory {
-        color: #FF4000;
+        color: $msOrange;
         margin-top:48px;
       }
     }
     .aboutSection {
-      color: #FF4000;
+      color: $msOrange;
       font-family: "Source Sans Pro";
       font-size: 24px;
       font-weight: 400;
@@ -1983,7 +1987,7 @@ html .ContactMain {
 html .contentContact {
   background: #FAFAFA;
   .title {
-    color: #FF4000;
+    color: $msOrange;
     font-family: Overpass;
     font-size: 96px;
     font-weight: 900;
@@ -1992,7 +1996,7 @@ html .contentContact {
     margin: 0;
 
     @include mobileView{
-      color: #FF4000;
+      color: $msOrange;
       font-family: Overpass;
       font-size: 32px;
       font-weight: 900;
@@ -2112,7 +2116,7 @@ html .contentContact {
 }
 html .ContainerInfo{
   width: 100%;
-  background-color: #FF4000;
+  background-color: $msOrange;
   position: relative;
   top: 10px;
   left: 0;
@@ -2525,7 +2529,7 @@ html {
 
       @include desktopView{
         background: none !important;
-        font-size: 30px;
+        font-size: 60px;
         color: #FAFAFA;
       }
     }
@@ -2552,7 +2556,7 @@ html {
   display: none;
   padding: 5px 0;
   background: #FA4000;
-  color: #fff !important;
+  color: #090909 !important;
   border-radius: 5px;
   position: absolute;
   bottom: 13px;
@@ -2560,8 +2564,14 @@ html {
   cursor: pointer;
   text-decoration: none !important;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: normal;
 
+  svg {
+    width: 11px;
+    path {
+      fill: $msOrange;
+    }
+  }
   &:hover {
     text-decoration: none;
     color: #FAFAFA;
@@ -2569,16 +2579,51 @@ html {
   @include mobileView{
     display: inline-block;
     min-width: 130px;
+    background: none;
+    span {
+      font-weight: bold;
+      position: relative;
+      left:0;
+      top:0;
+    }
   }
 
   @include desktopView{
     display: block;
-    bottom: 57px;
+    bottom: 48px;
     font-family: overpass;
     font-weight: bold;
     min-width: 150px;
     height: 48px;
     line-height: 43px;
+    background: none;
+
+    span {
+      font-weight: bold;
+      position: relative;
+      left:0;
+      top:-2px;
+    }
   }
 
+}
+
+
+.returnLinkDefault {
+  color: #fff;
+  text-decoration: none;
+  font-family: $brotherhood;
+  font-size: 35px;
+
+  &:hover {
+    text-decoration: none;
+    color: #fff;
+
+  }
+
+  .icoRight {
+    filter: invert(1) !important;
+    background-size: 70% auto;
+    background-position: 6px -11px;
+  }
 }

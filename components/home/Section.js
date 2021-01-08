@@ -16,6 +16,13 @@ import {
 } from 'react-bulma-components';
 import { ToastContainer, toast } from 'react-toastify';
 
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars} from '@fortawesome/free-solid-svg-icons'
+
+library.add(faBars)
+
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const variants = {
@@ -127,8 +134,8 @@ const Sections = ({title = "", data = [], getcategories = [], device, ...rest}) 
     }
 }
 
-const notifySuccess = () => {
-  toast.success("aucun post", {
+const notifySuccess = (category) => {
+  toast.warning(`aucun(s) post(s) pour ${category}`, {
     position: "top-right",
     autoClose: 2000,
     hideProgressBar: true,
@@ -168,7 +175,7 @@ const backVariants = {
 useEffect(() => {
  console.log('filterToggle', filterToggle, device)
 }, [])
-const filterData = (itemid, i) => {
+const filterData = (itemid, nameCat, i) => {
     console.log(itemid)
     const findCategoryPost = getcategories.filter(value => value._id === itemid)
 
@@ -178,7 +185,7 @@ const filterData = (itemid, i) => {
     let lengthCat = [...catSelected, itemid]
 
     if(findCategoryPost[0].posts.length === 0){
-        notifySuccess()
+        notifySuccess(nameCat)
         return ''
     }else {
         console.log(findCategoryPost[0].posts)
@@ -232,11 +239,23 @@ const filterData = (itemid, i) => {
                   filterValueDuplicate.push(concatPostsMultiple[i]._id)
                 }
 
+
                 let arrayCloneNotDuplicate = filterValueDuplicate.filter((v, i, a) => a.indexOf(v) === i)
 
-                console.log('coooliei', concatPostsMultiple, arrayCloneNotDuplicate)
+                const fPosts = (arr, element) => {
+                  for (let i = 0; i < arr.length; i++){
+                    console.log(element._id, arr[i])
+                    return element._id === arr[i]
+                  }
+                }
 
-                setPostsFilter(concatPostsMultiple)
+                const includesPost = data.filter(value => arrayCloneNotDuplicate.includes(value._id))
+
+                let arrayPostNotDuplicate = data.find(element => fPosts(arrayCloneNotDuplicate, element))
+
+                console.log('coooliei', concatPostsMultiple, arrayCloneNotDuplicate, "new posts", includesPost)
+
+                setPostsFilter(includesPost)
                 setCatSelected([...catSelected, itemid])
             } else {
                 setPostsFilter(findCategoryPost[0].posts)
@@ -268,13 +287,25 @@ const filterData = (itemid, i) => {
                 style={{opacity:`${selectedCategories(item._id) ? 1 : 0.7 }`}}
                 onClick={(e) => {
                 e.preventDefault()
-                filterData(item._id, i)
+                filterData(item._id, item.nameCategory, i)
                 toggleFilter()
                 }}>
                 {item.nameCategory}
               </Tag>
           </motion.li>
           ))}
+          <motion.li
+          variants={variantsItem} key="rzerez" className="returnLink">
+          <a
+            className="returnLinkDefault"
+            onClick={() => {
+              toggleFilter()
+            }}
+          >
+            Retours
+            <span className="icoRight" width={26}></span>
+          </a>
+        </motion.li>
         </motion.ul>
       </motion.div>
     <motion.div variant={variants} className="motionWrapper" initial="exit" animate={animBool ? "enter" : "exit"} exit="exit">
@@ -290,7 +321,7 @@ const filterData = (itemid, i) => {
             toggleFilter()
           }}
           className="filterMobileIcon">
-          filtrer
+        <span>Filtrer par :</span> <FontAwesomeIcon icon="bars" size="xs" />
         </a>
         </Container>
         <Container>
