@@ -302,7 +302,7 @@ const filterData = (itemid, nameCat, i) => {
               toggleFilter()
             }}
           >
-            Retours
+            Retour
             <span className="icoRight" width={26}></span>
           </a>
         </motion.li>
@@ -323,6 +323,34 @@ const filterData = (itemid, nameCat, i) => {
           className="filterMobileIcon">
         <span>Filtrer par :</span> <FontAwesomeIcon icon="bars" size="xs" />
         </a>
+        <motion.div
+      className={`${filterToggle ? "filterVisible" : "filterHidden"} filterCategoryStatic homesFilter`}
+      initial="enter"
+      animate="enter"
+      exit="exit"
+      variants={backVariants}
+      data-id={filterToggle}
+    >
+      <motion.ul variants={variantsUl}>
+        {getcategories.map((item, i) => (
+          <motion.li
+          variants={variantsItem}
+          key={i}>
+              <Tag
+                data-id={item._id}
+                className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
+                name={item.nameCategory}
+                style={{opacity:`${selectedCategories(item._id) ? 1 : 0.3 }`}}
+                onClick={(e) => {
+                e.preventDefault()
+                filterData(item._id, item.nameCategory, i)
+                }}>
+                {item.nameCategory}
+              </Tag>
+          </motion.li>
+          ))}
+        </motion.ul>
+      </motion.div>
         </Container>
         <Container>
         <motion.div variants={variantsUl} animate={!filterToggle ? "enter" : "exit" }>

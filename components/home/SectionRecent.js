@@ -62,10 +62,37 @@ const backVariants = {
   }
 };
 
+const variantsUl = {
+    enter: {
+        transition: { staggerChildren: 0.07, delayChildren: 0.2 }
+    },
+    exit: {
+        transition: { staggerChildren: 0.05, staggerDirection: -1 }
+    }
+  }
+
+  const variantsItem = {
+    enter: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        x: { stiffness: 1000, velocity: -100 }
+      }
+    },
+    exit: {
+      x: 100,
+      opacity: 0,
+      transition: {
+        x: { stiffness: 1000 }
+      }
+    }
+  };
+
 const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...rest}) => {
     const [categoriesDefault, setCategoriesDefault] = useState(getcategories)
     const [postsFilter, setPostsFilter] = useState(data)
     const [catSelected, setCatSelected] = useState([])
+    const [filterToggle, setFilterToggle] = useState(false)
 
     const selectedCategories = (itemid) => {
         console.log(catSelected)
@@ -76,7 +103,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
         }
     }
 
-    const filterData = (itemid, i) => {
+    const filterData = (itemid, nameCat, i) => {
         console.log(itemid)
         const findCategoryPost = getcategories.filter(value => value._id === itemid)
 
@@ -86,19 +113,20 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
         let lengthCat = [...catSelected, itemid]
 
         if(findCategoryPost[0].posts.length === 0){
-            notifySuccess()
+            notifySuccess(nameCat)
             return ''
         }else {
             console.log(findCategoryPost[0].posts)
             if(catSelected.some(value => value === itemid)){
-                let cloneCatSelected =[...catSelected]
-                cloneCatSelected.splice(itemid, 1)
-                console.log("cloneSelected", cloneCatSelected)
+              console.log("before cloneSelected array", [...catSelected])
+                let cloneCatSelected = [...catSelected]
+                let itemidcat = cloneCatSelected.filter(value => value !== itemid)
+                console.log("cloneSelected", itemidcat)
                 if(cloneCatSelected.length === 0) {
                     setPostsFilter(data)
                 }else {
-                    console.log("rest", cloneCatSelected)
-                    let multipleCatSelected = [...cloneCatSelected]
+                    console.log("rest", itemidcat)
+                    let multipleCatSelected = [...itemidcat]
                     let concatPosts = []
 
                     for(let i = 0; i < multipleCatSelected.length; i++){
@@ -108,16 +136,22 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
                         console.log("concatpost", concatPosts)
                     }
 
-                    setPostsFilter(concatPosts[0])
+                    if(multipleCatSelected.length === 0){
+                      setPostsFilter(data)
+                    } else {
+                      setPostsFilter(concatPosts[0].flat())
+                    }
                 }
 
-                setCatSelected(cloneCatSelected)
+                setCatSelected(itemidcat)
 
             }else{
 
                 if(lengthCat.length > 1){
                     console.log("rest", lengthCat)
                     let concatPostsMultiple = []
+
+
 
                     for(let i = 0; i < lengthCat.length; i++){
                         let filterCats = getcategories.filter(value => value._id === lengthCat[i])
@@ -127,9 +161,29 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
                         concatPostsMultiple = concatPostsMultiple.flat()
                     }
 
-                    console.log('coooliei', concatPostsMultiple)
+                    let filterValueDuplicate = []
+                    for (let i = 0; i < concatPostsMultiple.length; i++){
+                      console.log('value filter', filterValueDuplicate.some(value => value !== concatPostsMultiple[i]._id))
+                      filterValueDuplicate.push(concatPostsMultiple[i]._id)
+                    }
 
-                    setPostsFilter(concatPostsMultiple)
+
+                    let arrayCloneNotDuplicate = filterValueDuplicate.filter((v, i, a) => a.indexOf(v) === i)
+
+                    const fPosts = (arr, element) => {
+                      for (let i = 0; i < arr.length; i++){
+                        console.log(element._id, arr[i])
+                        return element._id === arr[i]
+                      }
+                    }
+
+                    const includesPost = data.filter(value => arrayCloneNotDuplicate.includes(value._id))
+
+                    let arrayPostNotDuplicate = data.find(element => fPosts(arrayCloneNotDuplicate, element))
+
+                    console.log('coooliei', concatPostsMultiple, arrayCloneNotDuplicate, "new posts", includesPost)
+
+                    setPostsFilter(includesPost)
                     setCatSelected([...catSelected, itemid])
                 } else {
                     setPostsFilter(findCategoryPost[0].posts)
@@ -139,13 +193,11 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
             }
 
         }
+      }
 
-        // if(selectedCategories(itemid)){
-
-        // }else {
-        //     notifySuccess()
-        // }
-    }
+    const toggleFilter = () => {
+        setFilterToggle(!filterToggle)
+      }
 
     const notifySuccess = () => {
         toast.success("aucun post", {
@@ -185,21 +237,34 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
                             {title &&
                                 <Heading className="titleMainCategory filterCategory" size={1}>
                                 {title}
-                                <div>
-                                {getcategories.map((item, i) => (
-                                        <Tag key={i}
-                                        data-id={item._id}
-                                        className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
-                                        name={item.nameCategory}
-                                        style={{opacity:`${selectedCategories(item._id) ? 1 : 0.7 }`}}
-                                        onClick={(e) => {
-                                        e.preventDefault()
-                                        filterData(item._id, i)
-                                        }}>
-                                        {item.nameCategory}
-                                        </Tag>
-                                    ))}
-                                    </div>
+                                <motion.div
+                                    className={`${filterToggle ? "filterVisible" : "filterHidden"} filterCategoryStatic homesFilter`}
+                                    initial="enter"
+                                    animate="enter"
+                                    exit="exit"
+                                    variants={backVariants}
+                                    data-id={filterToggle}
+                                    >
+                                    <motion.ul variants={variantsUl}>
+                                        {getcategories.map((item, i) => (
+                                        <motion.li
+                                        variants={variantsItem}
+                                        key={i}>
+                                            <Tag
+                                                data-id={item._id}
+                                                className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
+                                                name={item.nameCategory}
+                                                style={{opacity:`${selectedCategories(item._id) ? 1 : 0.3 }`}}
+                                                onClick={(e) => {
+                                                e.preventDefault()
+                                                filterData(item._id, item.nameCategory, i)
+                                                }}>
+                                                {item.nameCategory}
+                                            </Tag>
+                                        </motion.li>
+                                        ))}
+                                        </motion.ul>
+                                    </motion.div>
                                 </Heading>
                             }
                             </motion.div>

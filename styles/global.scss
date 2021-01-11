@@ -369,6 +369,13 @@ img {
       max-width: initial;
       height: 100vh;
       width: auto;
+      margin: 0 auto;
+      @include desktopView(){
+        max-width: 100%;
+        height: auto;
+        width: 100%;
+        margin: 0 auto;
+      }
     }
     @include mobileView(){
       height: 100vh;
@@ -2444,11 +2451,14 @@ html {
       height: auto;
       padding: 10px;
       margin: 0 10px 0 10px;
+      span {
+        color: #fff !important;
+      }
     }
     .tagCatAdmin {
       &.active {
-        border: 2px solid #FA4000;
-        color: #FA4000;
+       /// border: 2px solid #FA4000;
+        color: #FA4000 !important;
       }
     }
   }
@@ -2457,7 +2467,7 @@ html {
 
 
 .homesFilter, .section-category{
-  &.filterCategory, .filterCategory {
+  &.filterCategory{
     position: absolute;
     color: #fff !important;
     right:0;
@@ -2493,6 +2503,7 @@ html {
       &.filterVisible {
         display: flex;
         left:0;
+        position: static;
       }
 
       &.filterHidden {
@@ -2577,7 +2588,8 @@ html {
     color: #FAFAFA;
   }
   @include mobileView{
-    display: inline-block;
+    // display: inline-block;
+    display: none;
     min-width: 130px;
     background: none;
     span {
@@ -2589,7 +2601,7 @@ html {
   }
 
   @include desktopView{
-    display: block;
+    display: none;
     bottom: 48px;
     font-family: overpass;
     font-weight: bold;
@@ -2625,5 +2637,46 @@ html {
     filter: invert(1) !important;
     background-size: 70% auto;
     background-position: 6px -11px;
+  }
+}
+
+
+.filterCategoryStatic {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translateY(-50%);
+  top: 50%;
+  @include mobileView{
+    position: static;
+  }
+  ul {
+    display: flex;
+    flex-direction: row;
+    @include mobileView{
+      position: relative;
+      top:-17px;
+      left:0;
+    }
+    li {
+      &:first-child {
+        padding: 0;
+        span {
+          padding: 0;
+        }
+      }
+      padding: 0 5px;
+    }
+  }
+  .tag {
+    background: transparent;
+    font-family: overpass;
+    color: #090909;
+    font-size: 14px;
+    &.active {
+      color: $msOrange;
+    }
   }
 }

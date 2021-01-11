@@ -2,9 +2,9 @@
 
 import { themeContextUser } from './../../context/contextUser';
 import Link from 'next/link'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import Menu from './Menu'
-import { motion } from 'framer-motion';
+import {motion, useMotionValue} from 'framer-motion';
 import {
     Container,
     Columns,
@@ -61,6 +61,7 @@ const backVariants = {
   }
 };
 
+
 const Hometop = ({state = '', connect}) => {
     const [textAvailable, setTextAvailable] = useState([])
     const [isUserAdmin, setIsUserAdmin] = useState()
@@ -69,6 +70,12 @@ const Hometop = ({state = '', connect}) => {
     const [isToggle, setIsToggle] = useState(false)
     const [isBackground, setIsBackground] = useState(state.colorBackgroundMenu)
     const [isInnerWidth, setIsInnerWidth] = useState()
+    const [isDevice, setIsDevice] = useState()
+    const [isHomeImage, setIsHomeImage] = useState()
+
+    const scale = useMotionValue(isHomeImage < isDevice ? 1.4 : 1.2)
+
+    const refImageHome = useRef(null)
     const viewPortDetection = () => {
         console.log(window.innerWidth)
         if(window.innerWidth < isMobile){
@@ -132,7 +139,37 @@ const Hometop = ({state = '', connect}) => {
         viewPortDetection()
 
         console.log("isBackground", typeof(isBackground))
+
+        setIsDevice(window.innerWidth)
+        if(refImageHome){
+          console.log(refImageHome.current.clientWidth)
+          setIsHomeImage(refImageHome.current.clientWidth)
+        }
+
+        console.log("scale", scale)
+
     }, [])
+
+
+const scaleVariants = {
+  exit: {
+    scale: 1,
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  },
+  enter: {
+  scale: isHomeImage < isDevice ? 1.4 : 1.2 ,
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
 
     return (
       <themeContextUser.Consumer>
@@ -182,9 +219,19 @@ const Hometop = ({state = '', connect}) => {
                       className="scrollTopLink"
                     >{state.textScrollTop}</a>
                     </div>
-                  <div className="homeImage" style={{backgroundImage: `url(${state.logoSiteUrl})`}}>
-                    {/* <img data-img={state.menuCategoryLink} rel="preload" src={state.logoSiteUrl} width="100%" height="auto"/> */}
-                  </div>
+                  <motion.div
+                    style={{ scale }}
+                    className="homeImage">
+                    <img
+                      ref={refImageHome}
+                      data-img={state.menuCategoryLink}
+                      rel="preload"
+                      src={state.logoSiteUrl}
+                      width={isHomeImage < isDevice ? window.innerWidth : "100%"}
+                      height="auto"
+                    />
+                    {/* style={{transform:`${isHomeImage < isDevice ? "transform: scale(1.4)": "transform: scale(1)"}`}} */}
+                  </motion.div>
                 </motion.div>
                 </>
       )}
