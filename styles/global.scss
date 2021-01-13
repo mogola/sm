@@ -2486,6 +2486,11 @@ html {
     right:0;
     top: 50%;
     transform: translateY(-50%);
+
+    &.filterHidden {
+      display: none;
+    }
+
     @include mobileView{
       &.filterVisible {
         display: flex;
@@ -2520,7 +2525,7 @@ html {
       }
 
       &.filterHidden {
-        display: flex;
+        display: none;
       }
 
       position: fixed;
@@ -2727,6 +2732,9 @@ html {
 
     @include desktopView {
       color: #fff;
+      .section-home & {
+        color: #090909;
+      }
     }
 
     &.active {
