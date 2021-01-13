@@ -217,7 +217,6 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
         <ToastContainer />
     <Section {...rest}>
         <Container breakpoint="fullhd" fluid className="containerTitleSection">
-
         </Container>
             <Columns className="homeCategory">
             {postsFilter.map((post, i) => (

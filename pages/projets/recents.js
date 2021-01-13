@@ -17,7 +17,17 @@ import {useRouter} from 'next/router'
 import {motion} from 'framer-motion'
 
 import { getPostConfig, getAllPosts} from './../api/home'
-
+import {
+  Container,
+  Columns,
+  Section,
+  Heading,
+  Image,
+  Box,
+  Loader,
+  Tag,
+  Content
+} from 'react-bulma-components';
 export async function getStaticProps() {
   const config = await getPostConfig()
   const posts = await getAllPosts()
@@ -55,6 +65,10 @@ export default function Home({config, posts, connect, categories}) {
   const [configs, setConfigs] = useState(config)
   const [isAdmin, setIsAdmin] = useState(connect)
   const [onLoadingPage, setOnLoadingPage] = useState(false)
+  const [isAnim, setIsAnim] = useState(false)
+  const animatePage = () => {
+    setIsAnim(!isAnim)
+}
   const router = useRouter()
   useEffect(() => {
    // RouterTracking(router)
@@ -87,7 +101,7 @@ export default function Home({config, posts, connect, categories}) {
   //   </div>
   // }
 
-  return (<motion.div variants={imageVariants} className="motionWrapper" initial="enter" animate="enter" exit="exit">
+  return (<motion.div variants={imageVariants} className="motionWrapper" initial={isAnim ? "exit": "enter"} animate="enter" exit="exit">
       <Layout none>
         <Head>
           <title>{siteTitle}</title>
@@ -96,6 +110,20 @@ export default function Home({config, posts, connect, categories}) {
           state={config}
           connect={connect}
       />
+      <Container className="breadCategory">
+            <Heading className="titleBreadCategory" size={3}> Autres categories : </Heading>
+            <ul className="listBreadCategory">
+            {categories.map((cat, i) => (
+                <li key={i}>
+                    <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
+                        <a onClick={() => {
+                            animatePage()
+                        }}c lassName="linkToCategories">{cat.nameCategory}</a>
+                    </Link>
+                </li>
+            ))}
+            </ul>
+        </Container>
           <SectionsRecent
             title="Mes Projets"
             data={posts}

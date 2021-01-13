@@ -92,6 +92,20 @@ const Category = ({post, config, connect, categories})=>{
           state={config}
           connect={connect}
       />
+      <Container className="breadCategory">
+            <Heading className="titleBreadCategory" size={3}> Autres categories : </Heading>
+            <ul className="listBreadCategory">
+            {categories.map((cat, i) => (
+                <li key={i}>
+                    <Link key={i} href={`${cat.nameCategory}`} as={`${cat._id}`}>
+                        <a onClick={() => {
+                            animatePage()
+                        }}c lassName="linkToCategories">{cat.nameCategory}</a>
+                    </Link>
+                </li>
+            ))}
+            </ul>
+        </Container>
       {post.posts.length > 0 &&
       <motion.div variants={variantsUl} className="motionWrapper" initial="exit" animate={isAnim ? "exit": "enter"} exit="exit">
         <SectionsRecent
@@ -106,21 +120,7 @@ const Category = ({post, config, connect, categories})=>{
         {post.posts.length === 0 &&
         <> no posts</>
         }
-        <Container className="breadCategory">
-            <Heading className="titleBreadCategory" size={3}> Autres categories : </Heading>
-            <ul className="listBreadCategory">
-            {categories.map((cat, i) => (
-                <li key={i}>
-                    <Link key={i} href={`${cat.nameCategory}`} as={`${cat._id}`}>
-                        <a onClick={() => {
-                            animatePage()
-                        }}c lassName="linkToCategories">{cat.nameCategory}</a>
-                    </Link>
-                </li>
-            ))}
-            </ul>
 
-        </Container>
         <Footer
           menu={configs.menuCategoryLink}
           data={configs}
