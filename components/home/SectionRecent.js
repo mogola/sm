@@ -213,7 +213,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
           }
         })
       }
-    return(<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
+    return(<motion.div variants={backVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
         <ToastContainer />
     <Section {...rest}>
         <Container breakpoint="fullhd" fluid className="containerTitleSection">

@@ -2746,3 +2746,24 @@ html {
 .categoryMainFilter {
   position: relative;
 }
+
+.breadCategory {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.listBreadCategory {
+  display: flex;
+  padding-bottom: 40px;
+
+  li {
+    padding: 0 8px;
+
+    a {
+      font-family: overpass;
+      color:#090909;
+    }
+  }
+}
