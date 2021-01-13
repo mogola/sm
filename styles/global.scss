@@ -2433,6 +2433,11 @@ html {
 
 
 .section-category {
+  .CategoryMainFilter {
+    @include mobileView{
+      position: relative;
+    }
+  }
   .containerTitleSection {
     overflow:visible;
     position: relative;
@@ -2446,6 +2451,13 @@ html {
     top: 50%;
     transform:translate(-50%, -50%);
     color: #fff !important;
+
+    @include mobileView{
+      top: initial;
+      bottom: 30px;
+      transform: initial;
+      left: 30px;
+    }
     .tag{
       display: inline-block;
       height: auto;
@@ -2458,7 +2470,8 @@ html {
     .tagCatAdmin {
       &.active {
        /// border: 2px solid #FA4000;
-        color: #FA4000 !important;
+        background-color: #FA4000 !important;
+        color: #fff !important;
       }
     }
   }
@@ -2640,6 +2653,37 @@ html {
   }
 }
 
+.section-category {
+  .filterCategoryStatic {
+    ul{
+      @include mobileView{
+        top: 0;
+      }
+      li{
+        @include mobileView{
+          &:first-child {
+            .tag {
+              margin: 0 5px 0 0;
+            }
+          }
+        }
+        .tag {
+          @include mobileView{
+            display: inline-block;
+            height: auto;
+            margin: 0 5px;
+            padding: 5px;
+          }
+        }
+        span {
+          @include mobileView{
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}
 
 .filterCategoryStatic {
   display: flex;
@@ -2655,16 +2699,21 @@ html {
   ul {
     display: flex;
     flex-direction: row;
+    @include desktopView {
+      padding-top: 10px;
+    }
+
     @include mobileView{
       position: relative;
       top:-17px;
       left:0;
+      margin-top:12px;
     }
     li {
       &:first-child {
         padding: 0;
         span {
-          padding: 0;
+          padding: 0 5px 0 0;
         }
       }
       padding: 0 5px;
@@ -2675,8 +2724,17 @@ html {
     font-family: overpass;
     color: #090909;
     font-size: 14px;
+
+    @include desktopView {
+      color: #fff;
+    }
+
     &.active {
       color: $msOrange;
     }
   }
+}
+
+.categoryMainFilter {
+  position: relative;
 }

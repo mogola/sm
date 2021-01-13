@@ -21,7 +21,7 @@ let easing = [0.175, 0.85, 0.42, 0.96];
 const imageVariants = {
   exit: { scale: 1, opacity: 0, transition: { type: "spring", duration: 0.5, staggerChildren: 0.05} },
   enter: {
-   scale: 1.5,
+   scale: 1,
     opacity: 1,
     transition: {
         type: "spring",
@@ -199,10 +199,10 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
         setFilterToggle(!filterToggle)
       }
 
-    const notifySuccess = () => {
-        toast.success("aucun post", {
+      const notifySuccess = (category) => {
+        toast.warning(`Aucun(s) post(s) pour ${category}`, {
           position: "top-right",
-          autoClose: 2000,
+          autoClose: 1500,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
@@ -225,7 +225,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
                     {i === 0 &&
                         <Container breakpoint="fullhd" fluid className="mainProject onTopView" key={`${i}${post._id}`}>
                         <Columns.Column className="columnProject" size={12}>
-                            <motion.div variants={imageVariants} className="">
+                            <motion.div variants={imageVariants} className="categoryMainFilter">
                             <Link
                                 href={'/projet/[slug]'}
                                 as={`/projet/${encodeURIComponent(post.title)}`}
@@ -254,7 +254,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
                                                 data-id={item._id}
                                                 className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
                                                 name={item.nameCategory}
-                                                style={{opacity:`${selectedCategories(item._id) ? 1 : 0.3 }`}}
+                                                style={{opacity:`${selectedCategories(item._id) ? 1 : 0.5 }`}}
                                                 onClick={(e) => {
                                                 e.preventDefault()
                                                 filterData(item._id, item.nameCategory, i)
