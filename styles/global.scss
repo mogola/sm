@@ -720,6 +720,14 @@ html .homeCategory {
   .column {
     padding-bottom: 46px;
   }
+
+
+}
+
+html .section-category {
+  .column {
+    padding-bottom: 0;
+  }
 }
 
 //uploading
@@ -1149,6 +1157,7 @@ html{
             min-width: 20%;
             @include mobileView{
               flex-direction: row;
+              min-width: 100%;
             }
           }
           .tag{
@@ -2457,6 +2466,14 @@ html {
       bottom: 30px;
       transform: initial;
       left: 30px;
+      &.singleTitleCategory {
+        left: 50%;
+        top: 50%;
+        font-size:72px !important;
+        transform:translate(-50%, -50%);
+        color: #fff !important;
+        bottom: initial;
+      }
     }
     .tag{
       display: inline-block;
@@ -2747,23 +2764,31 @@ html {
   position: relative;
 }
 
-.breadCategory {
+html .breadCategory {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: row;
+  background: $msOrange;
+  padding: 10px 0;
+  .titleBreadCategory {
+    font-size: 13px;
+    color: #fff;
+    margin-bottom: 0;
+  }
 }
 
 .listBreadCategory {
   display: flex;
-  padding-bottom: 40px;
+  padding-bottom: 0;
 
   li {
     padding: 0 8px;
 
     a {
       font-family: overpass;
-      color:#090909;
+      // color:#090909;
+      color: #fff;
     }
   }
 }

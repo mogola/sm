@@ -88,7 +88,7 @@ const variantsUl = {
     }
   };
 
-const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...rest}) => {
+const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories = [], filter = true, ...rest}) => {
     const [categoriesDefault, setCategoriesDefault] = useState(getcategories)
     const [postsFilter, setPostsFilter] = useState(data)
     const [catSelected, setCatSelected] = useState([])
@@ -234,9 +234,9 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
                                 </a>
                             </Link>
                             {title &&
-                                <Heading className="titleMainCategory filterCategory" size={1}>
+                                <Heading className={`${!filter ? "singleTitleCategory" : ''} titleMainCategory filterCategory`} size={1}>
                                 {title}
-                                <motion.div
+                                {filter === true && <motion.div
                                     className={`${filterToggle ? "filterVisible" : "filterHidden"} filterCategoryStatic homesFilter`}
                                     initial="enter"
                                     animate="enter"
@@ -264,6 +264,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
                                         ))}
                                         </motion.ul>
                                     </motion.div>
+                                }
                                 </Heading>
                             }
                             </motion.div>
@@ -312,6 +313,7 @@ const SectionsRecent = ({title = "", data = [], isadmin, getcategories = [], ...
                                 </div>
                                 </Content>
                             </Columns.Column>
+                            <>{component}</>
                             </Container>
                     }
                     {i !== 0 &&

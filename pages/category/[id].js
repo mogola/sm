@@ -67,6 +67,27 @@ const Category = ({post, config, connect, categories})=>{
     const {id} = router.query
     //console.log("id of post", router.isFallback, getNextId, getPrevId)
 
+    const ComponentCategory = ({animboolean}) => {
+      return (
+        <motion.div variants={backVariants} className="motionWrapper" initial="exit" animate={animboolean ? "exit": "enter"} exit="exit">
+        <Container breakpoint="fullhd" className="breadCategory">
+          <Heading className="titleBreadCategory" size={3}> Autres categories : </Heading>
+          <ul className="listBreadCategory">
+          {categories.map((cat, i) => (
+              <li key={i}>
+                  <Link key={i} href={`${cat.nameCategory}`} as={`${cat._id}`}>
+                      <a onClick={() => {
+                          animatePage()
+                      }}
+                      className="linkToCategories">{cat.nameCategory}</a>
+                  </Link>
+              </li>
+          ))}
+          </ul>
+      </Container>
+      </motion.div>
+      )
+    }
     if(router.isFallback){
         return(
             <h3>loading...</h3>
@@ -92,20 +113,6 @@ const Category = ({post, config, connect, categories})=>{
           state={config}
           connect={connect}
       />
-      <Container className="breadCategory">
-            <Heading className="titleBreadCategory" size={3}> Autres categories : </Heading>
-            <ul className="listBreadCategory">
-            {categories.map((cat, i) => (
-                <li key={i}>
-                    <Link key={i} href={`${cat.nameCategory}`} as={`${cat._id}`}>
-                        <a onClick={() => {
-                            animatePage()
-                        }}c lassName="linkToCategories">{cat.nameCategory}</a>
-                    </Link>
-                </li>
-            ))}
-            </ul>
-        </Container>
       {post.posts.length > 0 &&
       <motion.div variants={variantsUl} className="motionWrapper" initial="exit" animate={isAnim ? "exit": "enter"} exit="exit">
         <SectionsRecent
@@ -114,6 +121,8 @@ const Category = ({post, config, connect, categories})=>{
             className="section-category"
             isadmin={isAdmin === true ? true : false}
             getcategories={categories}
+            filter={false}
+            component={<ComponentCategory animaboolean={isAnim} />}
             />
             </motion.div>
         }
