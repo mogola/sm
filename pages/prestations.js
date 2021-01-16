@@ -119,10 +119,10 @@ const router = useRouter()
         </Head>
         <ToastContainer />
         <Menu
-                state={config}
-                connect={connect}
-                classMenu="fixedMenu"
-            />
+            state={config}
+            connect={connect}
+            classMenu="singleMenuNoHome contactMenu"
+        />
             <Container className="prestationWrapper">
             <motion.div variants={variantsUl}>
             <Columns className="homeCategory">

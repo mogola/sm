@@ -168,6 +168,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
     const [isBackground, setIsBackground] = useState(state.colorBackgroundMenu)
     const [isInnerWidth, setIsInnerWidth] = useState()
     const [isDisconnect, setIsDisconnect] = useState(false)
+    const [fixedMenu, setFixedMenu] = useState(false)
     const router = useRouter()
     //const [isOpen, toggleOpen] = useCycle(false, true);
     const viewPortDetection = () => {
@@ -208,6 +209,8 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
         behavior: 'smooth'
       })
 
+
+
     }
     useEffect(() => {
       setIsInnerWidth(window.innerWidth)
@@ -233,6 +236,19 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
         viewPortDetection()
 
         console.log("isBackground", typeof(isBackground))
+
+        document.addEventListener('scroll', function(event){
+          console.log('event', window.scrollY)
+          let headerDoc = document.querySelector('.mainHeader')
+          console.log(headerDoc.offsetTop + headerDoc.offsetHeight)
+          if(window.scrollY > (headerDoc.offsetTop + headerDoc.offsetHeight)
+          && (fixedMenu !== true)) {
+            console.log("scroll")
+            setFixedMenu(true)
+          }else {
+            setFixedMenu(false)
+          }
+         })
     }, [isInnerWidth, ])
 
     const disconnect = async (e, callback) => {
@@ -258,7 +274,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
     return (<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
       <themeContextUser.Consumer>
         {({userConnected}) => (
-          <div className={`${classMenu} mainMenuNoHome`}>
+          <div className={`${fixedMenu ? "fixedMenu" : ""} ${classMenu} mainMenuNoHome`}>
             <Link href="" >
                 <motion.a
                 animate={isToggle ? "enter" : "exit"}

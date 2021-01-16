@@ -102,17 +102,18 @@ const Category = ({post, config, connect, categories})=>{
     const animatePage = () => {
         setIsAnim(!isAnim)
     }
-    return(<motion.div variants={backVariants} className="motionWrapper" initial="exit" animate={isAnim ? "exit": "enter"} exit="exit">
+    return(<>
+      <Menu
+      state={config}
+      connect={connect}
+      classMenu="singleMenuNoHome"
+  /><motion.div variants={backVariants} className="motionWrapper" initial="exit" animate={isAnim ? "exit": "enter"} exit="exit">
         <Layout
             none
         >
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <Menu
-          state={config}
-          connect={connect}
-      />
       {post.posts.length > 0 &&
       <motion.div variants={variantsUl} className="motionWrapper" initial="exit" animate={isAnim ? "exit": "enter"} exit="exit">
         <SectionsRecent
@@ -137,6 +138,7 @@ const Category = ({post, config, connect, categories})=>{
         />
         </Layout>
         </motion.div>
+        </>
     )
 }
 

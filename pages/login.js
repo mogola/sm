@@ -253,7 +253,6 @@ export default function Login({ connect, config}) {
                     <Menu
                         state={config}
                         connect={connect}
-                        classMenu="fixedMenu"
                     />
                     <motion.div
                     variants={loginVariants}

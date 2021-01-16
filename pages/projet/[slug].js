@@ -80,7 +80,14 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
 
     }, [])
 
-    return(<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
+    return(
+        <>
+        <Menu
+        state={config}
+        connect={connect}
+        classMenu="singleMenuNoHome"
+    />
+    <motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
         <NextSeo
             facebook={{
                 appId: `${3587318871321107}`,
@@ -129,10 +136,6 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
       <motion.div variants={imageVariants} className="postBgSingle"
         style={{backgroundImage: `url("${post.imageMainPrincipal}")`, backgroundColor:config.backgroudPost}}>
     </motion.div>
-      <Menu
-            state={config}
-            connect={connect}
-        />
         <Container data-id={post._id} className="mainProject" fluid>
             <Columns.Column className="columnProject" size={12}>
                 <Content className="info postProjectDetails">
@@ -204,6 +207,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
         />
         </Layout>
         </motion.div>
+        </>
     )
 }
 

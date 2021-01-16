@@ -193,6 +193,63 @@ img {
 
 // menu
 .mainMenuNoHome {
+  &.fixedMenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2000000000;
+    background: #fff;
+    &.singleMenuNoHome {
+      .activeDesktop {
+        filter: unset;
+      }
+
+      .txtLogo {
+        filter: unset !important;
+      }
+    }
+    &.isOpen {
+      &.singleMenuNoHome{
+        .txtLogo {
+          filter: unset;
+        }
+      }
+      .txtLogo {
+        //color: #fff;
+          filter: invert(1);
+          @include mobileView {
+            filter: unset;
+          }
+      }
+    }
+
+    .txtLogo {
+      //color: #000;
+      filter: invert(1);
+      @include mobileView {
+        filter: unset;
+      }
+    }
+    .isClosed {
+      .txtLogo {
+        @include mobileView {
+          filter: invert(1);
+        }
+      }
+    }
+    .menuB {
+      &.isClosed {
+        span {
+          background:#000;
+        }
+      }
+    }
+
+    .activeDesktop {
+      filter: invert(1)
+    }
+  }
   @include mobileView{
     height: 65px;
   }
@@ -619,6 +676,12 @@ html .titleMainCategory.title.is-1 {
     letter-spacing: 0;
     line-height: 37px;
     margin-bottom: 10px;
+    &.singleTitleCategory {
+      font-size: 56px !important;
+      line-height: 47px;
+      text-align:center;
+      display: inline-block;
+    }
   }
 }
 

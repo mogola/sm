@@ -132,7 +132,7 @@ export default function Contact({post, data, config, allPost, connect}) {
       <Menu
             state={config}
             connect={connect}
-            classMenu="fixedMenu contactMenu"
+            classMenu="singleMenuNoHome contactMenu"
         />
         <Container className="wrapperContact" fluid>
 

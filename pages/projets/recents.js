@@ -101,15 +101,17 @@ export default function Home({config, posts, connect, categories}) {
   //   </div>
   // }
 
-  return (<motion.div variants={imageVariants} className="motionWrapper" initial={isAnim ? "exit": "enter"} animate="enter" exit="exit">
+  return (<>
+    <Menu
+      state={config}
+      connect={connect}
+      classMenu="singleMenuNoHome"
+  />
+<motion.div variants={imageVariants} className="motionWrapper" initial={isAnim ? "exit": "enter"} animate="enter" exit="exit">
       <Layout none>
         <Head>
           <title>{siteTitle}</title>
         </Head>
-        <Menu
-          state={config}
-          connect={connect}
-      />
       <Container className="breadCategory">
             <Heading className="titleBreadCategory" size={3}> Autres categories : </Heading>
             <ul className="listBreadCategory">
@@ -138,6 +140,7 @@ export default function Home({config, posts, connect, categories}) {
           />
       </Layout>
     </motion.div>
+    </>
   )
 }
 
