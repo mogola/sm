@@ -62,7 +62,7 @@ const backVariants = {
 };
 
 
-const Hometop = ({state = '', connect}) => {
+const Hometop = ({onClick, state = '', connect}) => {
     const [textAvailable, setTextAvailable] = useState([])
     const [isUserAdmin, setIsUserAdmin] = useState()
     const [isMobile, setIsMobile] = useState(768)
@@ -205,7 +205,9 @@ const scaleVariants = {
                     <div>
                     <motion.div variants={backVariants} className="pastilleAvailable">
                       {
-                      <Link href="/contact"><a><img src={state.topImageUrl} rel="preload" /></a></Link>
+                      <Link href="/contact"><a onClick={() => {
+                        onClick()
+                      }}><img src={state.topImageUrl} rel="preload" /></a></Link>
                       /* {textAvailable.map((letter, i) => (
                         <span key={i} className={`char${i + 1}`}>
                           {letter}

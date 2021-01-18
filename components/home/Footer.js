@@ -18,7 +18,7 @@ import { faCheckSquare, faTshirt, faPencilAlt } from '@fortawesome/free-solid-sv
 
 library.add(faCheckSquare, faTshirt, faPencilAlt)
 
-const Footer = ({title = "", menu='', data = '', ...rest}) => {
+const Footer = ({onClick, title = "", menu='', data = '', ...rest}) => {
     return(<>
     <Section {...rest}>
         <Container className="containerTitleSection">
@@ -77,7 +77,12 @@ const Footer = ({title = "", menu='', data = '', ...rest}) => {
                     </ul>
                 </Columns.Column>
                 <Columns.Column className="partFooter pastilleFooter">
-                    <Link href="/contact"><a className="pastilleImg"><img src={data.bottomImageUrl} rel="preload" /></a></Link>
+                    <Link href="/contact"><a
+                        className="pastilleImg"
+                        onClick={(e) => {
+                            onClick()
+                        }}
+                    ><img src={data.bottomImageUrl} rel="preload" /></a></Link>
                 </Columns.Column>
             </Columns>
         </Container>

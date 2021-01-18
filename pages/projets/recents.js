@@ -107,7 +107,7 @@ export default function Home({config, posts, connect, categories}) {
       connect={connect}
       classMenu="singleMenuNoHome"
   />
-<motion.div variants={imageVariants} className="motionWrapper" initial={isAnim ? "exit": "enter"} animate="enter" exit="exit">
+<motion.div variants={imageVariants} className="motionWrapper" initial={isAnim === true ? "exit": "enter"} animate="enter" exit="exit">
       <Layout none>
         <Head>
           <title>{siteTitle}</title>

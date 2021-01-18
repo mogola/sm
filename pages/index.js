@@ -80,12 +80,18 @@ const backVariants = {
 export default function Home({config, posts, connect, categories}) {
   const [configs, setConfigs] = useState(config)
   const [valueScreen, setValueScreen] = useState()
+  const [isAnim, setIsAnim] = useState(false)
   let compareStorage = (initialStorage, newStorage) => {
     initialStorage = JSON.parse(initialStorage)
     if(initialStorage !== null && initialStorage.__v === newStorage.__v)
     return true
     else
     return false
+  }
+
+  const onClick= () =>{
+    console.log("clicked")
+    setIsAnim(true)
   }
 
   useEffect(() => {
@@ -103,7 +109,7 @@ export default function Home({config, posts, connect, categories}) {
     }
   }, [])
 
-  return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
+  return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate={isAnim === true ? "exit": "enter"} exit="exit">
     <Layout none homepage>
       <Head>
         <title>{siteTitle}</title>
@@ -112,6 +118,7 @@ export default function Home({config, posts, connect, categories}) {
         <Hometop
           state={configs}
           connect={connect}
+          onClick={onClick}
       />
       <motion.div variants={backVariants}>
           <Sections
@@ -141,6 +148,7 @@ export default function Home({config, posts, connect, categories}) {
           menu={configs.menuCategoryLink}
           data={configs}
           className="section-footer"
+          onClick={onClick}
         />
         </motion.div>
     </Layout>

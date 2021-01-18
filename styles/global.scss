@@ -200,6 +200,7 @@ img {
     width: 100%;
     z-index: 2000000000;
     background: #fff;
+    box-shadow: rgba(0,0,0,.2) 0 0 2.375rem;
     &.singleMenuNoHome {
       .activeDesktop {
         filter: unset;
@@ -1627,6 +1628,7 @@ html {
       top: 0;
       left: 0;
       z-index: 2;
+      box-shadow: rgba(0,0,0,.2) 0 0 2.375rem;
     }
     .mainMenu{
       background: #000;
