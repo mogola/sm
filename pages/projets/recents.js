@@ -101,6 +101,24 @@ export default function Home({config, posts, connect, categories}) {
   //   </div>
   // }
 
+  const Filtercomponent = () => {
+    return(
+    <Container className="breadCategory">
+            <Heading className="titleBreadCategory" size={3}>Filtrer par : </Heading>
+            <ul className="listBreadCategory">
+            {categories.map((cat, i) => (
+                <li key={i}>
+                    <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
+                        <a onClick={() => {
+                            animatePage()
+                        }}
+                        className="linkToCategories">{cat.nameCategory}</a>
+                    </Link>
+                </li>
+            ))}
+            </ul>
+        </Container>)
+  }
   return (<>
     <Menu
       state={config}
@@ -112,26 +130,13 @@ export default function Home({config, posts, connect, categories}) {
         <Head>
           <title>{siteTitle}</title>
         </Head>
-      <Container className="breadCategory">
-            <Heading className="titleBreadCategory" size={3}> Autres categories : </Heading>
-            <ul className="listBreadCategory">
-            {categories.map((cat, i) => (
-                <li key={i}>
-                    <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
-                        <a onClick={() => {
-                            animatePage()
-                        }}c lassName="linkToCategories">{cat.nameCategory}</a>
-                    </Link>
-                </li>
-            ))}
-            </ul>
-        </Container>
           <SectionsRecent
             title="Mes Projets"
             data={posts}
             className="section-category"
             isadmin={isAdmin === true ? true : false}
             getcategories={categories}
+            component={<Filtercomponent />}
           />
           <Footer
             menu={configs.menuCategoryLink}
