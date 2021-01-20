@@ -131,7 +131,7 @@ const [emailExisting, setEmailExisting] = useState(false)
         })
         .then(userInfo => {
             const result = userInfo.json()
-            result.then(data => {
+            result.then(async (data) => {
                 console.log("user", data)
                 if(data.success === true){
                     notifySuccess()
@@ -143,6 +143,17 @@ const [emailExisting, setEmailExisting] = useState(false)
                     setValidator(false)
                 }else{
                     setEmailExisting(false)
+
+                    await fetch(`${baseUrl}/api/email/accountcreated`, {
+                        method:"POST",
+                        headers: {
+                            'X-Mailin-custom': 'custom_header_1:custom_value_1|custom_header_2:custom_value_2',
+                            'api-key': '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',
+                            'accept': 'application/json',
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify(contentBody)
+                    })
                 }
             })
         })

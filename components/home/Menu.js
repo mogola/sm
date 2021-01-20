@@ -240,14 +240,15 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
         document.addEventListener('scroll', function(event){
           console.log('event', window.scrollY)
           let headerDoc = document.querySelector('.mainHeader')
-          console.log(headerDoc.offsetTop + headerDoc.offsetHeight)
-          if(window.scrollY > (headerDoc.offsetTop + headerDoc.offsetHeight)
-          && (fixedMenu !== true)) {
-            console.log("scroll")
-            setFixedMenu(true)
-          }else {
-            setFixedMenu(false)
-          }
+          if(headerDoc !== null) {
+            if(window.scrollY > (headerDoc.offsetTop + headerDoc.offsetHeight)
+            && (fixedMenu !== true)) {
+              console.log("scroll")
+              setFixedMenu(true)
+            }else {
+              setFixedMenu(false)
+            }
+        }
          })
     }, [isInnerWidth, ])
 

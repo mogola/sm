@@ -39,7 +39,7 @@ export default function Contact({post, data, config, allPost, connect}) {
     const [posts, setPosts] = useState(allPost)
     const [regexEmail, setRegexEmail] = useState(new RegExp('^[a-z0-9.-]+@[a-z.]{2,}\.[a-z]$'))
     const [state, changeState] = useState({})
-    const [btndisabled, setBtnDisabled] = useState(false)
+    const [btndisabled, setBtnDisabled] = useState(true)
     const [errorsField, setErrorsField] = useState()
     const [validError, setValidError] = useState(["","","","",""])
     const [firstFocus, setFirstFocus] = useState(false)
@@ -53,6 +53,7 @@ export default function Contact({post, data, config, allPost, connect}) {
     const router = useRouter()
     const errorsForm = () => {
         let getErrors = document.querySelectorAll('.error')
+        console.log("errors", getErrors.length)
         if(!getErrors.length){
             setBtnDisabled(false)
 
@@ -86,11 +87,10 @@ export default function Contact({post, data, config, allPost, connect}) {
     //  RouterTracking(router)
       if(refLastname.current && !firstFocus){
             refLastname.current.focus()
-        }
-        errorsForm()
-        setErrorsField(document.querySelectorAll('.error'))
-        console.log("errorsField", errorsField)
 
+        }
+
+        setErrorsField(document.querySelectorAll('.error'))
         // document.querySelectorAll('.required').forEach((item, i) =>{
         //     console.log("i", i)
         //     let objArray = validError.push("valid")
@@ -101,6 +101,7 @@ export default function Contact({post, data, config, allPost, connect}) {
         // console.log('validError', validError)
 
   }, [state])
+
   const onChange = ({target}) => {
       setFirstFocus(true)
     const {name, value} = target
@@ -109,6 +110,7 @@ export default function Contact({post, data, config, allPost, connect}) {
     changeState({...state, [name] : value})
     console.log("state change",indexInput, typeof indexInput, state)
     displayError(indexInput, value)
+    errorsForm()
   }
 
   const displayError = (targetIndex, refValue) => {
