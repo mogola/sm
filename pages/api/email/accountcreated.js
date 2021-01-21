@@ -34,6 +34,10 @@ const sendEmail = async (req, res) => {
                 email: email,
                 name: `${email}`
             }],
+            cc: [{
+                email: "mogola.sangare@gmail.com",
+                name: "Mogo Sangaré"
+            }],
             templateId: 2,
             params: {
                 email: email

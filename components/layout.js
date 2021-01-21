@@ -23,6 +23,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   const [state, changeState] = useState({});
   const [textAvailable, setTextAvailable] = useState([])
   const [onLoadingPage, setOnLoadingPage] = useState(false)
+  const [fixedMenu, setFixedMenu] = useState(false)
   let compareStorage = (initialStorage, newStorage) => {
     if(initialStorage === JSON.stringify(newStorage))
     return true
@@ -90,6 +91,17 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
 
   useEffect(() => {
       getData()
+      document.addEventListener('scroll', function(event){
+        let headerDoc = document.querySelector('.mainHeader')
+        if(headerDoc !== null) {
+          if(window.scrollY > (headerDoc.offsetTop + headerDoc.offsetHeight)
+          && (fixedMenu !== true)) {
+            setFixedMenu(true)
+          }else {
+            setFixedMenu(false)
+          }
+      }
+       })
   }, [])
 
   if(!onLoadingPage){
@@ -196,7 +208,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
             <link rel="icon" href="/favicon.ico" />
 
           </Head>
-          <header className={`header-portfolio ${styles.header}`}>
+          <header className={`${fixedMenu ? "fixedMain" : ""} header-portfolio ${styles.header}`}>
             {home ? (
               <>
                 <img

@@ -1611,6 +1611,12 @@ html {
   }
 }
 
+.fixedMain {
+  margin-top: 104px;
+  @include mobileView{
+    margin-top:65px;
+  }
+}
 //post
 .wrapperPost{
   z-index: 2;
