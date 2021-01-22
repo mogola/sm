@@ -96,7 +96,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
                 description={`${post.description.replace(/<[^>]+>/g, '')}`}
                 canonical={`${baseUrl}/projet/${post.title}`}
                 openGraph={{
-                url: `${baseUrl}`,
+                url: `${baseUrl}/projet/${post.title}`,
                 title: `${post.title}`,
                 description: `${post.description.replace(/<[^>]+>/g, '')}`,
                 images: [

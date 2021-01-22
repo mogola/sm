@@ -23,6 +23,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   const [state, changeState] = useState({});
   const [textAvailable, setTextAvailable] = useState([])
   const [onLoadingPage, setOnLoadingPage] = useState(false)
+  const [seoUrl, setSeoUrl] = useState()
   const [fixedMenu, setFixedMenu] = useState(false)
   let compareStorage = (initialStorage, newStorage) => {
     if(initialStorage === JSON.stringify(newStorage))
@@ -90,6 +91,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   }
 
   useEffect(() => {
+    setSeoUrl(window.location.href)
       getData()
       document.addEventListener('scroll', function(event){
         let headerDoc = document.querySelector('.mainHeader')
@@ -112,9 +114,9 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
           }}
             title={siteTitle}
             description={siteTitle}
-            canonical={`${baseUrl}`}
+            canonical={seoUrl}
             openGraph={{
-              url: `${baseUrl}`,
+              url: `${seoUrl}`,
               title: `${siteTitle}`,
               description: `${siteTitle}`,
               images: [

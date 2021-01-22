@@ -275,7 +275,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
       })
     }
 
-    return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
+    return (<motion.div className="motionWrapper">
       <themeContextUser.Consumer>
         {({userConnected}) => (
           <motion.div variants={imageVariants}
