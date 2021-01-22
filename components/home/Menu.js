@@ -20,12 +20,12 @@ import {notify} from '../notify'
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
-  exit: { y: 150, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  exit: { y: [-120, 0], opacity: [0.5, 1], transition: { duration: 0.5, ease: easing } },
   enter: {
-    y: 0,
-    opacity: 1,
+    y: [0, 0],
+    opacity: [1,1],
     transition: {
-      duration: 0.5,
+      duration: 1,
       ease: easing
     }
   }
@@ -272,10 +272,14 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
       })
     }
 
-    return (<motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
+    return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
       <themeContextUser.Consumer>
         {({userConnected}) => (
-          <div className={`${fixedMenu ? "fixedMenu" : ""} ${classMenu} mainMenuNoHome`}>
+          <motion.div variants={imageVariants}
+          initial="exit"
+          enter="exit"
+          animate={fixedMenu ? "exit" : "enter"}
+          className={`${fixedMenu ? "fixedMenu" : ""} ${classMenu} mainMenuNoHome`}>
             <Link href="" >
                 <motion.a
                 animate={isToggle ? "enter" : "exit"}
@@ -451,7 +455,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                     <div>
                     </div>
                     </div>
-                </div>
+                </motion.div>
       )}
       </themeContextUser.Consumer>
       </motion.div>

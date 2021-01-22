@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 9000",
-    "build": "next build",
+    "build": "next build & next export",
     "start": "next start -p $PORT",
     "postbuild": "next-on-netlify",
     "heroku-postbuild": "npm run build"
@@ -24,6 +24,7 @@
     "encoding": "^0.1.13",
     "express": "^4.17.1",
     "file-system": "^2.2.2",
+    "filestack-js": "^3.21.0",
     "framer": "^1.2.11",
     "framer-motion": "^2.9.5",
     "fs": "0.0.1-security",
