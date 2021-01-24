@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
+import Category from './Category'
 // require Mongoose
 // import mongoose, {models} from 'mongoose'
 
@@ -51,7 +52,8 @@ let ProjectsSchema = new Schema({
     date : {
         type: Date,
         default: Date.now
-    }
+    },
+    categoryArray: [{ type: Schema.Types.ObjectId, ref: 'Category' }]
 })
 
 // create a model for reference

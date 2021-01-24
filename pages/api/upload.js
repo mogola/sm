@@ -89,53 +89,53 @@ const postImage = async (req, res) => {
         })
 
     }else {
-        const {file, name, type} = req.body
-    // This method is *CORRECT*:
-    // const { sep } = path
-    // fs.mkdtemp(`${sep}tmp`, (err, directory) => {
-    // if (err) throw err;
-    // console.log(directory);
-    // // Will print something similar to `/tmp/abc123`.
-    // // A new temporary directory is created within
-    // // the /tmp directory.
-    // });
+        const {images} = req.body
+        console.log(req.body, images.length);
+        // get all base64 image
+        let manageImages = () => {
 
-    // fs.copyFile("public\\images\\profile.png", 'dest.png', (err) => {
-    //     if (err) console.log(err);
-    //     console.log('file was copied');
-    // });
+            return images.map((image, i) => {
+                console.log(image.filename)
+            const params = {
+                Bucket: BUCKET_NAME,
+                Key: `${image.filename.split(".")[0]}.${image.type}`, // File name you want to save as in S3
+                Body: new Buffer.from(image.data_url.replace(/^data:image\/\w+;base64,/, ""), 'base64'),
+                ACL: 'public-read',
+                ContentEncoding: 'base64',
+                ContentType:`image/${image.type}`
+            };
 
-    // fs.realpath("public\\images\\profile.png", (err, pathResolved)=>{
-    //     if (err) console.log(err);
-    //     console.log("realpath", pathResolved);
-    // })
-    // const fileContent = fs.readFileSync(file);
+            let uploadImg = () => {
+                return new Promise((resolve, reject) => {
+                s3.upload(params, function(err, data) {
+                    if (err) {
+                        reject(err);
+                    }
+                    resolve(data.Location)
+                    console.log(`File uploaded successfully. ${data}`);
+                })
+            }).then(result => {
 
-    //const fileContent = file
-    let base64 = file
+                if(images.length) {
+                    new Promise((resolve) => {
+                        resolve(result)
+                    }).then((values) => {
+                        console.log("value", values)
+                        res.status(201).json({
+                            "urlDataList" : values,
+                            "success": true
+                        })
+                    });
+                }
 
-    const fileContent = new Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-
-    const params = {
-        Bucket: BUCKET_NAME,
-        Key: `${name}.${type}`, // File name you want to save as in S3
-        Body: fileContent,
-        ACL: 'public-read',
-        ContentEncoding: 'base64',
-        ContentType:`image/${type}`
-    };
-
-    //Uploading files to the bucket
-    s3.upload(params, function(err, data) {
-        if (err) {
-            throw err;
+            })
         }
+        uploadImg()
+        })
+    }
+        new Promise((resolve) => {
+            resolve(manageImages())
+        })
 
-    res.status(201).json({
-        "url" : data.Location,
-        "success": true
-    })
-        console.log(`File uploaded successfully. ${data.Location}`);
-    });
     }
 }

@@ -3,14 +3,16 @@ import Head from 'next/head'
 import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
-import { themeContextUser } from 'context/contextUser'
+import { themeContextUser } from '../context/contextUser'
 import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
+import { motion } from 'framer-motion';
+import { NextSeo } from 'next-seo';
 
-const name = 'Your Name'
-export const siteTitle = 'Next.js Sample Website'
+const name = 'Mogola Sangaré'
+export const siteTitle = "Mogola Sangaré website"
 
-export default function Layout({ children, home, portfolio, dashboard }) {
+export default function Layout({ children, none, home, portfolio, dashboard, post, homepage, slug, metaImage, postTitle, postDescription}) {
   const [dataConfigs, setDataConfig] = useState([])
   const [naming, setNaming] = useState()
   const [menu, setMenu] = useState()
@@ -20,6 +22,9 @@ export default function Layout({ children, home, portfolio, dashboard }) {
   const [textScrollTop, setTextScrollTop] = useState()
   const [state, changeState] = useState({});
   const [textAvailable, setTextAvailable] = useState([])
+  const [onLoadingPage, setOnLoadingPage] = useState(false)
+  const [seoUrl, setSeoUrl] = useState()
+  const [fixedMenu, setFixedMenu] = useState(false)
   let compareStorage = (initialStorage, newStorage) => {
     if(initialStorage === JSON.stringify(newStorage))
     return true
@@ -28,7 +33,6 @@ export default function Layout({ children, home, portfolio, dashboard }) {
   }
 
   let dataStorage = (callback) => {
-    console.log("compare object",callback)
     return localStorage.getItem("info") !== null && compareStorage(localStorage.getItem("info"),callback) === true
     ? JSON.parse(localStorage.getItem("info"))
     : callback
@@ -37,7 +41,7 @@ export default function Layout({ children, home, portfolio, dashboard }) {
   const getData = async () => {
     const getData = await fetch(`${baseUrl}/api/info`)
     const data = await getData.json()
-
+    setOnLoadingPage(false)
     await new Promise((resolve) => {
         resolve(dataStorage(data))
     }).then(result => {
@@ -49,7 +53,6 @@ export default function Layout({ children, home, portfolio, dashboard }) {
       setTextScrollTop(textScrollTop)
 
       let dataCfs = Object.entries(result)
-      console.log(dataCfs)
 
       let obj = [];
       dataCfs.forEach(([key, value]) => {
@@ -75,7 +78,6 @@ export default function Layout({ children, home, portfolio, dashboard }) {
 
       dataCfs.forEach(([key, value])=> changeState(prevState => ({...prevState, [key]: value })));
 
-      console.log(dataCfs)
       setDataConfig(obj)
       if(compareStorage(localStorage.getItem("info"),result)){
         setDataConfig(localStorage.getItem("info"))
@@ -83,33 +85,132 @@ export default function Layout({ children, home, portfolio, dashboard }) {
         localStorage.setItem("info", JSON.stringify(result))
         setDataConfig(JSON.stringify(result))
       }
+
+      setOnLoadingPage(true)
     })
   }
 
   useEffect(() => {
+    setSeoUrl(window.location.href)
       getData()
+      document.addEventListener('scroll', function(event){
+        let headerDoc = document.querySelector('.mainHeader')
+        if(headerDoc !== null) {
+          if(window.scrollY > (headerDoc.offsetTop + headerDoc.offsetHeight)
+          && (fixedMenu !== true)) {
+            setFixedMenu(true)
+          }else {
+            setFixedMenu(false)
+          }
+      }
+       })
   }, [])
 
+  if(!onLoadingPage){
+    return <div className="loaderPage">
+      {homepage && <NextSeo
+        facebook={{
+            appId: `${3587318871321107}`,
+          }}
+            title={siteTitle}
+            description={siteTitle}
+            canonical={seoUrl}
+            openGraph={{
+              url: `${seoUrl}`,
+              title: `${siteTitle}`,
+              description: `${siteTitle}`,
+              images: [
+                {
+                  url: "/app_visual_dewalgo.jpg",
+                  width: 800,
+                  height: 600,
+                  alt: 'Og Image Alt',
+                },
+                {
+                  url: "/app_visual_dewalgo.jpg",
+                  width: 900,
+                  height: 800,
+                  alt: 'Og Image Alt Second',
+                },
+                { url: "/app_visual_dewalgo.jpg" },
+                { url: "/app_visual_dewalgo.jpg" },
+              ],
+              site_name: `${name}`,
+            }}
+            twitter={{
+              handle: '@handle',
+              site: '@site',
+              cardType: 'summary_large_image',
+            }}
+          />}
+      <motion.div
+        animate={{ y: -25, opacity: 0.4 }}
+        transition={{
+          repeat: Infinity,
+          repeatType: "reverse",
+          duration: 1
+        }}
+        className="visualLoader">
+          S
+        </motion.div>
+        <motion.div
+        animate={{ y: 25, opacity: 0.3 }}
+        transition={{
+          repeat: Infinity,
+          repeatType: "reverse",
+          duration: 1
+        }}
+        className="visualLoader">
+          M
+        </motion.div>
+    </div>
+  }
+
   return (
+    <>
     <themeContextUser.Consumer>
       {({ dataConfig }) => (
-        <div data={naming} className={portfolio ? "config.nameSite" : styles.container}>
+        <div data={naming} className={portfolio || none || post ? "df-none" : styles.container}>
+          {homepage && <NextSeo
+        facebook={{
+            appId: `${3587318871321107}`,
+          }}
+            title={siteTitle}
+            description={siteTitle}
+            canonical={`${baseUrl}`}
+            openGraph={{
+              url: `${baseUrl}`,
+              title: `${siteTitle}`,
+              description: `${siteTitle}`,
+              images: [
+                {
+                  url: "/app_visual_dewalgo.jpg",
+                  width: 800,
+                  height: 600,
+                  alt: 'Og Image Alt',
+                },
+                {
+                  url: "/app_visual_dewalgo.jpg",
+                  width: 900,
+                  height: 800,
+                  alt: 'Og Image Alt Second',
+                },
+                { url: "/app_visual_dewalgo.jpg" },
+                { url: "/app_visual_dewalgo.jpg" },
+              ],
+              site_name: `${name}`,
+            }}
+            twitter={{
+              handle: '@handle',
+              site: '@site',
+              cardType: 'summary_large_image',
+            }}
+          />}
           <Head>
             <link rel="icon" href="/favicon.ico" />
-            <meta
-              name="description"
-              content="Learn how to build a personal website using Next.js"
-            />
-            <meta
-              property="og:image"
-              content={`https://og-image.now.sh/${encodeURI(
-                siteTitle
-              )}.png?theme=light&md=0&fontSize=75px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fnextjs-black-logo.svg`}
-            />
-            <meta name="og:title" content={siteTitle} />
-            <meta name="twitter:card" content="summary_large_image" />
+
           </Head>
-          <header className={`header-portfolio ${styles.header}`}>
+          <header className={`${fixedMenu ? "fixedMain" : ""} header-portfolio ${styles.header}`}>
             {home ? (
               <>
                 <img
@@ -124,9 +225,19 @@ export default function Layout({ children, home, portfolio, dashboard }) {
               <>
                 <h1 className={utilStyles.heading2Xl}>
                   <span className={utilStyles.nameSite}>
-                    {state.nameSite}</span><span>Créer un projet</span>
+                    <Link href="/">
+                      <a>{state.nameSite}</a>
+                      </Link>
+                    </span><span>Créer un projet</span>
                 </h1>
               </>
+            )
+            : (none || post) ? (<></>
+              // <>
+              //   {post &&
+              //   <div className="postBgSingle"
+              //   style={{backgroundColor:state.backgroudPost}}></div>}
+              // </>
             )
             : portfolio ? (
               <>
@@ -202,16 +313,17 @@ export default function Layout({ children, home, portfolio, dashboard }) {
                   </>
                 )}
           </header>
-          <main>{children}</main>
-          {!home && (
+          <main className={post ? "wrapperPost" : ""}>{children}</main>
+          {/* {(!none || !post) && (
             <div className={styles.backToHome}>
               <Link href="/">
                 <a className={utilStyles.linkInherit}>← Back to home</a>
               </Link>
             </div>
-          )}
+          )} */}
         </div>
       )}
     </themeContextUser.Consumer>
+    </>
   )
 }

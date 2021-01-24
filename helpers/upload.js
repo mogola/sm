@@ -15,7 +15,7 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
     const uploadRef = useRef(null)
     /*manage state */
     const [onLoading, setOnLoading] = useState(false)
-    const [imgDownloaded, setImgDownLoaded] = useState()
+    const [imgDownloaded, setImgDownLoaded] = useState("")
     const [tmpFile, setTmpFile] = useState()
     const [filename, setFileName] = useState()
     const [saveTmpFile, setSaveTmpFile] = useState()
@@ -67,28 +67,31 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
                 const typeFile = getFile[1].toLowerCase()
 
                 console.log(getFile, nameFile, typeFile, saveTmpFile)
-
+                let imagesDetails = [{
+                      data_url: result,
+                      filename: nameFile,
+                      type: typeFile
+                    }]
             const res = fetch(`${baseUrl}/api/upload`,{
               method:"POST",
               headers:{
               'Content-Type':'application/json'
               },
               body:JSON.stringify({
-                file : result,
-                name : nameFile,
-                type: typeFile
+                images:imagesDetails,
+                multiple: false,
               })
             }).then((res) => {
               const data = res.json()
               data.then(result => {
-                setImgDownLoaded(result.url)
+                setImgDownLoaded(result.urlDataList)
                 setLoading(result.success)
                 setOnLoading(false)
                 console.log(result)
                 callBack()
                 getUrlImage()
               })
-              console.log("data resfont", data.url)
+              console.log("data resfont", data.urlDataList)
               console.log('upload image', data)
               })
               .catch((err) => {
@@ -326,7 +329,7 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
         </div>
         <Field>
           <Control>
-            <input className={`input ${nameFile}`} value={imgDownloaded} />
+            <input className={`input ${nameFile}`} defaultValue={imgDownloaded} />
           </Control>
         </Field>
         <div>

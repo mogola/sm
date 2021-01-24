@@ -66,15 +66,23 @@ const getAllProjects = async (req,res)=>{
 
 const saveProjects = async (req,res)=>{
   const {projects} =  req.body
-  console.log(projects)
+  console.log("projects", projects)
   try{
         if(!projects){
             return res.status(422).json({error:"Please add all the fields"})
         }
    const getProjects = await new ProjectsSchema({
      _id: new mongoose.Types.ObjectId(),
-     projects
+     title: projects.title,
+     description:projects.description,
+     listCategory:projects.listTags,
+     idCategory:projects.idCategory,
+     imageMainPrincipal:projects.mainImage,
+     imageArray:projects.arrayImage,
+     subTextDescription:projects.subTextDescription,
+     LinkNextProjectId:""
    }).save()
+
    res
    .status(201)
    .json(getProjects, {"success": true})

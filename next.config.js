@@ -1,19 +1,22 @@
 const fs = require('fs')
 const privateKEY = fs.readFileSync('private.key', 'utf8');
 const publicKEY = fs.readFileSync('public.key', 'utf8');
-console.log(privateKEY, publicKEY)
 const withFonts = require('next-fonts');
 
 module.exports = withFonts({
   // Target must be serverless
+  enableSvg: true,
   target: 'serverless',
   env: {
     production: process.env.NEXT_PUBLIC_URL_PRODUCTION,
+    development: "http://localhost:9000/",
     keyPrivate: privateKEY,
-    keyPublic: publicKEY
+    keyPublic: publicKEY,
+    apikeysendinblue: process.env.APIKEY_SENDINBLUE
   },
   webpack: (config, { isServer }) => {
     // Fixes npm packages that depend on `fs` module
+    config.module.rules.push({ parser: { amd: false } })
     if (!isServer) {
       config.node = {
         fs: 'empty',

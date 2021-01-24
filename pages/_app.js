@@ -5,51 +5,62 @@ import 'react-toastify/dist/ReactToastify.css'
 import { themeContextUser, tokenStorage, userIsConnected, connected} from './../context/contextUser'
 import { getPostConfig } from './api/home'
 import baseUrl from './../helpers/baseUrl'
-import fetch from 'node-fetch'
-
-export async function getStaticProps() {
-    const config = await getPostConfig()
-
+import fetch from 'isomorphic-unfetch'
+import { useRouter } from 'next/router'
+import { AnimatePresence } from 'framer-motion';
+import {RouterTracking} from './../components/router/ngprogress'
+import { ToastContainer } from 'react-toastify';
+export async function getServerSideProps() {
+  const config = await getPostConfig()
     return {
       props: {
         config: JSON.parse(JSON.stringify(config[0]))
-      },
-      revalidate: 1, // In secondes
+      }
     }
   }
 
-export default function App({ Component, pageProps, config }) {
+export default function App({ Component, pageProps, config, router }) {
+  const routering = useRouter()
+  const [localStorageData , setLocalStorageData] = useState(config)
 
-    const [dataConfigs, setDataConfig] = useState()
-    const [naming, setNaming] = useState()
+  let compareStorage = (initialStorage, newStorage) => {
+    if(initialStorage === JSON.stringify(newStorage))
+    return true
+    else
+    return false
+  }
 
-      const getData = async () => {
-          const getData = await fetch(`${baseUrl}/api/homeconfig`)
-          const data = await getData.json()
+  let dataStorage = (callback) => {
+    console.log("callback", callback, typeof callback)
+    return localStorage.getItem("info") !== null && compareStorage(localStorage.getItem("info"),callback) === true
+    ? JSON.parse(localStorage.getItem("info"))
+    : callback
+  }
 
-          new Promise((resolve) => {
-            resolve(data)
-          }).then(result => {
-            console.log(result, result.nameSite, result.logoSiteUrl)
-            setNaming(result.nameSite)
-            setDataConfig(data)
-          })
-        }
+  const fetchData = async () => {
+      console.log("getInfo", dataStorage(config))
+  }
 
-        useEffect(()=>{
-          getData()
-          console.log("get data", dataConfigs)
-        }, [])
+  useEffect(() => {
+    Promise.resolve(localStorage.getItem("info")).then(result => console.log("resulting", result))
+    fetchData()
+    console.log(routering, router)
+     RouterTracking(routering.route)
+  }, [])
+
     return (
         <themeContextUser.Provider value={{
             getToken: tokenStorage,
             userIsConnected: userIsConnected,
             userConnected: connected,
-            dataConfig: dataConfigs
+            dataConfig: localStorageData
         }}>
             <themeContextUser.Consumer>
                 {({userConnected}) => (
-                    <Component config={dataConfigs} connect={userConnected()} {...pageProps} />
+                    <AnimatePresence exitBeforeEnter>
+                      <ToastContainer />
+                      <Component key={router.route} config={localStorageData} connect={userConnected()} {...pageProps} />
+                    </AnimatePresence>
                 )}
             </themeContextUser.Consumer>
         </themeContextUser.Provider>)

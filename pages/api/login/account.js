@@ -21,13 +21,6 @@ const loginUser = async (req, res) => {
 
         const token = sign({email: user.email}, user)
 
-        // const createUser = await new RegisterModel({
-        //     _id: new mongoose.Types.ObjectId(),
-        //     email: user.email,
-        //     password: user.password,
-        //     newpassword: user.newpassword
-        // }).save()
-
         console.log(token)
         await RegisterModel.findOne({email: user.email})
         .then(account => {
@@ -47,17 +40,6 @@ const loginUser = async (req, res) => {
                 })
             }
         })
-
-        // console.log("token", token)
-        // res.setHeader('x-auth-token', token)
-
-        // res
-        // .status(201)
-        // .json({
-        //     "user": createUser,
-        //     "success": true,
-        //     "token": token
-        // })
     }
     catch(err){
         if(err.code === 11000){

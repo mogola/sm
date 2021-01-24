@@ -52,6 +52,10 @@ let HomeConfigSchema = new Schema({
         type: String,
         default: "default text"
     },
+    textContentServices: {
+        type: Array,
+        default: []
+    },
     titleBlocOne: {
         type: String,
         default: "default text"
@@ -97,6 +101,18 @@ let HomeConfigSchema = new Schema({
         default: "default text"
     },
     textLocalisation:{
+        type: String,
+        default: "default text"
+    },
+    titleLocalisation:{
+        type: String,
+        default: "default text"
+    },
+    topImageUrl:{
+        type: String,
+        default: "default text"
+    },
+    bottomImageUrl:{
         type: String,
         default: "default text"
     },

@@ -7,16 +7,17 @@ import baseUrl from '../../helpers/baseUrl'
 import Layout, { siteTitle } from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from '../../components/layout.module.css'
-import Input from '../../components/Input'
-import InputConfig from '../../components/InputConfig'
-import UploadFile from './../../helpers/upload'
 import { getPostConfig } from '../api/home'
 import { themeContext, getUrlSaved } from './../../context/context'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import { themeContextUser } from './../../context/contextUser'
+import Input from '../../components/Input'
+import InputConfig from '../../components/InputConfig'
+import UploadFile from './../../helpers/upload'
 import { Button, Heading, Box, Loader, Tag, Form, Column } from 'react-bulma-components';
 
+import { Editor } from '@tinymce/tinymce-react';
 const { Field, InputFile, Control } = Form
 export async function getStaticProps() {
   const config = await getPostConfig()
@@ -31,6 +32,7 @@ export async function getStaticProps() {
 
 const addConfig = async (config) => {
   try {
+    console.log("new data", config)
     const res = await fetch(`${baseUrl}/api/homeconfig`, {
       method: "POST",
       headers: {
@@ -74,7 +76,6 @@ export default function config({ config, connect }) {
 
   const submitForm = async (event) => {
     event.preventDefault();
-
     try {
       await addConfig(dataConfig)
     }
@@ -98,6 +99,11 @@ export default function config({ config, connect }) {
       cloneArray[name][i].url = refInputUrl
       console.log(refInputUrl)
     }
+    if (target.hasAttribute("i_content")) {
+      refInputUrl = target.value
+      cloneArray[name][i].content = refInputUrl
+      console.log(refInputUrl)
+    }
 
     setDataConfig(cloneArray)
     console.log("currentValue", cloneArray)
@@ -113,17 +119,21 @@ export default function config({ config, connect }) {
   }
   const updateConfig = async (e) => {
     e.preventDefault()
-    console.log('nameCategory', dataConfig["menuCategoryLink"])
+    console.log('nameCategory', dataConfig)
 
-    let menuCategoryExist;
+    // let menuCategoryExist;
 
-    if (dataConfig["menuCategoryLink"] === undefined) {
-      menuCategoryExist = { ...dataConfig, menuCategoryLink: [{ name: "test", url: "example of url" }] }
-    } else {
-      menuCategoryExist = { ...dataConfig }
-    }
+    // if (dataConfig["menuCategoryLink"] === undefined) {
+    //   menuCategoryExist = { ...dataConfig, menuCategoryLink: [{ name: "test", url: "example of url" }] }
+    // } else {
+    //   menuCategoryExist = { ...dataConfig }
+    // }
 
-    console.log("update menucategoryLink", menuCategoryExist)
+    // if(config["textContentServices"] === undefined){
+    //   menuCategoryExist = {...dataConfig, textContentServices: []}
+    // }
+
+    // console.log("update menucategoryLink", menuCategoryExist)
 
     try {
       const res = await fetch(`${baseUrl}/api/homeconfig`, {
@@ -131,10 +141,9 @@ export default function config({ config, connect }) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ "config": menuCategoryExist })
+        body: JSON.stringify({ config : dataConfig })
       })
         .then((res) => {
-          console.log("updating", menuCategoryExist)
           setDataConfig(dataConfig)
           notifySuccess()
         })
@@ -146,6 +155,18 @@ export default function config({ config, connect }) {
       console.log(err)
     }
   }
+
+  const handleChangeEditor = (target) => {
+    let getName = target.getElement().name
+    const cloneArray = { ...dataConfig }
+    console.log(getName)
+    cloneArray[getName] = target.getContent()
+
+    setDataConfig(cloneArray)
+    console.log("new value", dataConfig)
+    //console.log('target', target.getContent(), target)
+  }
+
   const deleteItem = (i, name) => {
     let updateArray = { ...dataConfig }
     const arrayToDelete = [...inputSocial[name]]
@@ -164,10 +185,17 @@ export default function config({ config, connect }) {
     e.preventDefault()
     let updateArray = { ...dataConfig }
     console.log(updateArray[name])
+    if(name !== "textContentServices"){
     updateArray[name].push({
       "name": "new",
       "url": "http://www.example.com"
     })
+  }else{
+    updateArray[name].push({
+      "name": "new",
+      "content": "example text"
+    })
+  }
 
     let newList = updateArray[name]
     console.log('newList', newList)
@@ -231,11 +259,13 @@ export default function config({ config, connect }) {
                     <form>
                       {labelInputItem.map((inputConfig, i) => (
                         <div key={i}>
-                          {(inputConfig === "logoSiteUrl" ||
+                          {(inputConfig === "bottomImageUrl" ||
+                            inputConfig === "topImageUrl" ||
+                            inputConfig === "logoSiteUrl" ||
                             inputConfig === "logoSiteImageUrl") &&
                             <div>
                               <UploadFile
-                                imageExist={dataConfig[inputConfig] ? true : false}
+                                imageExist={dataConfig[inputConfig] ? true : true}
                                 nameFile={inputConfig}
                                 callBack={notifySuccess}
                                 onGet={dataConfig[inputConfig]}
@@ -243,6 +273,77 @@ export default function config({ config, connect }) {
                                   updateImageLogo(inputConfig)
                                 }} />
                             </div>
+                          }
+                          {
+                            (inputConfig === "textContentAbout") &&
+                            <>
+                            <label className="label" htmlFor={inputConfig}>
+                              {inputConfig}
+                            </label>
+                            <Editor
+                              apiKey="n20l3oxsnnev0ao8wjw8bqhpou0jajpz8ew2r3pysqf0mxgn"
+                              initialValue={dataConfig[inputConfig]}
+                              tagName={inputConfig}
+                              textareaName={inputConfig}
+                              init={{
+                                height: 500,
+                                menubar: false,
+                                plugins: [
+                                  'advlist autolink lists link image',
+                                  'charmap print preview anchor help',
+                                  'searchreplace visualblocks code',
+                                  'insertdatetime media table paste wordcount'
+                                ],
+                                toolbar:
+                                  'undo redo | formatselect | bold italic | \
+                                  alignleft aligncenter alignright | \
+                                  bullist numlist outdent indent | help | forecolor backcolor'
+                              }}
+                              onChange={({target}) => {
+                                handleChangeEditor(target)
+                              }}
+                            />
+                            </>
+                          }
+                          {inputConfig === "textContentServices" &&
+                            <>
+                              <div className="listChild">
+                                {dataConfig[inputConfig].map((item, i) => (
+                                  <Input
+                                    key={i}
+                                    value={item.name}
+                                    url={item.url}
+                                    nameReference={inputConfig}
+                                    i_content={dataConfig[inputConfig][i].content}
+                                    i_name={dataConfig[inputConfig][i].name}
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      deleteItem(i, inputConfig)
+                                    }}
+                                    onChange={(e) => { handleChangeSocial(i, inputConfig, e.target) }}
+                                  />
+                                ))}
+                              </div>
+                              <Button.Group
+                                hasAddons={false}
+                                position='centered'
+                                size='medium'
+                                style={{ width: '100%', paddingTop: "15px" }}
+                              >
+                                <Button
+                                  color="info"
+                                  onClick={(e) => {
+                                    insertInputFile(e, inputConfig)
+                                  }}>Add field</Button>
+                                <Button
+                                  color="success"
+                                  style={{ marginRight: "15px" }}
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    saveList()
+                                  }}>save</Button>
+                              </Button.Group>
+                            </>
                           }
                           {(inputConfig === "socialLink" ||
                             inputConfig === "menuCategoryLink") &&
@@ -253,6 +354,7 @@ export default function config({ config, connect }) {
                                     key={i}
                                     value={item.name}
                                     url={item.url}
+                                    nameReference={inputConfig}
                                     i_name={dataConfig[inputConfig][i].name}
                                     i_url={dataConfig[inputConfig][i].url}
                                     onClick={(e) => {
@@ -287,8 +389,12 @@ export default function config({ config, connect }) {
 
                           {inputConfig !== "socialLink" &&
                             inputConfig !== "menuCategoryLink" &&
+                            inputConfig !== "textContentServices" &&
                             inputConfig !== "logoSiteUrl" &&
                             inputConfig !== "logoSiteImageUrl" &&
+                            inputConfig !== "textContentAbout" &&
+                            inputConfig !== "bottomImageUrl" &&
+                            inputConfig !== "topImageUrl" &&
                             <InputConfig
                               name={inputConfig}
                               defaultValue={dataConfig[inputConfig]}

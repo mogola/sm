@@ -20,4 +20,5 @@ function initDB(){
     })
 }
 
+//export const db = connect("mongodb+srv://heroku_ppkc1116:q2fjjm3d8g20be22kvifqkq5gr@cluster0.4wngo.mongodb.net/Portfolio?retryWrites=true&w=majority")
 export default initDB
