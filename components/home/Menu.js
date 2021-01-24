@@ -253,7 +253,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
             }
         }
          })
-    }, [isInnerWidth, ])
+    }, [isInnerWidth])
 
     const disconnect = async (e, callback) => {
       e.preventDefault()

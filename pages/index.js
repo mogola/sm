@@ -90,21 +90,17 @@ export default function Home({config, posts, connect, categories}) {
   }
 
   const onClick= () =>{
-    console.log("clicked")
     setIsAnim(true)
   }
 
   useEffect(() => {
-    console.log(window)
     if(window){
       setValueScreen(window.innerWidth)
     }
 
     if(compareStorage(localStorage.getItem("info"), config)) {
-      console.log('from localStorage')
       setConfigs(JSON.parse(localStorage.getItem('info')))
     }else {
-      console.log('from server')
       return ''
     }
   }, [])

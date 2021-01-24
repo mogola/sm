@@ -25,8 +25,6 @@ const data = await getData.json()
 const config = await getPostConfig()
 const getPostData = await getAllPosts(6)
 
-console.log("data about", JSON.parse(JSON.stringify(data)))
-console.log("post", getPostData)
 return {
     props: {
       data: JSON.parse(JSON.stringify(data.data)),
@@ -63,13 +61,10 @@ const variants = {
 }
 
 export default function About({post, data, config, allPost, connect}) {
-const [getData, setGetData] = useState(data)
 const [configs, setConfigs] = useState(config)
-const [posts, setPosts] = useState(allPost)
 const router = useRouter()
 
     useEffect(()=> {
-     //   RouterTracking(router)
     }, [data])
 
   return (<motion.div

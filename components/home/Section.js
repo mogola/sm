@@ -3,12 +3,12 @@ import Link from 'next/link'
 import moment from 'moment'
 import arrowRight from './../../public/images/right-arrow.svg'
 import { motion } from 'framer-motion';
+import Image from 'next/image'
 import {
     Container,
     Columns,
     Section,
     Heading,
-    Image,
     Box,
     Loader,
     Tag,
@@ -363,7 +363,7 @@ const filterData = (itemid, nameCat, i) => {
                         as={`/projet/${encodeURIComponent(post.title)}`}
                       >
                       <a>
-                        <Image rounded={false} src={post.imageMainPrincipal} />
+                        <Image className="postHomeSectionImg" layout="responsive" width={500} height={350} src={post.imageMainPrincipal} />
                       </a>
                       </Link>
                     <Tag.Group className="tagGroupPost">

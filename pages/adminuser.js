@@ -19,10 +19,6 @@ import { toast } from 'react-toastify';
 
 export async function getStaticProps() {
   const dataUser = await getAllUserList()
-  // const allUser = await fetch(`${baseUrl}/api/login/admin`, { method: 'GET'})
-  // const dataUser = await allUser.json()
-
-  console.log('allUser', dataUser)
 
   return {
     props: {
@@ -69,7 +65,6 @@ export default function Adminuser({ users, connect }) {
         let data = result.json()
         data.then(dataUser => {
           notifySuccess()
-          console.log(dataUser)
         })
       })
     }
@@ -80,7 +75,6 @@ export default function Adminuser({ users, connect }) {
   }
 
   const onChange = (i, target) => {
-    console.log(target.value)
     userObj(i, target)
   }
 
@@ -90,7 +84,6 @@ export default function Adminuser({ users, connect }) {
     currentUser = { ...currentUser, role: target.value }
     user[i] = currentUser
     setUserToUpdate(currentUser)
-    console.log(userToUpdate)
     setGetAllUser(user)
   }
 
@@ -105,7 +98,6 @@ export default function Adminuser({ users, connect }) {
       progress: undefined,
       onOpen: () => {
         setOnLoading(false)
-        console.log("success")
       }
     })
   }
@@ -120,7 +112,6 @@ export default function Adminuser({ users, connect }) {
       draggable: true,
       progress: undefined,
       onOpen: () => {
-        console.log("error")
         setOnLoading(false)
       }
     })
@@ -130,7 +121,6 @@ export default function Adminuser({ users, connect }) {
     return (
     <Button className="button is-success" onClick={(e) => {
       submitForm(e)
-      console.log('update user', target)
       setIndexUser(target)
     }}>Save</Button>
     )

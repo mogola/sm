@@ -34,15 +34,12 @@ const getAllProjects = async (req,res)=>{
         console.log(decode(getTokenUser))
         if(getTokenUser !== undefined || decode(getTokenUser) !== null){
             let {payload} = decode(getTokenUser)
-        console.log('get req-header-x-auth', decode(getTokenUser))
 
         await RegisterModel.findOne({email: payload.email})
         .then(async (account) => {
             if(account.role !== "admin"){
-                console.log('role :', account.role)
                 res.status(300).json({"message": "not authorized"})
             }else {
-                console.log(account)
                 const posts = await Homeconfig
                 .find()
                 .sort({"_id": 1})
@@ -66,7 +63,6 @@ const getAllProjects = async (req,res)=>{
 
 const saveProjects = async (req,res)=>{
   const {projects} =  req.body
-  console.log("projects", projects)
   try{
         if(!projects){
             return res.status(422).json({error:"Please add all the fields"})
@@ -99,7 +95,6 @@ const deleteProjects = async (req,res)=>{
         await ProjectsSchema.remove({ _id: req.body.id })
         .exec()
         .then(result => {
-            console.log(result)
             res.status(200).json({
             message: "post deleted"
             })
@@ -118,7 +113,7 @@ const deleteProjects = async (req,res)=>{
 
 const updateProjects = async(req, res) => {
     const {projects} = req.body;
-    console.log('current post', projects)
+
     try {
         await ProjectsSchema.updateOne({ _id:projects._id},
             projects,
@@ -126,7 +121,6 @@ const updateProjects = async(req, res) => {
                 if (err){
                     console.log(err.message);  // returns error if no matching object found
                 }else{
-                    console.log(object);
                     res.json(object)
                 }
             })

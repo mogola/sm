@@ -2,6 +2,7 @@
 
 import { themeContextUser } from './../../context/contextUser';
 import Link from 'next/link'
+import Image from 'next/image'
 import {useState, useEffect, useRef} from 'react'
 import Menu from './Menu'
 import {motion, useMotionValue} from 'framer-motion';
@@ -10,7 +11,6 @@ import {
     Columns,
     Section,
     Heading,
-    Image,
     Box,
     Loader,
     Tag,
@@ -80,24 +80,22 @@ const Hometop = ({onClick, state = '', connect}) => {
         console.log(window.innerWidth)
         if(window.innerWidth < isMobile){
           setIsMobileMenu(true)
-        console.log(isMobileMenu)
       }else{
         setIsMobileMenu(false)
-        console.log(isMobileMenu)
       }
     }
 
     const toggleMenu = (e) => {
       e.preventDefault()
       setIsToggle(!isToggle)
-      console.log("console.log toggle", isToggle)
     }
+
     const scrollToTheView = () => {
       let wrapper = document.querySelector(".homeWrapper");
-      console.log("wrapper", wrapper.offsetHeight)
+
       let classNameExist = wrapper.getAttribute("class");
       let verifyClassExist = classNameExist.split(" ");
-      console.log(verifyClassExist)
+
 
       const verify = (val, arr) => {
         return arr.some((value) => value === val)
@@ -106,7 +104,6 @@ const Hometop = ({onClick, state = '', connect}) => {
       if(!verify("scrolling", verifyClassExist)){
         wrapper.setAttribute("class", `${classNameExist} scrolling`)
       }else{
-        console.log("class Exist")
       }
 
       window.scroll({
@@ -133,21 +130,19 @@ const Hometop = ({onClick, state = '', connect}) => {
         })
 
         setTextAvailable(arrayConcat)
-        console.log("isConnected", connect)
+
         setIsUserAdmin(connect)
         window.addEventListener('resize',viewPortDetection)
         viewPortDetection()
 
-        console.log("isBackground", typeof(isBackground))
-
         setIsDevice(window.innerWidth)
         if(refImageHome){
-          console.log(refImageHome.current.clientWidth)
-          setIsHomeImage(refImageHome.current.clientWidth)
+          console.log(refImageHome)
+          if(refImageHome.current !== null) {
+            setIsHomeImage(refImageHome.current.clientWidth)
+          }
+
         }
-
-        console.log("scale", scale)
-
     }, [])
 
 
@@ -224,13 +219,12 @@ const scaleVariants = {
                   <motion.div
                     style={{ scale }}
                     className="homeImage">
-                    <img
+                    <Image
+                      className="mainHomeGlobal"
                       ref={refImageHome}
-                      data-img={state.menuCategoryLink}
-                      rel="preload"
                       src={state.logoSiteUrl}
-                      width={isHomeImage < isDevice ? window.innerWidth : "100%"}
-                      height="auto"
+                      layout="fill"
+                      preload="true"
                     />
                     {/* style={{transform:`${isHomeImage < isDevice ? "transform: scale(1.4)": "transform: scale(1)"}`}} */}
                   </motion.div>

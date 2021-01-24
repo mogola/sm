@@ -40,7 +40,6 @@ const getDataPost = async (req, res) => {
 
 const createPost = async (req, res) => {
     const {data} =  req.body
-    console.log(data)
     try{
           if(!data){
               return res.status(422).json({error:"Please add all the fields"})
@@ -66,19 +65,5 @@ const deletePost = (req, res) => {
 
 const updatePost = async (req, res) => {
     const {data, collection, _id} = req.body
-    console.log(data, collection, _id)
     updatePostData(res, data, _id)
-    //     await AboutSchema.updateOne({ _id: _id }, data,
-    //         function(err, updatePost){
-    //             if(err) console.log(err)
-    //             console.log("updateAbout", updatePost)
-    //             res.json({
-    //                 "aboutUpdate":updatePost
-    //             })
-    //     })
-    // }
-    // catch(err){
-    //     console.log(err)
-    // }
-
 }

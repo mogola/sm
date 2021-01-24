@@ -69,56 +69,25 @@ export default function Home({config, posts, connect, categories}) {
   const animatePage = () => {
     setIsAnim(!isAnim)
 }
-  const router = useRouter()
-  useEffect(() => {
-   // RouterTracking(router)
-  //  setOnLoadingPage(true)
-  }, [])
 
-
-  // if(!onLoadingPage){
-  //   return <div className="loaderPage">
-  //     <motion.div
-  //       animate={{ y: -25, opacity: 0.4 }}
-  //       transition={{
-  //         repeat: Infinity,
-  //         repeatType: "reverse",
-  //         duration: 1
-  //       }}
-  //       className="visualLoader">
-  //         S
-  //       </motion.div>
-  //       <motion.div
-  //       animate={{ y: 25, opacity: 0.3 }}
-  //       transition={{
-  //         repeat: Infinity,
-  //         repeatType: "reverse",
-  //         duration: 1
-  //       }}
-  //       className="visualLoader">
-  //         M
-  //       </motion.div>
-  //   </div>
-  // }
-
-  const Filtercomponent = () => {
-    return(
-    <Container className="breadCategory">
-            <Heading className="titleBreadCategory" size={3}>Filtrer par : </Heading>
-            <ul className="listBreadCategory">
-            {categories.map((cat, i) => (
-                <li key={i}>
-                    <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
-                        <a onClick={() => {
-                            animatePage()
-                        }}
-                        className="linkToCategories">{cat.nameCategory}</a>
-                    </Link>
-                </li>
-            ))}
-            </ul>
-        </Container>)
-  }
+const Filtercomponent = () => {
+  return(
+  <Container className="breadCategory">
+      <Heading className="titleBreadCategory" size={3}>Filtrer par : </Heading>
+      <ul className="listBreadCategory">
+      {categories.map((cat, i) => (
+          <li key={i}>
+              <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
+                  <a onClick={() => {
+                      animatePage()
+                  }}
+                  className="linkToCategories">{cat.nameCategory}</a>
+              </Link>
+          </li>
+      ))}
+      </ul>
+  </Container>)
+}
   return (<>
     <Menu
       state={config}

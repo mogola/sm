@@ -64,10 +64,7 @@ const imageVariants = {
 const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
     const [configs, setConfigs] = useState(config)
     const router = useRouter()
-    const [getNextId, setGetNextId] = useState(nextPost)
-    const [getPrevId, setGetPrevId] = useState(prevPost)
     const {id} = router.query
-    //console.log("id of post", router.isFallback, getNextId, getPrevId)
 
     if(router.isFallback){
         return(
@@ -221,34 +218,26 @@ export async function getStaticProps({params:{slug}}) {
         console.log(post.title === slug)
         return post.title === slug
     })
-    console.log("index post", findindex)
+
     let getPrev = posts[findindex + 1]
     let getNext = posts[findindex - 1]
     let idprev
     let idnext
 
-    console.log(getNext, getPrev )
     if(getNext === undefined) {
-        console.log("pas de post existant 2")
         getNext = posts[findindex]
-        console.log(getNext)
         idnext = getNext.title
     }else {
         idnext = getNext.title
     }
 
     if(getPrev === undefined) {
-        console.log("pas de post existant 1")
         getPrev = posts[findindex]
 
         idprev = getPrev.title
     }else {
         idprev = getPrev.title
     }
-    console.log('prev', idprev, idnext)
-
-    console.log('data', getPostData)
-
     return {
             props: {
                 post:JSON.parse(JSON.stringify(getPostData)),

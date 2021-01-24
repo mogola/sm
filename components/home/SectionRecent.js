@@ -104,12 +104,7 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
     }
 
     const filterData = (itemid, nameCat, i) => {
-        console.log(itemid)
         const findCategoryPost = getcategories.filter(value => value._id === itemid)
-
-        console.log(findCategoryPost.length, findCategoryPost[0].posts.length)
-
-        console.log("itemid Category", [...catSelected, itemid])
         let lengthCat = [...catSelected, itemid]
 
         if(findCategoryPost[0].posts.length === 0){
@@ -118,22 +113,17 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
         }else {
             console.log(findCategoryPost[0].posts)
             if(catSelected.some(value => value === itemid)){
-              console.log("before cloneSelected array", [...catSelected])
                 let cloneCatSelected = [...catSelected]
                 let itemidcat = cloneCatSelected.filter(value => value !== itemid)
-                console.log("cloneSelected", itemidcat)
                 if(cloneCatSelected.length === 0) {
                     setPostsFilter(data)
                 }else {
-                    console.log("rest", itemidcat)
                     let multipleCatSelected = [...itemidcat]
                     let concatPosts = []
 
                     for(let i = 0; i < multipleCatSelected.length; i++){
                         let filterCats = getcategories.filter(value => value._id === multipleCatSelected[i])
-                        console.log("get post array", filterCats[0].posts)
                          concatPosts.push(filterCats[0].posts)
-                        console.log("concatpost", concatPosts)
                     }
 
                     if(multipleCatSelected.length === 0){
@@ -148,22 +138,15 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
             }else{
 
                 if(lengthCat.length > 1){
-                    console.log("rest", lengthCat)
                     let concatPostsMultiple = []
-
-
-
                     for(let i = 0; i < lengthCat.length; i++){
                         let filterCats = getcategories.filter(value => value._id === lengthCat[i])
-                        console.log("get post array multiple", filterCats[0].posts)
                         concatPostsMultiple.push(filterCats[0].posts)
-                        console.log("concatpost multiple", concatPostsMultiple.flat())
                         concatPostsMultiple = concatPostsMultiple.flat()
                     }
 
                     let filterValueDuplicate = []
                     for (let i = 0; i < concatPostsMultiple.length; i++){
-                      console.log('value filter', filterValueDuplicate.some(value => value !== concatPostsMultiple[i]._id))
                       filterValueDuplicate.push(concatPostsMultiple[i]._id)
                     }
 
@@ -172,23 +155,17 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
 
                     const fPosts = (arr, element) => {
                       for (let i = 0; i < arr.length; i++){
-                        console.log(element._id, arr[i])
                         return element._id === arr[i]
                       }
                     }
 
                     const includesPost = data.filter(value => arrayCloneNotDuplicate.includes(value._id))
 
-                    let arrayPostNotDuplicate = data.find(element => fPosts(arrayCloneNotDuplicate, element))
-
-                    console.log('coooliei', concatPostsMultiple, arrayCloneNotDuplicate, "new posts", includesPost)
-
                     setPostsFilter(includesPost)
                     setCatSelected([...catSelected, itemid])
                 } else {
                     setPostsFilter(findCategoryPost[0].posts)
                     setCatSelected([...catSelected, itemid])
-                    console.log(selectedCategories(itemid))
                 }
             }
 
@@ -209,7 +186,6 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
           draggable: true,
           progress: undefined,
           onOpen: () => {
-            console.log("aucun post")
           }
         })
       }

@@ -82,7 +82,6 @@ const [matchPwd, setMatchPwd] = useState(false)
 const [emailExisting, setEmailExisting] = useState(false)
 
     useEffect(() => {
-        // RouterTracking(router)
     }, [])
 
     const submitForm = async (e) => {
@@ -93,27 +92,6 @@ const [emailExisting, setEmailExisting] = useState(false)
             const cryptoPassword = CryptoJS.AES.encrypt(body.password, privateKey).toString()
             body = {...body, password: cryptoPassword, newpassword: cryptoPassword }
 
-        //  console.log(verify(sign({email: body.email}, body), body))
-        //  console.log(decode(sign({email: body.email}, body)))
-        //     let i  = 'Mogola sangare';          // Issuer
-        //     let s  = 'mogola.sangare@gmail.com';        // Subject
-        //     let a  = cryptoPassword; // Audience
-
-        //     let verifyOptions = {
-        //         issuer:  i,
-        //         subject:  s,
-        //         audience:  a,
-        //         expiresIn:  "12h"
-        //     };
-
-        //    // let token = jwt.sign({email: body.email}, privateKey, verifyOptions);
-        //     let legit = jwt.verify({email: body.email}, privateKey, verifyOptions);
-        //     console.log("\nJWT verification result: " + JSON.stringify(legit))
-        //     console.log(token)
-            // var bytes  = CryptoJS.AES.decrypt(cryptoPassword, 'secret key 123');
-            // var originalText = bytes.toString(CryptoJS.enc.Utf8);
-
-            //console.log(body, originalText);
             await apiUpload(`${baseUrl}/api/register/account`, 'POST', body)
         }
         catch(err){
@@ -208,7 +186,6 @@ const [emailExisting, setEmailExisting] = useState(false)
     let password = addObj.password !== undefined ? addObj.password : ""
     let newpassword = addObj.newpassword !== undefined ? addObj.newpassword : ""
 
-    console.log("isEmpty", password)
     if(password === newpassword &&
         (password.length) !== 0 &&
         (newpassword.length) !== 0 &&

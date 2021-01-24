@@ -31,7 +31,7 @@ export default async (req,res)=>{
 const postImage = async (req, res) => {
     if(req.body.multiple === true){
         const {images} = req.body
-        console.log(req.body, images.length);
+
         let files = new Array()
         let urlImageDownloaded = new Array()
         // get all base64 image

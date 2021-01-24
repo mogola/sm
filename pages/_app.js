@@ -31,21 +31,14 @@ export default function App({ Component, pageProps, config, router }) {
   }
 
   let dataStorage = (callback) => {
-    console.log("callback", callback, typeof callback)
     return localStorage.getItem("info") !== null && compareStorage(localStorage.getItem("info"),callback) === true
     ? JSON.parse(localStorage.getItem("info"))
     : callback
   }
 
-  const fetchData = async () => {
-      console.log("getInfo", dataStorage(config))
-  }
-
   useEffect(() => {
-    Promise.resolve(localStorage.getItem("info")).then(result => console.log("resulting", result))
-    fetchData()
-    console.log(routering, router)
-     RouterTracking(routering.route)
+    Promise.resolve(localStorage.getItem("info"))
+    RouterTracking(routering.route)
   }, [])
 
     return (

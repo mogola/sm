@@ -65,6 +65,11 @@ module.exports = withFonts({
       }
     ]
   },
+  images: {
+    domains: [
+      'testbucketcreateds3.s3.eu-west-3.amazonaws.com',
+      'testbucketcreateds3.s3.amazonaws.com']
+  },
   // async rewrites() {
   //   return [
   //     // Advanced rewrite

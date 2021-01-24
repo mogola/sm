@@ -2949,3 +2949,25 @@ html .breadCategory {
     }
   }
 }
+
+.mainHomeGlobal {
+  @include desktopView {
+    width: 100vw !important;
+    height: auto !important;
+    max-height: initial !important;
+  }
+
+  @include mobileView {
+    width: auto !important;
+    max-width: none;
+    max-width: initial;
+    transform: translateX(-50%);
+    height: 100vh !important;
+  }
+}
+
+.posezirzp{
+  height: auto !important;
+  max-width: 100%;
+  min-height: inherit !important;
+}

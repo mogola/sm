@@ -22,8 +22,6 @@ export async function getServerSideProps() {
     const config = await getPostConfig()
     const getPostData = await getAllPosts(6)
 
-    console.log("data about", JSON.parse(JSON.stringify(data)))
-    console.log("post", getPostData)
     return {
         props: {
           data: JSON.parse(JSON.stringify(data.data)),
@@ -53,20 +51,18 @@ export default function Contact({post, data, config, allPost, connect}) {
     const router = useRouter()
     const errorsForm = () => {
         let getErrors = document.querySelectorAll('.error')
-        console.log("errors", getErrors.length)
+
         if(!getErrors.length){
             setBtnDisabled(false)
 
         }else {
             setBtnDisabled(true)
         }
-        console.log('getErrors', getErrors.length)
     }
 
     const submitForm = async (e) => {
         e.preventDefault()
         try{
-        console.log("state email", state)
           await fetch(`${baseUrl}/api/email/sendemail`, {
                 method:"POST",
                 headers: {
@@ -87,19 +83,9 @@ export default function Contact({post, data, config, allPost, connect}) {
     //  RouterTracking(router)
       if(refLastname.current && !firstFocus){
             refLastname.current.focus()
-
         }
 
         setErrorsField(document.querySelectorAll('.error'))
-        // document.querySelectorAll('.required').forEach((item, i) =>{
-        //     console.log("i", i)
-        //     let objArray = validError.push("valid")
-        //     console.log(objArray)
-        //     setValidError(objArray)
-        // })
-
-        // console.log('validError', validError)
-
   }, [state])
 
   const onChange = ({target}) => {
@@ -108,13 +94,11 @@ export default function Contact({post, data, config, allPost, connect}) {
     const indexInput = parseInt(document.querySelectorAll(`[name="${name}"]`)[0].getAttribute("index"))
 
     changeState({...state, [name] : value})
-    console.log("state change",indexInput, typeof indexInput, state)
     displayError(indexInput, value)
     errorsForm()
   }
 
   const displayError = (targetIndex, refValue) => {
-      console.log("target", targetIndex)
       let arrayO = validError
     if(refValue === "") {
         arrayO[targetIndex] = "error"

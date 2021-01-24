@@ -65,7 +65,6 @@ const Category = ({post, config, connect, categories})=>{
     const [isAnim, setIsAnim] = useState(false)
     const router = useRouter()
     const {id} = router.query
-    //console.log("id of post", router.isFallback, getNextId, getPrevId)
 
     const ComponentCategory = ({animboolean}) => {
       return (
@@ -95,8 +94,6 @@ const Category = ({post, config, connect, categories})=>{
     }
 
     useEffect(() => {
-       // RouterTracking(router)
-
     }, [])
 
     const animatePage = () => {
@@ -146,11 +143,11 @@ export async function getStaticProps({params:{id}}) {
     try{
     const config = await fetch(`${baseUrl}/api/info`, {method: 'GET'})
     const allConfig = await config.json()
-    console.log("config", allConfig)
+
     const getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
     const categoriesPost = await getCategory.json()
     const posts = JSON.parse(JSON.stringify(categoriesPost))
-    console.log(posts.posts)
+
     const getPostData = await posts.find(post => post._id === id)
     const getCategoryList = await fetch(`${baseUrl}/api/categories`, {
         method: "GET",
@@ -177,9 +174,7 @@ export async function getStaticPaths() {
     try{
         const getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
         const categoriesPost = await getCategory.json()
-        console.log('postssss', categoriesPost)
         const posts = JSON.parse(JSON.stringify(categoriesPost))
-        console.log('postssss', posts)
       // Get the paths we want to pre-render based on posts
       const paths = posts.map((category) => ({
         params: { id: category._id },

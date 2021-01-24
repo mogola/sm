@@ -88,9 +88,6 @@ export default function Login({ connect, config}) {
     const [isUserAdmin, setIsUserAdmin] = useState(false)
 
     useEffect(() => {
-        console.log('test', connect, typeof (connect))
-       // RouterTracking(router)
-        //router.prefetch('/')
         setIsUserAdmin(connect)
     }, [isUserAdmin])
 
@@ -131,11 +128,7 @@ export default function Login({ connect, config}) {
                             itemStorage = localStorage.getItem('token')
                         }
 
-                        const tokenItem = await callback
                         const payload = decode(itemStorage).payload
-                        // console.log('console return', tokenItem, data.account.role)
-
-                        // console.log("verifyAccount", payload.aud, payload.email)
                         let tokenPwd = CryptoJS.AES.decrypt(payload.aud, 'secret key 123');
                         let loginPwd = CryptoJS.AES.decrypt(data.account.password, 'secret key 123');
                         let verifyPwd = tokenPwd.toString(CryptoJS.enc.Utf8);
