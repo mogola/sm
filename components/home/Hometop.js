@@ -224,7 +224,9 @@ const scaleVariants = {
                       ref={refImageHome}
                       src={state.logoSiteUrl}
                       layout="fill"
-                      preload="true"
+                      priority={true}
+                      rel="preload"
+                      sizes="100vw"
                     />
                     {/* style={{transform:`${isHomeImage < isDevice ? "transform: scale(1.4)": "transform: scale(1)"}`}} */}
                   </motion.div>

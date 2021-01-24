@@ -309,7 +309,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                         ${isMobileMenu ? "activeMobileMenu": "activeDesktopMenu"}
                         ${isToggle ? "isOpen" : "isClosed"}
                         `}>
-                          <Link href="/">
+                          <Link href={baseUrl}>
                             <a
                               className={`txtLogo ${utilStyles.colorInherit}`}
                             >{state.nameSite}</a>

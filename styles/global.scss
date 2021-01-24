@@ -2959,8 +2959,7 @@ html .breadCategory {
 
   @include mobileView {
     width: auto !important;
-    max-width: none;
-    max-width: initial;
+    max-width: initial !important;
     transform: translateX(-50%);
     height: 100vh !important;
   }

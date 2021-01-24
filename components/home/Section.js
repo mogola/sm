@@ -363,7 +363,15 @@ const filterData = (itemid, nameCat, i) => {
                         as={`/projet/${encodeURIComponent(post.title)}`}
                       >
                       <a>
-                        <Image className="postHomeSectionImg" layout="responsive" width={500} height={350} src={post.imageMainPrincipal} />
+                        <Image
+                          className="postHomeSectionImg"
+                          layout="responsive"
+                          width={500}
+                          height={350}
+                          rel="preload"
+                          src={post.imageMainPrincipal}
+                          priority={true}
+                        />
                       </a>
                       </Link>
                     <Tag.Group className="tagGroupPost">
