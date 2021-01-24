@@ -2970,3 +2970,23 @@ html .breadCategory {
   max-width: 100%;
   min-height: inherit !important;
 }
+
+.navigationPostFixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #fff;
+  border-top: 1px solid #090909;
+  // &:before {
+  //   content:"";
+  //   height: 132px;
+  //   display: block;
+  // }
+}
+
+
+.section-footer-fixed {
+ margin-top: 132px;
+}

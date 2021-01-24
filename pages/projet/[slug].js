@@ -61,8 +61,31 @@ const imageVariants = {
       }
     }
   };
-const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
+
+  const slideVariants = {
+    exit: { x: [-90, 0], opacity: [0.9, 1],
+      transition: {
+        duration: 0.5,
+        type: "tween",
+        stiffness:100,
+        bounce: 0.5,
+      } },
+    enter: {
+      x: [0, 0],
+      opacity: [1, 1],
+      transition: {
+        duration: 0.5,
+        type: "tween",
+        stiffness: 100,
+        bounce: 0.5
+      }
+    }
+  }
+
+const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
     const [configs, setConfigs] = useState(config)
+    const [isAnim, setIsAnim] = useState(false)
+    const [fixedMenu, setFixedMenu] = useState(false)
     const router = useRouter()
     const {id} = router.query
 
@@ -74,9 +97,25 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
 
     useEffect(() => {
        // RouterTracking(router)
-
+       document.addEventListener('scroll', function(event){
+        let headerDoc = document.querySelector('.section-footer')
+        console.log(headerDoc)
+        if(headerDoc !== null) {
+            if((headerDoc.offsetTop - window.scrollY) > window.innerHeight && (headerDoc.offsetTop - window.scrollY) > 0 && (fixedMenu !== true)) {
+            console.log("scroll")
+            setFixedMenu(true)
+          }else {
+            setFixedMenu(false)
+          }
+      }
+       })
+       toggleAnim()
     }, [])
 
+    const toggleAnim = () => {
+        console.log("animPage")
+        setIsAnim(true)
+    }
     return(
         <>
         <Menu
@@ -84,7 +123,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
         connect={connect}
         classMenu="singleMenuNoHome"
     />
-    <motion.div className="motionWrapper" initial="exit" animate="enter" exit="exit">
+    <motion.div className="motionWrapper" initial="exit" animate={isAnim ? "exit" :"enter"} exit="exit">
         <NextSeo
             facebook={{
                 appId: `${3587318871321107}`,
@@ -108,9 +147,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
                     width: 900,
                     height: 800,
                     alt: 'Og Image Alt Second',
-                    },
-                    { url: `${post.imageMainPrincipal}` },
-                    { url: `${post.imageMainPrincipal}` },
+                    }
                 ],
                 site_name: `${config.nameSite}`,
                 }}
@@ -130,7 +167,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <motion.div variants={imageVariants} className="postBgSingle"
+      <motion.div variants={imageVariants} animate={isAnim === true ? "exit" : "enter"} className="postBgSingle"
         style={{backgroundImage: `url("${post.imageMainPrincipal}")`, backgroundColor:config.backgroudPost}}>
     </motion.div>
         <Container data-id={post._id} className="mainProject" fluid>
@@ -188,19 +225,30 @@ const Post = ({post, config, connect, nextPost, prevPost, slug})=>{
                 </Container>
             </Container>
             }
-            <div className="navigationPost">
+            <div className={`${fixedMenu ? "navigationPostFixed navigationPost" : "navigationPost" } `}>
                 <Link href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(nextPost)}`}>
-                    <a className="linkSee nextProjectLink"><span className="txtLinkNav">Voir le projet suivant</span><span className="icoRight" width={26}></span></a>
+                    <a onClick={(e) => {
+                        e.preventDefault()
+                        toggleAnim(true)
+                        router.push(`/projet/${encodeURIComponent(nextPost)}`)
+                    }}
+                    className="linkSee nextProjectLink"><span className="txtLinkNav">Voir le projet suivant</span><span className="icoRight" width={26}></span></a>
                 </Link>
                 <Link href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(prevPost)}`}>
-                    <a className="linkSee prevProjectLink"><span className="icoRight" width={26}></span> <span className="txtLinkNav">Voir le projet précédent</span></a>
+                    <a
+                        onClick={(e) => {
+                            e.preventDefault()
+                            toggleAnim(true)
+                            router.push(`/projet/${encodeURIComponent(prevPost)}`)
+                        }}
+                        className="linkSee prevProjectLink"><span className="icoRight" width={26}></span> <span className="txtLinkNav">Voir le projet précédent</span></a>
                 </Link>
             </div>
         </Container>
         <Footer
           menu={configs.menuCategoryLink}
           data={configs}
-          className="section-footer"
+          className={`${fixedMenu ? "section-footer-fixed section-footer" : "section-footer"  }`}
         />
         </Layout>
         </motion.div>
