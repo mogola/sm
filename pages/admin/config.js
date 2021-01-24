@@ -60,7 +60,7 @@ const addConfig = async (config) => {
   }
 }
 
-export default function config({ config, connect }) {
+export default function Config({ config, connect }) {
   console.log(config)
   const [labelInputItem, setInputItemLabel] = useState(Object.keys(config))
   const [dataConfig, setDataConfig] = useState(config)
