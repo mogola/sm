@@ -227,6 +227,7 @@ const scaleVariants = {
                       priority={true}
                       rel="preload"
                       sizes="100vw"
+                      quality={100}
                     />
                     {/* style={{transform:`${isHomeImage < isDevice ? "transform: scale(1.4)": "transform: scale(1)"}`}} */}
                   </motion.div>

@@ -633,6 +633,9 @@ img {
   }
   img{
     max-width: 195px;
+    position: static !important;
+    width: 100% !important;
+    height: 100% !important;
     @include mobileView{
       max-width: 130px;
     }

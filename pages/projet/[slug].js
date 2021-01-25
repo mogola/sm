@@ -135,6 +135,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
                 url: `${baseUrl}/projet/${post.title}`,
                 title: `${post.title}`,
                 description: `${post.description.replace(/<[^>]+>/g, '')}`,
+                type: "article",
                 images: [
                     {
                     url: `${post.imageMainPrincipal}`,
