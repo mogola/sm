@@ -8,7 +8,7 @@ module.exports = withFonts({
   enableSvg: true,
   target: 'serverless',
   env: {
-    production: "https://" + process.env.NEXT_PUBLIC_URL_PRODUCTION,
+    production: process.env.NEXT_PUBLIC_URL_PRODUCTION,
     development: "http://localhost:9000/",
     keyPrivate: privateKEY,
     keyPublic: publicKEY,
