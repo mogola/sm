@@ -70,6 +70,10 @@ module.exports = withFonts({
       'testbucketcreateds3.s3.eu-west-3.amazonaws.com',
       'testbucketcreateds3.s3.amazonaws.com']
   },
+  // i18n: {
+  //   locales: ['en', 'fr'],
+  //   defaultLocale: 'en'
+  // }
   // async rewrites() {
   //   return [
   //     // Advanced rewrite

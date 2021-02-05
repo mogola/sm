@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import RegisterModel from './RegisterModel'
 const { Schema } = mongoose;
 
 // Define a schema

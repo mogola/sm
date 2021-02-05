@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Homeconfig from './Homeconfig'
 const { Schema } = mongoose;
 
 // Define a schema

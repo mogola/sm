@@ -21,7 +21,8 @@ const mylogger = async (req, res, next) => {
                     console.log('role :', account.role)
                     res.status(300).json({"message": "not authorized"})
                 }else {
-                    console.log("user connected with", account)
+                    console.log("user connected with", account.email)
+                    req.email = account.email
                     next()
                 }
             })

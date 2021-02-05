@@ -791,6 +791,10 @@ html .linkToProject {
 html .homeCategory {
   .column {
     padding-bottom: 46px;
+    img {
+      height: auto !important;
+      min-height: initial !important;
+    }
   }
 
 

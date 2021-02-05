@@ -34,6 +34,7 @@ handler.get(async (req, res) => {
     const posts = await Homeconfig
     .find()
     .sort({"_id": 1})
+    .populate({path:'owner'})
 
     if(posts){
         res.json(JSON.stringify(posts[0]))
@@ -48,7 +49,7 @@ handler.get(async (req, res) => {
 
 handler.post(async (req, res) => {
   const {config} =  req.body
-  console.log(config)
+
   try{
         if(!config){
             return res.status(422).json({error:"Please add all the fields"})
@@ -93,6 +94,7 @@ handler.delete(async (req, res) => {
 handler.put(async (req, res) => {
     const {config} = req.body;
     console.log('current post', config._id)
+    console.log("emailllllllll owwwnerrrrr",req.email)
     config.__v++
     try {
         await Homeconfig.updateOne({ _id:config._id},

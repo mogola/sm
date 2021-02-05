@@ -70,6 +70,7 @@ export default function Config({ config, connect }) {
 
   useEffect(() => {
     localStorage.setItem("formData", dataConfig)
+    console.log("connect info User", connect)
     setIsUserAdmin(connect)
   }, [dataConfig])
 
