@@ -58,7 +58,7 @@ export default function App({ Component, pageProps, config, router }) {
         }}>
             <themeContextUser.Consumer>
                 {({userConnected}) => (
-                    <AnimatePresence exitBeforeEnter>
+                    <AnimatePresence exitBeforeEnter={false}>
                       <ToastContainer />
                       <Component key={router.route} config={localStorageData} connect={userConnected()} {...pageProps} />
                     </AnimatePresence>

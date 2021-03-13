@@ -1,9 +1,7 @@
-
-
 import { themeContextUser } from './../../context/contextUser';
 import Link from 'next/link'
 import Image from 'next/image'
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useRef, forwardRef} from 'react'
 import Menu from './Menu'
 import {motion, useMotionValue} from 'framer-motion';
 import {
@@ -61,6 +59,11 @@ const backVariants = {
   }
 };
 
+const MainImageHome = forwardRef((props, ref) => (
+  <div className="refImageHome" ref={ref}>
+    {props.children}
+  </div>
+))
 
 const Hometop = ({onClick, state = '', connect}) => {
     const [textAvailable, setTextAvailable] = useState([])
@@ -219,16 +222,18 @@ const scaleVariants = {
                   <motion.div
                     style={{ scale }}
                     className="homeImage">
-                    <Image
-                      className="mainHomeGlobal"
-                      ref={refImageHome}
-                      src={state.logoSiteUrl}
-                      layout="fill"
-                      priority={true}
-                      rel="preload"
-                      sizes="100vw"
-                      quality={100}
-                    />
+                      <MainImageHome ref={refImageHome}>
+                      <Image
+                        className="mainHomeGlobal"
+                        src={state.logoSiteUrl}
+                        layout="fill"
+                        priority={true}
+                        rel="preload"
+                        sizes="100vw"
+                        quality={100}
+                      />
+                      </MainImageHome>
+                    
                     {/* style={{transform:`${isHomeImage < isDevice ? "transform: scale(1.4)": "transform: scale(1)"}`}} */}
                   </motion.div>
                 </motion.div>
