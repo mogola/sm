@@ -11,7 +11,15 @@ import { AnimatePresence } from 'framer-motion';
 import {RouterTracking} from './../components/router/ngprogress'
 import { ToastContainer } from 'react-toastify';
 export async function getServerSideProps() {
-  const config = await getPostConfig()
+  let config;
+  try{
+    config = await getPostConfig()
+  }
+  catch(err){
+    console.log('error', err)
+  }
+  
+  console.log("state config ====================>", config); 
     return {
       props: {
         config: JSON.parse(JSON.stringify(config[0]))
