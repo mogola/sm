@@ -24,7 +24,14 @@ const {Field, Control, Label} = Form;
 const { sign, verify, decode } = require('../helpers/jwt')
 
 export async function getStaticProps() {
-    const config = await getPostConfig()
+    let config;
+    try{
+        config = await getPostConfig()
+    }
+    catch(err){
+        console.log('error', err)
+    }
+     
 
     return {
         props: {

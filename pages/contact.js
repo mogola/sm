@@ -15,6 +15,7 @@ const {Field, Control, Label} = Form;
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import {useRouter} from 'next/router'
+import { motion} from 'framer-motion'
 
 export async function getServerSideProps() {
     const getData = await fetch(`${baseUrl}/api/about`, {method:"GET"})
@@ -49,6 +50,27 @@ export default function Contact({post, data, config, allPost, connect}) {
     let refPhone = useRef()
 
     const router = useRouter()
+
+    const imageVariants = {
+        exit: { x: -300, opacity: 0.9,
+          transition: {
+            duration: 0.5,
+            type: "tween",
+            stiffness:100,
+            bounce: 0.5,
+            when: "afterChildren"
+          } },
+        enter: {
+          x: 0,
+          opacity: 1,
+          transition: {
+            duration: 0.5,
+            type: "tween",
+            stiffness: 100,
+            bounce: 0.5
+          }
+        }
+      };
     const errorsForm = () => {
         let getErrors = document.querySelectorAll('.error')
 
@@ -110,6 +132,11 @@ export default function Contact({post, data, config, allPost, connect}) {
   }
 
   return (
+    <motion.div
+    variants={imageVariants}
+    initial="exit"
+    animate="enter"
+    exit="exit">
     <Layout post>
       <Head>
         <title>{siteTitle}</title>
@@ -265,5 +292,6 @@ export default function Contact({post, data, config, allPost, connect}) {
           className="section-footer"
         />
     </Layout>
+    </motion.div>
   )
 }
