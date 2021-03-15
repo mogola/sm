@@ -800,9 +800,16 @@ html .homeCategory {
 
 }
 
+html .homeCategory {
+ &.columns{
+    margin :0;
+  } 
+}
 html .section-category {
   .column {
     padding-bottom: 0;
+    padding: 0;
+    margin: 0;
   }
 }
 
@@ -1791,7 +1798,7 @@ html {
       letter-spacing: 0;
       line-height: 86px;
       position: relative;
-      left: 191px;
+      left: 20%;
       z-index: 1;
 
       @include mobileView{
@@ -2401,13 +2408,17 @@ $colorProgress: #FF4000;
   background-attachment: fixed;
 }
 
-.contentLogin {
+html .contentLogin {
   display: flex;
   align-items: center;
-  height: 100vh;
-  max-height: 80vh;
   flex-direction: column;
   justify-content: center;
+  padding: 40px 0;
+
+  &.container {
+    padding-top: 0;
+  }
+
   .field.is-grouped {
     justify-content: center;
     padding-top: 24px;
@@ -2419,6 +2430,11 @@ $colorProgress: #FF4000;
   padding: 24px;
   max-width:520px;
   width: 100%;
+  border-radius: 12px;
+  margin-top: 0;
+  .label {
+    text-transform: Capitalize;
+  }
 
   @include mobileView{
     max-width: 360px;
@@ -2798,10 +2814,10 @@ html {
 .filterCategoryStatic {
   display: flex;
   flex-direction: row;
-  position: absolute;
+  position: static;
   bottom: 0;
   right: 0;
-  transform: translateY(-50%);
+  // transform: translateY(-50%);
   top: 50%;
   @include mobileView{
     position: static;

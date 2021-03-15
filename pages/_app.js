@@ -46,7 +46,7 @@ export default function App({ Component, pageProps, config, router }) {
 
   useEffect(() => {
     Promise.resolve(localStorage.getItem("info"))
-    RouterTracking(routering.route)
+  //  RouterTracking(routering.route)
   }, [])
 
     return (

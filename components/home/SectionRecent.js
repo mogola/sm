@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import moment from 'moment'
 import arrowRight from './../../public/images/right-arrow.svg'
@@ -189,16 +189,23 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
           }
         })
       }
+
+      useEffect(() => {
+        console.log("update posts", data,postsFilter)
+        setPostsFilter(data)
+    }, [])
+    
+    
     return(<motion.div variants={backVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
         <ToastContainer />
     <Section {...rest}>
-        <Container breakpoint="fullhd" fluid className="containerTitleSection">
+        <Container fluid className="containerTitleSection">
         </Container>
             <Columns className="homeCategory">
             {postsFilter.map((post, i) => (
                 <React.Fragment key={i}>
                     {i === 0 &&
-                        <Container breakpoint="fullhd" fluid className="mainProject onTopView" key={`${i}${post._id}`}>
+                        <Container fluid className="mainProject onTopView" key={`${i}${post._id}`}>
                         <Columns.Column className="columnProject" size={12}>
                             <motion.div variants={imageVariants} className="categoryMainFilter">
                             <Link

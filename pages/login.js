@@ -239,7 +239,7 @@ export default function Login({ connect, config}) {
             {({ getToken }) => (
                 <motion.div
                     style={{backgroundImage: `url(${config.logoSiteUrl})`}}
-                    variants={imageVariants}
+                    variants={loginVariants}
                     className="motionWrapper loginWrapper"
                     initial="exit"
                     animate="enter"

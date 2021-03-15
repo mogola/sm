@@ -121,7 +121,6 @@ const router = useRouter()
         <Menu
             state={config}
             connect={connect}
-            classMenu="singleMenuNoHome contactMenu"
         />
             <Container className="prestationWrapper">
             <motion.div variants={variantsUl}>

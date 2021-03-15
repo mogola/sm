@@ -10,7 +10,6 @@ import Menu from './../../components/home/Menu'
 import Footer from './../../components/home/Footer'
 import Masonry from './../../components/Masonry'
 import moment from 'moment'
-import {RouterTracking} from './../../components/router/ngprogress'
 import {motion, useViewportScroll } from 'framer-motion'
 import { NextSeo } from 'next-seo';
 import SectionsRecent from './../../components/home/SectionRecent'
@@ -26,6 +25,7 @@ import {
     Tag,
     Content
 } from 'react-bulma-components';
+import { postcssVersion } from 'autoprefixer'
 
 let easing = [0.175, 0.85, 0.42, 0.96];
 
@@ -59,14 +59,28 @@ const backVariants = {
           transition: { staggerChildren: 0.05, staggerDirection: -1 }
       }
     }
-const Category = ({post, config, connect, categories})=>{
+const Category = ({post, config, connect, categories, allPost})=>{
     const [configs, setConfigs] = useState(config)
     const [isAdmin, setIsAdmin] = useState(connect)
     const [isAnim, setIsAnim] = useState(false)
+    const [getPost, setGetPost] = useState(post.posts)
+    const [allPosts, getAllPosts] = useState(allPost)
     const router = useRouter()
     const {id} = router.query
 
     const ComponentCategory = ({animboolean}) => {
+
+      const filterPosts = (paramsId) => {
+        
+        const getIdCat = allPosts.find(post => {
+          console.log(post._id, paramsId);
+          return post._id === paramsId 
+        })
+
+        console.log(getIdCat);
+        setGetPost(getIdCat.posts)
+      }
+
       return (
         <motion.div variants={backVariants} className="motionWrapper" initial="exit" animate={animboolean ? "exit": "enter"} exit="exit">
         <Container breakpoint="fullhd" className="breadCategory">
@@ -74,9 +88,18 @@ const Category = ({post, config, connect, categories})=>{
           <ul className="listBreadCategory">
           {categories.map((cat, i) => (
               <li key={i}>
-                  <Link key={i} href={`${cat.nameCategory}`} as={`${cat._id}`}>
-                      <a onClick={() => {
+                  <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
+                      <a onClick={(e) => {
+                        e.preventDefault();
                           animatePage()
+                          console.log('refresh page');
+                          filterPosts(cat._id)
+                          router.push({
+                            pathname: `/category/${cat._id}`, 
+                            query: cat.nameCategory
+                          });
+
+                          router.reload()
                       }}
                       className="linkToCategories">{cat.nameCategory}</a>
                   </Link>
@@ -87,6 +110,8 @@ const Category = ({post, config, connect, categories})=>{
       </motion.div>
       )
     }
+
+
     if(router.isFallback){
         return(
             <h3>loading...</h3>
@@ -94,10 +119,12 @@ const Category = ({post, config, connect, categories})=>{
     }
 
     useEffect(() => {
-    }, [])
+      console.log("isAnim", isAnim)
+      console.log(getPost, post.posts.length)
+    }, [getPost])
 
     const animatePage = () => {
-        setIsAnim(!isAnim)
+        setIsAnim(false)
     }
     return(<>
       <Menu
@@ -111,11 +138,11 @@ const Category = ({post, config, connect, categories})=>{
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      {post.posts.length > 0 &&
+      {getPost.length &&
       <motion.div variants={variantsUl} className="motionWrapper" initial="exit" animate={isAnim ? "exit": "enter"} exit="exit">
         <SectionsRecent
             title={post.nameCategory}
-            data={post.posts}
+            data={getPost}
             className="section-category"
             isadmin={isAdmin === true ? true : false}
             getcategories={categories}
@@ -140,43 +167,48 @@ const Category = ({post, config, connect, categories})=>{
 }
 
 export async function getStaticProps({params:{id}}) {
+  let config, allConfig, getCategory, categoriesPost, posts, getPostData, getCategoryList, allCategory;
+
     try{
-    const config = await fetch(`${baseUrl}/api/info`, {method: 'GET'})
-    const allConfig = await config.json()
+     config = await fetch(`${baseUrl}/api/info`, {method: 'GET'})
+     allConfig = await config.json()
 
-    const getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
-    const categoriesPost = await getCategory.json()
-    const posts = JSON.parse(JSON.stringify(categoriesPost))
+     getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
+     categoriesPost = await getCategory.json()
+     posts = JSON.parse(JSON.stringify(categoriesPost))
 
-    const getPostData = await posts.find(post => post._id === id)
-    const getCategoryList = await fetch(`${baseUrl}/api/categories`, {
+     getPostData = await posts.find(post => post._id === id)
+     getCategoryList = await fetch(`${baseUrl}/api/categories`, {
         method: "GET",
       })
 
-      const allCategory = await getCategoryList.json()
-
-    return {
-            props: {
-                post:JSON.parse(JSON.stringify(getPostData)),
-                config: JSON.parse(JSON.stringify(allConfig)),
-                categories: allCategory
-            }
-        }
+       allCategory = await getCategoryList.json()
     }
     catch(err){
         console.log(err)
+    }
+
+    return {
+        props: {
+            allPost: posts,
+            post:JSON.parse(JSON.stringify(getPostData)),
+            config: JSON.parse(JSON.stringify(allConfig)),
+            categories: allCategory
+        }
     }
 }
 
 // This function gets called at build time
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
+    let getCategory, categoriesPost, posts, paths;
+
     try{
-        const getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
-        const categoriesPost = await getCategory.json()
-        const posts = JSON.parse(JSON.stringify(categoriesPost))
+        getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
+        categoriesPost = await getCategory.json()
+        posts = JSON.parse(JSON.stringify(categoriesPost))
       // Get the paths we want to pre-render based on posts
-      const paths = posts.map((category) => ({
+      paths = posts.map((category) => ({
         params: { id: category._id },
       }))
 

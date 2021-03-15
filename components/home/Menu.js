@@ -178,10 +178,10 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
         console.log(window.innerWidth)
         if(window.innerWidth < isMobile){
           setIsMobileMenu(true)
-        console.log(isMobileMenu)
+       // console.log(isMobileMenu)
       }else{
         setIsMobileMenu(false)
-        console.log(isMobileMenu)
+        //console.log(isMobileMenu)
       }
     }
 
@@ -241,12 +241,12 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
         console.log("isBackground", typeof(isBackground))
 
         document.addEventListener('scroll', function(event){
-          console.log('event', window.scrollY)
+        //  console.log('event', window.scrollY)
           let headerDoc = document.querySelector('.mainHeader')
           if(headerDoc !== null) {
             if(window.scrollY > (headerDoc.offsetTop + headerDoc.offsetHeight)
             && (fixedMenu !== true)) {
-              console.log("scroll")
+              // console.log("scroll")
               setFixedMenu(true)
             }else {
               setFixedMenu(false)
@@ -309,7 +309,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                         ${isMobileMenu ? "activeMobileMenu": "activeDesktopMenu"}
                         ${isToggle ? "isOpen" : "isClosed"}
                         `}>
-                          <Link href={`${baseUrl}`}>
+                          <Link href={`${baseUrl}/`}>
                             <a
                               className={`txtLogo ${utilStyles.colorInherit}`}
                             >{state.nameSite}</a>

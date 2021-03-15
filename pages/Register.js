@@ -231,13 +231,17 @@ const notifySuccess = () => {
       <Menu
             state={config}
             connect={connect}
-            classMenu="fixedMenu"
         />
         <motion.div
         variants={loginVariants}
         initial="enter"
         animate="enter"
         exit="exit">
+    <Container className="contentLogin" fluid>
+            <div className="innerWrapperLogin">
+        <Heading className="titleMainLogin" size={3}>
+            Register
+        </Heading>
         <Container className="contentLogin" fluid>
             <Control className="innerLoginContent">
       <form>
@@ -281,6 +285,8 @@ const notifySuccess = () => {
         </Field>
       </form>
       </Control>
+      </Container>
+      </div>
       </Container>
       </motion.div>
       <Prestation
