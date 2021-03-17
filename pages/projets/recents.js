@@ -66,9 +66,12 @@ export default function Home({config, posts, connect, categories}) {
   const [isAdmin, setIsAdmin] = useState(connect)
   const [onLoadingPage, setOnLoadingPage] = useState(false)
   const [isAnim, setIsAnim] = useState(false)
+  const [getPost, setGetPost] = useState(posts)
   const animatePage = () => {
     setIsAnim(!isAnim)
 }
+
+console.log("posts", posts)
 
 const Filtercomponent = () => {
   return(
@@ -101,7 +104,7 @@ const Filtercomponent = () => {
         </Head>
           <SectionsRecent
             title="Mes Projets"
-            data={posts}
+            data={getPost}
             className="section-category"
             isadmin={isAdmin === true ? true : false}
             getcategories={categories}

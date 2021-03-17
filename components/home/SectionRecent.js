@@ -14,8 +14,9 @@ import {
     Content
 } from 'react-bulma-components';
 import { ToastContainer, toast } from 'react-toastify';
+import { themeContextUser } from './../../context/contextUser'
 import { motion } from 'framer-motion';
-import { get } from 'mongoose';
+
 let easing = [0.175, 0.85, 0.42, 0.96];
 
 const imageVariants = {
@@ -191,18 +192,30 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
       }
 
       useEffect(() => {
-        console.log("update posts", data,postsFilter)
-        setPostsFilter(data)
+        console.log("update posts", postsFilter)
+
     }, [])
     
     
     return(<motion.div variants={backVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
         <ToastContainer />
     <Section {...rest}>
+    <themeContextUser.Consumer>
+        {({userConnected, postsCategory}) => (
+            <div>
+                {postsCategory.length}
+                {postsCategory.map((item, i) => (
+                    <span key={i}>
+                        {item.nameCategory}
+                    </span>
+                ))}
+            </div>
+        )}
+    </themeContextUser.Consumer>
         <Container fluid className="containerTitleSection">
         </Container>
             <Columns className="homeCategory">
-            {postsFilter.map((post, i) => (
+            {postsFilter.length && postsFilter.map((post, i) => (
                 <React.Fragment key={i}>
                     {i === 0 &&
                         <Container fluid className="mainProject onTopView" key={`${i}${post._id}`}>

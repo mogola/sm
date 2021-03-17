@@ -47,11 +47,23 @@ export function userIsConnected(userIsConnect) {
         return false
 }
 
+export function getAllCategory(allPost, idParam){
+    if(idParam !== undefined || idParam === ''){
+        console.log(idParam, allPost, Array.isArray(allPost))
+        const postId = allPost.filter(post => post._id === idParam)
+        console.log(postId, typeof postId );
+        return postId;
+    }else {
+        return allPost
+    }
+}  
+
 export const themeContextUser = React.createContext({
     getToken: tokenStorage,
     isConnected: userIsConnected,
     userConnected: connected,
     dataConfig: config,
+    postsCategory: getAllCategory, 
     toggleTheme: () => {
         console.log('default click')
     }

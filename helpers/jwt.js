@@ -10,7 +10,7 @@ const privateKEY = ''
 const publicKEY = ''
 
 
-console.log("getPrivate", key.private(), key.public())
+// console.log("getPrivate", key.private(), key.public())
 
 module.exports = {
     sign: (payload, $Option) => {

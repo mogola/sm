@@ -29,14 +29,14 @@ import {
 const imageVariants = {
     exit: {
         scale: 1,
-        opacity: 0.8,
+        opacity: 1,
         transition: {
             type: "spring",
             duration: 1,
             staggerChildren: 0.05} },
     enter: {
      scale: 1.5,
-      opacity: 1,
+      opacity: 0.8,
       transition: {
           type: "spring",
             duration: 1,
@@ -99,10 +99,10 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
        // RouterTracking(router)
        document.addEventListener('scroll', function(event){
         let headerDoc = document.querySelector('.section-footer')
-        console.log(headerDoc)
+        //console.log(headerDoc)
         if(headerDoc !== null) {
             if((headerDoc.offsetTop - window.scrollY) > window.innerHeight && (headerDoc.offsetTop - window.scrollY) > 0 && (fixedMenu !== true)) {
-            console.log("scroll")
+            //console.log("scroll")
             setFixedMenu(true)
           }else {
             setFixedMenu(false)
@@ -113,7 +113,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
     }, [])
 
     const toggleAnim = () => {
-        console.log("animPage")
+        //console.log("animPage")
         setIsAnim(true)
     }
     return(
