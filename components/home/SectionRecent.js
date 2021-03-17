@@ -200,7 +200,7 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
     return(<motion.div variants={backVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
         <ToastContainer />
     <Section {...rest}>
-    <themeContextUser.Consumer>
+    {/* <themeContextUser.Consumer>
         {({userConnected, postsCategory}) => (
             <div>
                 {postsCategory.length}
@@ -211,7 +211,7 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
                 ))}
             </div>
         )}
-    </themeContextUser.Consumer>
+    </themeContextUser.Consumer> */}
         <Container fluid className="containerTitleSection">
         </Container>
             <Columns className="homeCategory">
