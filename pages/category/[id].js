@@ -358,7 +358,6 @@ export async function getStaticPaths() {
     // Call an external API endpoint to get posts
     let getCategory, categoriesPost, posts, paths;
 
-    try{
         getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
         categoriesPost = await getCategory.json()
         posts = JSON.parse(JSON.stringify(categoriesPost))
@@ -370,10 +369,6 @@ export async function getStaticPaths() {
       // We'll pre-render only these paths at build time.
       // { fallback: false } means other routes should 404.
       return { paths, fallback: false }
-    }
-    catch(err){
-      console.log(err)
-    }
   }
 
 export default Category
