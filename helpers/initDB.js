@@ -8,7 +8,7 @@ function initDB(){
         console.log("alredy connected")
         return
     }
-    mongoose.connect(uri,{
+    mongoose.connect(`${uri}${dbName}?retryWrites=true&w=majority`,{
         useNewUrlParser:true,
         useUnifiedTopology:true
     })

@@ -4,7 +4,7 @@ import nextConnect from 'next-connect';
 let uri = process.env.MONGODB_URI
 let dbName = process.env.MONGODB_DB
 
-const client = new MongoClient(uri, {
+const client = new MongoClient(`${uri}${dbName}?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

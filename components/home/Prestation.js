@@ -50,7 +50,7 @@ const Prestation = ({title = "", data = '', ...rest}) => {
                 ))}
                 <Columns.Column className="flexEndContent">
                 <Container className="containLink">
-                    <Link href="/about">
+                    <Link href="/About">
                         <a className="linkSee getWhite">En Savoir plus <span className="icoRight" width={26}></span></a>
                     </Link>
                 </Container>
