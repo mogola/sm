@@ -324,7 +324,6 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
 export async function getStaticProps({params:{id}}) {
   let config, allConfig, getCategory, categoriesPost, posts, getPostData, getCategoryList, allCategory;
 
-    try{
      config = await fetch(`${baseUrl}/api/info`, {method: 'GET'})
      allConfig = await config.json()
 
@@ -338,10 +337,6 @@ export async function getStaticProps({params:{id}}) {
       })
 
        allCategory = await getCategoryList.json()
-    }
-    catch(err){
-        console.log(err)
-    }
 
     return {
         props: {
