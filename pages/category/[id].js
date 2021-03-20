@@ -322,48 +322,56 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
 }
 
 export async function getStaticProps({params:{id}}) {
-  let config, allConfig, getCategory, categoriesPost, posts, getPostData, getCategoryList, allCategory;
+  try {
+      const config = await fetch(`${baseUrl}/api/info`, {method: 'GET'})
+      const allConfig = await config.json()
 
-     config = await fetch(`${baseUrl}/api/info`, {method: 'GET'})
-     allConfig = await config.json()
+      const getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
+      const categoriesPost = await getCategory.json()
+      const posts = JSON.parse(JSON.stringify(categoriesPost))
 
-     getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
-     categoriesPost = await getCategory.json()
-     posts = JSON.parse(JSON.stringify(categoriesPost))
+      const getPostData = await posts.find(post => post._id === id)
+      const getCategoryList = await fetch(`${baseUrl}/api/categories`, {
+          method: "GET",
+        })
 
-     getPostData = await posts.find(post => post._id === id)
-     getCategoryList = await fetch(`${baseUrl}/api/categories`, {
-        method: "GET",
-      })
+        const allCategory = await getCategoryList.json()
 
-       allCategory = await getCategoryList.json()
-
-    return {
-        props: {
-            allPost: posts,
-            post:JSON.parse(JSON.stringify(getPostData)),
-            config: JSON.parse(JSON.stringify(allConfig)),
-            categories: allCategory
-        }
+        return {
+          props: {
+              allPost: posts,
+              post:JSON.parse(JSON.stringify(getPostData)),
+              config: JSON.parse(JSON.stringify(allConfig)),
+              categories: allCategory
+          }
+      }
     }
+    catch(err){
+      console.log("error lors de la dynamisation", err)
+    }
+
+   
 }
 
 // This function gets called at build time
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
-    let getCategory, categoriesPost, posts, paths;
-
-        getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
-        categoriesPost = await getCategory.json()
-        posts = JSON.parse(JSON.stringify(categoriesPost))
+    try{
+       const getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
+        const categoriesPost = await getCategory.json()
+        const posts = JSON.parse(JSON.stringify(categoriesPost))
       // Get the paths we want to pre-render based on posts
-      paths = posts.map((category) => ({
+      const paths = posts.map((category) => ({
         params: { id: category._id },
       }))
 
       // We'll pre-render only these paths at build time.
       // { fallback: false } means other routes should 404.
       return { paths, fallback: false }
+    }
+    catch(err){
+      console.log("err", err)
+    }
   }
 
 export default Category
