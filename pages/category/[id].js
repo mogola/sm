@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import {useRouter} from 'next/router'
 import baseUrl from '../../helpers/baseUrl'
-// import { getAllPosts, getPostConfig } from '../api/home'
+import { getAllCategories } from '../api/home'
 import {useRef,useEffect,useState} from 'react'
 import Layout, { siteTitle } from '../../components/layout'
 import Menu from './../../components/home/Menu'
@@ -357,9 +357,8 @@ export async function getStaticProps({params:{id}}) {
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
     try{
-       const getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
-        const categoriesPost = await getCategory.json()
-        const posts = JSON.parse(JSON.stringify(categoriesPost))
+       const getCategory = await getAllCategories()
+        const posts = JSON.parse(JSON.stringify(getCategory))
       // Get the paths we want to pre-render based on posts
       const paths = posts.map((category) => ({
         params: { id: category._id },
