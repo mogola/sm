@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import {useRouter} from 'next/router'
 import baseUrl from '../../helpers/baseUrl'
-import { getAllCategories } from '../api/home'
+import { getAllCategories, getPostConfig } from '../api/home'
 import {useRef,useEffect,useState} from 'react'
 import Layout, { siteTitle } from '../../components/layout'
 import Menu from './../../components/home/Menu'
@@ -322,33 +322,31 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
 }
 
 export async function getStaticProps({params:{id}}) {
-  try {
-      const config = await fetch(`${baseUrl}/api/info`, {method: 'GET'})
-      const allConfig = await config.json()
+  // try {
+      const config = await getPostConfig()
+     // const allConfig = await config.json()
 
-      const getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
-      const categoriesPost = await getCategory.json()
-      const posts = JSON.parse(JSON.stringify(categoriesPost))
+      const getCategory = await getAllCategories()
+      // const categoriesPost = await getCategory.json()
+      const posts = JSON.parse(JSON.stringify(getCategory))
 
       const getPostData = await posts.find(post => post._id === id)
-      const getCategoryList = await fetch(`${baseUrl}/api/categories`, {
-          method: "GET",
-        })
+      const getCategoryList = await getAllCategories()
 
-        const allCategory = await getCategoryList.json()
+       // const allCategory = await getCategoryList.json()
 
         return {
           props: {
               allPost: posts,
               post:JSON.parse(JSON.stringify(getPostData)),
-              config: JSON.parse(JSON.stringify(allConfig)),
-              categories: JSON.parse(JSON.stringify(allCategory))
+              config: JSON.parse(JSON.stringify(config[0])),
+              categories: JSON.parse(JSON.stringify(getCategoryList))
           }
       }
-    }
-    catch(err){
-      console.log("error lors de la dynamisation", err)
-    }
+    // }
+    // catch(err){
+    //   console.log("error lors de la dynamisation", err)
+    // }
 
    
 }
@@ -356,7 +354,7 @@ export async function getStaticProps({params:{id}}) {
 // This function gets called at build time
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
-    try{
+ //   try{
        const getCategory = await getAllCategories()
         const posts = JSON.parse(JSON.stringify(getCategory))
       // Get the paths we want to pre-render based on posts
@@ -367,10 +365,10 @@ export async function getStaticPaths() {
       // We'll pre-render only these paths at build time.
       // { fallback: false } means other routes should 404.
       return { paths, fallback: false }
-    }
-    catch(err){
-      console.log("err", err)
-    }
+   // }
+    // catch(err){
+    //   console.log("err", err)
+    // }
   }
 
 export default Category

@@ -13,23 +13,21 @@ import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 import { motion } from 'framer-motion';
 
-import { getPostConfig, getAllPosts} from './api/home'
+import { getPostConfig, getAllPosts, getAllCategories} from './api/home'
 import Arrayjs from '../components/array'
 
 export async function getStaticProps() {
   const config = await getPostConfig()
   const posts = await getAllPosts(4)
-  const getCategoryList = await fetch(`${baseUrl}/api/categories`, {
-    method: "GET",
-  })
+  const getCategoryList = await getAllCategories()
 
-  const allCategory = await getCategoryList.json()
+ // const allCategory = await getCategoryList.json()
 
   return {
     props: {
       config: JSON.parse(JSON.stringify(config[0])),
       posts: JSON.parse(JSON.stringify(posts)),
-      categories: allCategory
+      categories: JSON.parse(JSON.stringify(getCategoryList))
     }
   }
 }
