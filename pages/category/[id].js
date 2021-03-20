@@ -322,7 +322,7 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
 }
 
 export async function getStaticProps({params:{id}}) {
-  // try {
+  try {
       const config = await getPostConfig()
      // const allConfig = await config.json()
 
@@ -343,10 +343,10 @@ export async function getStaticProps({params:{id}}) {
               categories: JSON.parse(JSON.stringify(getCategoryList))
           }
       }
-    // }
-    // catch(err){
-    //   console.log("error lors de la dynamisation", err)
-    // }
+    }
+    catch(err){
+      console.log("error lors de la dynamisation", err)
+    }
 
    
 }
@@ -354,7 +354,7 @@ export async function getStaticProps({params:{id}}) {
 // This function gets called at build time
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
- //   try{
+   try{
        const getCategory = await getAllCategories()
         const posts = JSON.parse(JSON.stringify(getCategory))
       // Get the paths we want to pre-render based on posts
@@ -365,10 +365,10 @@ export async function getStaticPaths() {
       // We'll pre-render only these paths at build time.
       // { fallback: false } means other routes should 404.
       return { paths, fallback: false }
-   // }
-    // catch(err){
-    //   console.log("err", err)
-    // }
+   }
+    catch(err){
+      console.log("err", err)
+    }
   }
 
 export default Category

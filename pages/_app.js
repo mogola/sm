@@ -3,7 +3,7 @@ import '../styles/global.scss'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import 'react-toastify/dist/ReactToastify.css'
 import { themeContextUser, tokenStorage, userIsConnected, connected, getAllCategory} from './../context/contextUser'
-import { getPostConfig } from './api/home'
+import { getPostConfig, getAllCategories } from './api/home'
 import baseUrl from './../helpers/baseUrl'
 import fetch from 'isomorphic-unfetch'
 import { useRouter } from 'next/router'
@@ -14,9 +14,7 @@ export async function getServerSideProps() {
 
   const [configRes, categoryRes] = await Promise.all([
     getPostConfig(),
-    fetch(`${baseUrl}/api/categories`, {
-      method: "GET",
-    })
+    getAllCategories()
   ])
 
   const [configs, categories] = await Promise.all([
@@ -36,7 +34,7 @@ export async function getServerSideProps() {
     return {
       props: {
         config: JSON.parse(JSON.stringify(configs[0])),
-        allCats: categories
+        allCats: JSON.parse(JSON.stringify(configs[0]))
       }
     }
   }

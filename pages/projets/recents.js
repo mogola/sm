@@ -29,16 +29,21 @@ import {
   Content
 } from 'react-bulma-components';
 export async function getStaticProps() {
-  const config = await getPostConfig()
-  const posts = await getAllPosts()
-  const getCategoryList = await getAllCategories()
+  try {
+    const config = await getPostConfig()
+    const posts = await getAllPosts()
+    const getCategoryList = await getAllCategories()
 
-  return {
-    props: {
-      config: JSON.parse(JSON.stringify(config[0])),
-      posts: JSON.parse(JSON.stringify(posts)),
-      categories: JSON.parse(JSON.stringify(getCategoryList))
+    return {
+      props: {
+        config: JSON.parse(JSON.stringify(config[0])),
+        posts: JSON.parse(JSON.stringify(posts)),
+        categories: JSON.parse(JSON.stringify(getCategoryList))
+      }
     }
+  }
+  catch(err){
+    console.log("recent fetch", err)
   }
 }
 

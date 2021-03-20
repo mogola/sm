@@ -151,7 +151,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
           duration: 1
         }}
         className="visualLoader">
-          S
+          M
         </motion.div>
         <motion.div
         animate={{ y: 25, opacity: 0.3 }}
@@ -161,7 +161,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
           duration: 1
         }}
         className="visualLoader">
-          M
+          S
         </motion.div>
     </div>
   }
