@@ -4,6 +4,7 @@ import moment from 'moment'
 import arrowRight from './../../public/images/right-arrow.svg'
 import { motion } from 'framer-motion';
 import Image from 'next/image'
+import baseUrl from './../../helpers/baseUrl'
 import {
     Container,
     Columns,
@@ -121,7 +122,7 @@ const variantsItem = {
 
 const Sections = ({title = "", data = [], getcategories = [], device, ...rest}) => {
   const [animBool, setAnimBool] = useState(true)
-  const [categoriesDefault, setCategoriesDefault] = useState(getcategories)
+  const [categoriesDefault, setCategoriesDefault] = useState([])
   const [postsFilter, setPostsFilter] = useState(data)
   const [catSelected, setCatSelected] = useState([])
   const [filterToggle, setFilterToggle] = useState(false)
@@ -174,10 +175,30 @@ const backVariants = {
 
 useEffect(() => {
  console.log('filterToggle', filterToggle, device)
+ 
+ async function getsCategories() {
+    const fetchCat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+    const getCats = await fetchCat.json()
+    
+    let getFetch = JSON.parse(JSON.stringify(getCats))
+    console.log("getcat", getFetch)
+    
+    setCategoriesDefault(getFetch)
+ }
+
+ getsCategories()
+
 }, [])
-const filterData = (itemid, nameCat, i) => {
+
+
+const filterData = async (itemid, nameCat, i) => {
     console.log(itemid)
-    const findCategoryPost = getcategories.filter(value => value._id === itemid)
+
+    const fetchCat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+    const getCats = await fetchCat.json()
+
+    console.log("getCats filter", getCats);
+    const findCategoryPost = getCats.filter(value => value._id === itemid)
 
     console.log(findCategoryPost.length, findCategoryPost[0].posts.length)
 
@@ -202,7 +223,7 @@ const filterData = (itemid, nameCat, i) => {
                 let concatPosts = []
 
                 for(let i = 0; i < multipleCatSelected.length; i++){
-                    let filterCats = getcategories.filter(value => value._id === multipleCatSelected[i])
+                    let filterCats = getCats.filter(value => value._id === multipleCatSelected[i])
                     console.log("get post array", filterCats[0].posts)
                      concatPosts.push(filterCats[0].posts)
                     console.log("concatpost", concatPosts)
@@ -226,7 +247,7 @@ const filterData = (itemid, nameCat, i) => {
 
 
                 for(let i = 0; i < lengthCat.length; i++){
-                    let filterCats = getcategories.filter(value => value._id === lengthCat[i])
+                    let filterCats = getCats.filter(value => value._id === lengthCat[i])
                     console.log("get post array multiple", filterCats[0].posts)
                     concatPostsMultiple.push(filterCats[0].posts)
                     console.log("concatpost multiple", concatPostsMultiple.flat())
@@ -276,7 +297,7 @@ const filterData = (itemid, nameCat, i) => {
       data-id={filterToggle}
     >
       <motion.ul variants={variantsUl}>
-        {getcategories.map((item, i) => (
+        {categoriesDefault.map((item, i) => (
           <motion.li
           variants={variantsItem}
           key={i}>
@@ -332,7 +353,7 @@ const filterData = (itemid, nameCat, i) => {
       data-id={filterToggle}
     >
       <motion.ul variants={variantsUl}>
-        {getcategories.map((item, i) => (
+        {categoriesDefault.map((item, i) => (
           <motion.li
           variants={variantsItem}
           key={i}>

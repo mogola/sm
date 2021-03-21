@@ -80,7 +80,7 @@ export async function gettingCategories() {
     const cats = await CategorySchema
               .find()
               .sort({ "_id": 1 })
-              .populate({path:'posts'}).exec();
+              .populate({path:'posts'})
       return cats
   }
 

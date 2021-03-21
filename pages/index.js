@@ -13,13 +13,12 @@ import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 import { motion } from 'framer-motion';
 
-import { getPostConfig, getAllPosts, gettingCategories} from './api/home'
-import Arrayjs from '../components/array'
+import { getPostConfig, getAllPosts} from './api/home'
 
 export async function getStaticProps() {
   const config = await getPostConfig()
   const posts = await getAllPosts(4)
-  const getCategoryList = await gettingCategories()
+  const getCategoryList = []
 
  // const allCategory = await getCategoryList.json()
 
