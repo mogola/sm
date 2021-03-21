@@ -13,13 +13,13 @@ import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 import { motion } from 'framer-motion';
 
-import { getPostConfig, getAllPosts, getAllCategories} from './api/home'
+import { getPostConfig, getAllPosts, gettingCategories} from './api/home'
 import Arrayjs from '../components/array'
 
 export async function getStaticProps() {
   const config = await getPostConfig()
   const posts = await getAllPosts(4)
-  const getCategoryList = await getAllCategories()
+  const getCategoryList = await gettingCategories()
 
  // const allCategory = await getCategoryList.json()
 
@@ -79,6 +79,18 @@ export default function Home({config, posts, connect, categories}) {
   const [configs, setConfigs] = useState(config)
   const [valueScreen, setValueScreen] = useState()
   const [isAnim, setIsAnim] = useState(false)
+
+  const fetchCategories = async () => {
+    try {
+      const cats = await fetch(`${baseUrl}/api/categories`,{method:'GET'})
+      const getCats = await cats.json()
+      
+      return JSON.parse(JSON.stringify(getCats))
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
   let compareStorage = (initialStorage, newStorage) => {
     initialStorage = JSON.parse(initialStorage)
     if(initialStorage !== null && initialStorage.__v === newStorage.__v)
