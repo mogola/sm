@@ -77,16 +77,11 @@ export async function getAllCategories(number) {
 
 export async function gettingCategories() {
   const { db } = await connectToDatabase();
-  try{
-    const cats = CategorySchema
+    const cats = await CategorySchema
               .find()
               .sort({ "_id": 1 })
               .populate({path:'posts'}).exec();
       return cats
-    }
-    catch(err){
-      console.log(err)
-    }
   }
 
 
