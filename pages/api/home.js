@@ -1,6 +1,6 @@
 import { connectToDatabase } from "../../utils/mongodb";
 import ProjectsSchema from '../../models/Projects'
-import Category from '../../models/Category'
+import CategorySchema from '../../models/Category'
 export async function getPost() {
     const { db } = await connectToDatabase();
 
@@ -76,12 +76,18 @@ export async function getAllCategories(number) {
 }
 
 export async function gettingCategories() {
-  const cats = await Category
-            .find()
-            .sort({ "_id": 1 })
-            .populate({path:'posts'}).exec()
-    return cats
-}
+  const { db } = await connectToDatabase();
+  try{
+    const cats = CategorySchema
+              .find()
+              .sort({ "_id": 1 })
+              .populate({path:'posts'}).exec();
+      return cats
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
 
 
 export async function getSinglePost(id) {
