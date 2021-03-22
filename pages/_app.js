@@ -10,26 +10,27 @@ import { useRouter } from 'next/router'
 import { AnimatePresence } from 'framer-motion';
 import {RouterTracking} from './../components/router/ngprogress'
 import { ToastContainer } from 'react-toastify';
-export async function getStaticProps() {
-try {
-    const [configRes, categoryRes] = await Promise.all([
-      getPostConfig(),
-      getAllCategories()
-    ])
 
-    const [configs, categories] = await Promise.all([
-      configRes.json(),
-      categoryRes.json()
-    ])
+export async function getServerSideProps() {
+  try {
+      let promiseCats, promiseConfigs;
+      // const allCategory = await getCategoryList.json()
+      await Promise.all([getPostConfig(), getAllCategories()])
+      .then((values) => {
+      promiseConfigs = values[0]
+      promiseCats = values[1]
+    
+      console.log("promise all_apps ",promiseCats )
+    })
+  console.log("get site info", promiseConfigs, promiseCats)
+  console.log("state config ====================>", promiseConfigs);
 
-    console.log("get site info", configs, categories)
-    console.log("state config ====================>", config); 
-      return {
-        props: {
-          config: JSON.parse(JSON.stringify(configs[0])),
-          allCats: JSON.parse(JSON.stringify(categories))
-        }
+    return {
+      props: {
+        config: JSON.parse(JSON.stringify(promiseConfigs[0])),
+        allCats: JSON.parse(JSON.stringify(promiseCats))
       }
+    } 
   }
   catch(err){
     console.log(err)
@@ -65,7 +66,7 @@ export default function App({ Component, pageProps, config, router, allCats }) {
     catch(err){
       console.log(err)
     }
-  }, [])
+  }, [id])
 
   useEffect(() => {
     Promise.resolve(localStorage.getItem("info"))
@@ -73,7 +74,7 @@ export default function App({ Component, pageProps, config, router, allCats }) {
   // console.log(allCats)
   getCats()
   console.log("all Getting", config, allCats, id)
-  }, [getCats])
+  }, [id])
 
 
   console.log("all Getting", configData(localStorageData), config, allCats, id)

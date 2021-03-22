@@ -13,23 +13,63 @@ import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 import { motion } from 'framer-motion';
 
-import { getPostConfig, getAllPosts} from './api/home'
+import { getPostConfig, getAllPosts, getAllCategories} from './api/home'
 
 export async function getStaticProps() {
-  const config = await getPostConfig()
-  const posts = await getAllPosts(4)
-  const getCategoryList = []
+  // const config = await getPostConfig()
+  // const posts = await getAllPosts(4)
+  // const getCategoryList = []
 
+  let promiseCat, promiseConfig, promisePosts;
  // const allCategory = await getCategoryList.json()
+ await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(4)])
+ .then((values) => {
+  promiseConfig = values[0]
+  promiseCat = values[1]
+  promisePosts = values[2]
+
+  console.log("promise all Index",promisePosts)
+})
 
   return {
     props: {
-      config: JSON.parse(JSON.stringify(config[0])),
-      posts: JSON.parse(JSON.stringify(posts)),
-      categories: JSON.parse(JSON.stringify(getCategoryList))
+      config: JSON.parse(JSON.stringify(promiseConfig[0])),
+      posts: JSON.parse(JSON.stringify(promisePosts)),
+      categories: JSON.parse(JSON.stringify(promiseCat))
     }
   }
 }
+
+// export async function getStaticProps() {
+//   try {
+//     const [configRes, categoryRes, postRes] = await Promise.all([
+//       getPostConfig(),
+//       getAllCategories(),
+//       getAllPosts(4)
+//     ])
+
+//     const [configs, categories, posts] = await Promise.all([
+//       configRes.json(),
+//       categoryRes.json(),
+//       postRes.json()
+//     ])
+
+
+//     Promise.all([getPostConfig(), getAllCategories(),getAllPosts(4)]).then(value => {console.log(values)})
+
+//     console.log("get site info", configs, categories)
+//       return {
+//         props: {
+//           config: JSON.parse(JSON.stringify(configs[0])),
+//           posts: JSON.parse(JSON.stringify(posts)),
+//           allCats: JSON.parse(JSON.stringify(categories))
+//         }
+//       }
+//   }
+//   catch(err){
+//     console.log(err)
+//   }
+// }
 
 const imageVariants = {
   exit: { x: -90, opacity: 0.9,
