@@ -57,25 +57,30 @@ export default function App({ Component, pageProps, config, router, allCats }) {
 
   useEffect(() => {
     Promise.resolve(localStorage.getItem("info"))
-  
+    
+    let isBool = false
+
     async function getCats() {
         try{
           allCategories = await fetch(`${baseUrl}/api/categories`, { method: "GET"})
           const allCategoriesRes = await allCategories.json()
           setAllCatsGetting(getAllCategory(allCategoriesRes, id))
+          isBool = true
         }
         catch(err){
           console.log(err)
         }
       }
-
-      getCats();
+      
+      if(isBool !== false){
+        getCats();
+      }
   //  RouterTracking(routering.route)
   // console.log(allCats)
   console.log("all Getting", config, allCats, id)
   }, [id])
 
-  
+
   console.log("all Getting", config, allCats, id)
     return (
         <themeContextUser.Provider value={{

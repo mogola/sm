@@ -38,52 +38,22 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
 
   const getData = async () => {
     try {
-      const getData = await fetch(`${baseUrl}/api/info`)
+      const getData = await fetch(`${baseUrl}/api/info`, {method:"GET"})
       const data = await getData.json()
       setOnLoadingPage(false)
       
       await new Promise((resolve) => {
-          resolve(dataStorage(data))
+          resolve(dataStorage(JSON.parse(JSON.stringify(data))))
       }).then(result => {
-        const {
-          menuCategoryLink,
-        } = result
+        const { menuCategoryLink } = result
 
         setMenu(menuCategoryLink)
-        setTextScrollTop(textScrollTop)
 
-        let dataCfs = Object.entries(result)
-
-        let obj = [];
-        dataCfs.forEach(([key, value]) => {
-        obj.push({[key] : value})
-        });
-
-        const available = result.textAvailable.split(' ')
-        let arrayAvailable = []
-        let arrayConcat = [];
-
-        available.forEach(key => {
-          let keyLetter = key.split('')
-          keyLetter.push(' ')
-          arrayAvailable.push(keyLetter)
-        })
-
-        arrayAvailable.map((item, i) => {
-          let accItem = item
-          arrayConcat = [...arrayConcat, ...accItem]
-        })
-
-        setTextAvailable(arrayConcat)
-
-        dataCfs.forEach(([key, value])=> changeState(prevState => ({...prevState, [key]: value })));
-
-        setDataConfig(obj)
-        if(compareStorage(localStorage.getItem("info"),result)){
+        if(compareStorage(localStorage.getItem("info"),result)) {
           setDataConfig(localStorage.getItem("info"))
-        }else{
+        } else {
           localStorage.setItem("info", JSON.stringify(result))
-          setDataConfig(JSON.stringify(result))
+          setDataConfig(JSON.parse(JSON.stringify(result)))
         }
 
         setOnLoadingPage(true)
@@ -95,8 +65,12 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   }
 
   useEffect(() => {
+    let isPromised = true
     setSeoUrl(window.location.href)
+    if(isPromised !== false){
       getData()
+    }
+
       document.addEventListener('scroll', function(event){
         let headerDoc = document.querySelector('.mainHeader')
         if(headerDoc !== null) {
@@ -108,6 +82,8 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
           }
       }
        })
+
+       return () => isPromised = false
   }, [])
 
   if(!onLoadingPage){
