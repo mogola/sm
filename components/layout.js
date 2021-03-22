@@ -22,7 +22,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   const [textScrollTop, setTextScrollTop] = useState()
   const [state, changeState] = useState({});
   const [textAvailable, setTextAvailable] = useState([])
-  const [onLoadingPage, setOnLoadingPage] = useState(false)
+  const [onLoadingPage, setOnLoadingPage] = useState(true)
   const [seoUrl, setSeoUrl] = useState()
   const [fixedMenu, setFixedMenu] = useState(false)
   let compareStorage = (initialStorage, newStorage) => {
@@ -41,7 +41,9 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
   const getData = async () => {
     const getData = await fetch(`${baseUrl}/api/info`)
     const data = await getData.json()
+    
     setOnLoadingPage(false)
+
     await new Promise((resolve) => {
         resolve(dataStorage(data))
     }).then(result => {
