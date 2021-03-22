@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 import { AnimatePresence } from 'framer-motion';
 import {RouterTracking} from './../components/router/ngprogress'
 import { ToastContainer } from 'react-toastify';
-export async function getServerSideProps() {
+export async function getStaticProps() {
 
   const [configRes, categoryRes] = await Promise.all([
     getPostConfig(),
