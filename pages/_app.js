@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import '../styles/global.scss'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import 'react-toastify/dist/ReactToastify.css'
-import { themeContextUser, tokenStorage, userIsConnected, connected, getAllCategory} from './../context/contextUser'
+import { themeContextUser, tokenStorage, userIsConnected, connected, configData, getAllCategory} from './../context/contextUser'
 import { getPostConfig, getAllCategories } from './api/home'
 import baseUrl from './../helpers/baseUrl'
 import fetch from 'isomorphic-unfetch'
@@ -81,20 +81,20 @@ export default function App({ Component, pageProps, config, router, allCats }) {
   }, [id])
 
 
-  console.log("all Getting", config, allCats, id)
+  console.log("all Getting", configData(localStorageData), config, allCats, id)
     return (
         <themeContextUser.Provider value={{
             getToken: tokenStorage,
             userIsConnected: userIsConnected,
             userConnected: connected,
             postsCategory: allCatsGetting,
-            dataConfig: config
+            dataConfig: configData(localStorageData)
         }}>
             <themeContextUser.Consumer>
-                {({userConnected, postsCategory}) => (
+                {({userConnected, postsCategory, dataConfig}) => (
                     <AnimatePresence exitBeforeEnter={false}>
                       <ToastContainer />
-                      <Component key={router.route} allCats={postsCategory} config={config} connect={userConnected()} {...pageProps} />
+                      <Component key={router.route} allCats={postsCategory} config={dataConfig} connect={userConnected()} {...pageProps} />
                     </AnimatePresence>
                 )}
             </themeContextUser.Consumer>

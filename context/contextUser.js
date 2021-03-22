@@ -5,6 +5,12 @@ const { sign, verify, decode } = require('../helpers/jwt')
 export function config(data){
     return data
 }
+
+
+export function configData(data){
+    return data
+}
+
 export function connected() {
     const ISSERVER = typeof window === "undefined";
     if (!ISSERVER) {
