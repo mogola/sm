@@ -11,40 +11,35 @@ import { AnimatePresence } from 'framer-motion';
 import {RouterTracking} from './../components/router/ngprogress'
 import { ToastContainer } from 'react-toastify';
 export async function getStaticProps() {
+try {
+    const [configRes, categoryRes] = await Promise.all([
+      getPostConfig(),
+      getAllCategories()
+    ])
 
-  const [configRes, categoryRes] = await Promise.all([
-    getPostConfig(),
-    getAllCategories()
-  ])
+    const [configs, categories] = await Promise.all([
+      configRes.json(),
+      categoryRes.json()
+    ])
 
-  const [configs, categories] = await Promise.all([
-    configRes.json(),
-    categoryRes.json()
-  ])
-
-  console.log(configs, categories)
-  // try{
-  //   config = await getPostConfig()
-  // }
-  // catch(err){
-  //   console.log('error', err)
-  // }
-  
-  console.log("state config ====================>", config); 
-    return {
-      props: {
-        config: JSON.parse(JSON.stringify(configs[0])),
-        allCats: JSON.parse(JSON.stringify(configs[0]))
+    console.log("get site info", configs, categories)
+    console.log("state config ====================>", config); 
+      return {
+        props: {
+          config: JSON.parse(JSON.stringify(configs[0])),
+          allCats: JSON.parse(JSON.stringify(categories))
+        }
       }
-    }
   }
+  catch(err){
+    console.log(err)
+  }
+}
 
 export default function App({ Component, pageProps, config, router, allCats }) {
-    const {id} = router.query
+  const {id} = router.query
   const [localStorageData , setLocalStorageData] = useState(config)
   const [allCatsGetting, setAllCatsGetting] = useState([])
-
-  console.log(allCatsGetting)
 
   let compareStorage = (initialStorage, newStorage) => {
     if(initialStorage === JSON.stringify(newStorage))
@@ -77,22 +72,24 @@ export default function App({ Component, pageProps, config, router, allCats }) {
       getCats();
   //  RouterTracking(routering.route)
   // console.log(allCats)
-  console.log("all Getting", allCatsGetting, id)
+  console.log("all Getting", config, allCats, id)
   }, [id])
 
+  
+  console.log("all Getting", config, allCats, id)
     return (
         <themeContextUser.Provider value={{
             getToken: tokenStorage,
             userIsConnected: userIsConnected,
             userConnected: connected,
             postsCategory: allCatsGetting,
-            dataConfig: localStorageData
+            dataConfig: config
         }}>
             <themeContextUser.Consumer>
                 {({userConnected, postsCategory}) => (
                     <AnimatePresence exitBeforeEnter={false}>
                       <ToastContainer />
-                      <Component key={router.route} allCats={postsCategory} config={localStorageData} connect={userConnected()} {...pageProps} />
+                      <Component key={router.route} allCats={postsCategory} config={config} connect={userConnected()} {...pageProps} />
                     </AnimatePresence>
                 )}
             </themeContextUser.Consumer>

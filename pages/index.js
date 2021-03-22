@@ -79,17 +79,6 @@ export default function Home({config, posts, connect, categories}) {
   const [valueScreen, setValueScreen] = useState()
   const [isAnim, setIsAnim] = useState(false)
 
-  const fetchCategories = async () => {
-    try {
-      const cats = await fetch(`${baseUrl}/api/categories`,{method:'GET'})
-      const getCats = await cats.json()
-      
-      return JSON.parse(JSON.stringify(getCats))
-    }
-    catch(err){
-      console.log(err)
-    }
-  }
   let compareStorage = (initialStorage, newStorage) => {
     initialStorage = JSON.parse(initialStorage)
     if(initialStorage !== null && initialStorage.__v === newStorage.__v)
@@ -112,6 +101,8 @@ export default function Home({config, posts, connect, categories}) {
     }else {
       return ''
     }
+
+    console.log("config index", config)
   }, [])
 
   return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate={isAnim === true ? "exit": "enter"} exit="exit">
@@ -121,14 +112,14 @@ export default function Home({config, posts, connect, categories}) {
         <FacebookScript />
       </Head>
         <Hometop
-          state={configs}
+          state={config}
           connect={connect}
           onClick={onClick}
       />
       <motion.div variants={backVariants}>
           <Sections
             data={posts}
-            title={configs.titleCategoryRecent}
+            title={config.titleCategoryRecent}
             className="section-home"
             getcategories={categories}
             device={valueScreen && valueScreen }
@@ -136,22 +127,22 @@ export default function Home({config, posts, connect, categories}) {
         </motion.div>
         <motion.div variants={backVariants}>
         <About
-          data={configs.textContentAbout}
-          title={configs.titleCategoryAbout}
+          data={config.textContentAbout}
+          title={config.titleCategoryAbout}
           className="section-about"
         />
         </motion.div>
         <motion.div variants={backVariants}>
         <Prestation
-          data={configs.textContentServices}
-          title={configs.textCategoryServices}
+          data={config.textContentServices}
+          title={config.textCategoryServices}
           className="section-prestation"
         />
         </motion.div>
         <motion.div variants={backVariants}>
         <Footer
-          menu={configs.menuCategoryLink}
-          data={configs}
+          menu={config.menuCategoryLink}
+          data={config}
           className="section-footer"
           onClick={onClick}
         />

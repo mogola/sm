@@ -126,8 +126,8 @@ const Sections = ({title = "", data = [], getcategories = [], device, ...rest}) 
   const [postsFilter, setPostsFilter] = useState(data)
   const [catSelected, setCatSelected] = useState([])
   const [filterToggle, setFilterToggle] = useState(false)
+
   const selectedCategories = (itemid) => {
-    console.log(catSelected)
     if(catSelected.some(value => value === itemid)){
         return true
     }else{
@@ -281,7 +281,6 @@ const filterData = async (itemid, nameCat, i) => {
             } else {
                 setPostsFilter(findCategoryPost[0].posts)
                 setCatSelected([...catSelected, itemid])
-                console.log(selectedCategories(itemid))
             }
         }
 
