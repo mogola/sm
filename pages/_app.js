@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useCallback} from 'react'
 import '../styles/global.scss'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import 'react-toastify/dist/ReactToastify.css'
@@ -53,32 +53,27 @@ export default function App({ Component, pageProps, config, router, allCats }) {
     ? JSON.parse(localStorage.getItem("info"))
     : callback
   }
-  let allCategories;
+
+  const getCats = useCallback(async () => {
+    let allCategories;
+
+    try{
+      allCategories = await fetch(`${baseUrl}/api/categories`, { method: "GET"})
+      const allCategoriesRes = await allCategories.json()
+      setAllCatsGetting(getAllCategory(allCategoriesRes, id))
+    }
+    catch(err){
+      console.log(err)
+    }
+  }, [])
 
   useEffect(() => {
     Promise.resolve(localStorage.getItem("info"))
-    
-    let isBool = false
-
-    async function getCats() {
-        try{
-          allCategories = await fetch(`${baseUrl}/api/categories`, { method: "GET"})
-          const allCategoriesRes = await allCategories.json()
-          setAllCatsGetting(getAllCategory(allCategoriesRes, id))
-          isBool = true
-        }
-        catch(err){
-          console.log(err)
-        }
-      }
-      
-      if(isBool !== false){
-        getCats();
-      }
   //  RouterTracking(routering.route)
   // console.log(allCats)
+  getCats()
   console.log("all Getting", config, allCats, id)
-  }, [id])
+  }, [getCats])
 
 
   console.log("all Getting", configData(localStorageData), config, allCats, id)
@@ -92,9 +87,9 @@ export default function App({ Component, pageProps, config, router, allCats }) {
         }}>
             <themeContextUser.Consumer>
                 {({userConnected, postsCategory, dataConfig}) => (
-                    <AnimatePresence exitBeforeEnter={false}>
+                    <AnimatePresence>
                       <ToastContainer />
-                      <Component key={router.route} allCats={postsCategory} config={dataConfig} connect={userConnected()} {...pageProps} />
+                      <Component key={router.route} allCats={postsCategory} config={localStorageData} connect={userConnected()} {...pageProps} />
                     </AnimatePresence>
                 )}
             </themeContextUser.Consumer>
