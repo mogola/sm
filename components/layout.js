@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
@@ -64,7 +64,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     let isPromised = true
     setSeoUrl(window.location.href)
     if(isPromised !== false){
@@ -146,7 +146,6 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
     </div>
   }
 
-  if(onLoadingPage){
     return (
       <>
       <themeContextUser.Consumer>
@@ -213,13 +212,6 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
                   </h1>
                 </>
               )
-              : (none || post) ? (<></>
-                // <>
-                //   {post &&
-                //   <div className="postBgSingle"
-                //   style={{backgroundColor:state.backgroudPost}}></div>}
-                // </>
-              )
               : portfolio ? (
                 <>
                 <a className="menuB">
@@ -284,28 +276,17 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
                   </div>
                 </div>
                 </>
-              ) : (
+              ) : !homepage ? (
                     <>
-                      <h2 className={utilStyles.headingLg}>
-                        <Link href="/">
-                          <a className={utilStyles.colorInherit}>{name}</a>
-                        </Link>
-                      </h2>
                     </>
+                  ) : !none && (
+                    <></>
                   )}
             </header>
             <main className={post ? "wrapperPost" : ""}>{children}</main>
-            {/* {(!none || !post) && (
-              <div className={styles.backToHome}>
-                <Link href="/">
-                  <a className={utilStyles.linkInherit}>← Back to home</a>
-                </Link>
-              </div>
-            )} */}
           </div>
         )}
       </themeContextUser.Consumer>
       </>
     )
-  }
 }

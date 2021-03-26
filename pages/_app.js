@@ -55,7 +55,7 @@ export default function App({ Component, pageProps, config, router, allCats }) {
     : callback
   }
 
-  const getCats = useCallback(async () => {
+  const getCats = async () => {
     let allCategories;
 
     try{
@@ -66,7 +66,7 @@ export default function App({ Component, pageProps, config, router, allCats }) {
     catch(err){
       console.log(err)
     }
-  }, [id])
+  }
 
   useEffect(() => {
     Promise.resolve(localStorage.getItem("info"))
@@ -77,7 +77,7 @@ export default function App({ Component, pageProps, config, router, allCats }) {
   }, [id])
 
 
-  console.log("all Getting", configData(localStorageData), config, allCats, id)
+  console.log("all Getting", config, allCats, id)
     return (
         <themeContextUser.Provider value={{
             getToken: tokenStorage,
@@ -88,10 +88,12 @@ export default function App({ Component, pageProps, config, router, allCats }) {
         }}>
             <themeContextUser.Consumer>
                 {({userConnected, postsCategory, dataConfig}) => (
-                    <AnimatePresence>
+                    // <AnimatePresence>
+                    <div>
                       <ToastContainer />
                       <Component key={router.route} allCats={postsCategory} config={localStorageData} connect={userConnected()} {...pageProps} />
-                    </AnimatePresence>
+                      </div>
+                    // </AnimatePresence>
                 )}
             </themeContextUser.Consumer>
         </themeContextUser.Provider>)

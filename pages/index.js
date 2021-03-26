@@ -15,29 +15,34 @@ import { motion } from 'framer-motion';
 
 import { getPostConfig, getAllPosts, getAllCategories} from './api/home'
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   // const config = await getPostConfig()
   // const posts = await getAllPosts(4)
   // const getCategoryList = []
-
+try {
   let promiseCat, promiseConfig, promisePosts;
- // const allCategory = await getCategoryList.json()
- await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(4)])
- .then((values) => {
-  promiseConfig = values[0]
-  promiseCat = values[1]
-  promisePosts = values[2]
+  // const allCategory = await getCategoryList.json()
+  await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(4)])
+  .then((values) => {
+   promiseConfig = values[0]
+   promiseCat = values[1]
+   promisePosts = values[2]
+ 
+   console.log("promise all Index",promisePosts)
+ })
+ 
+   return {
+     props: {
+       config: JSON.parse(JSON.stringify(promiseConfig[0])),
+       posts: JSON.parse(JSON.stringify(promisePosts)),
+       categories: JSON.parse(JSON.stringify(promiseCat))
+     }
+   }
+}
+catch(err){
+  console.log("err", err)
+}
 
-  console.log("promise all Index",promisePosts)
-})
-
-  return {
-    props: {
-      config: JSON.parse(JSON.stringify(promiseConfig[0])),
-      posts: JSON.parse(JSON.stringify(promisePosts)),
-      categories: JSON.parse(JSON.stringify(promiseCat))
-    }
-  }
 }
 
 // export async function getStaticProps() {

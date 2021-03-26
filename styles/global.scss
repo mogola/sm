@@ -2032,6 +2032,14 @@ $s: 1.5em;
     width: 100%; max-height: inherit;
   object-fit: cover;
   }
+
+  &.containerfullWidth {
+    max-width: 100% !important;
+    width: 100% !important;
+    grid-gap: 0;
+    grid-template-columns: repeat(auto-fit, Min(50%, 100%));
+    padding:0;
+  }
 }
 
 html .container {

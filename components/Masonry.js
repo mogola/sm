@@ -1,7 +1,7 @@
 import {useEffect} from 'react'
 import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
 
-const Masonry = ({children = []}) => {
+const Masonry = ({children = [],booleanlist, content, classnameplus= ''}) => {
 
     const gridMasonry = () => {
         let grids = [...document.querySelectorAll('.containerMas')];
@@ -51,21 +51,29 @@ const Masonry = ({children = []}) => {
       }
 
       useEffect(() => {
+          console.log('masonry ready')
         gridMasonry()
       }, [])
 
     if(children.length === 0){
         return (<></>)
     }
-    return (
-        <>
-        <Container className="containerMas">
-          {children.map((item, i) => (
-              <img loading="lazy" rel="preload" key={i} src={item} />
-            ))}
-          </Container>
-        </>
-    )
+    if(booleanlist === false){
+        return (
+            <>
+            <Container className="containerMas" rest>
+              {children.map((item, i) => (
+                  <img loading="lazy" rel="preload" key={i} src={item} />
+                ))}
+              </Container>
+            </>
+        )
+    } else {
+        return (
+        <Container className={`containerMas ${classnameplus}`}>
+            {content}
+        </Container>)
+    }
 }
 
 export default Masonry
