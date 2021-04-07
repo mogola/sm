@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import '../styles/global.scss'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import 'react-toastify/dist/ReactToastify.css'
@@ -68,7 +68,7 @@ export default function App({ Component, pageProps, config, router, allCats }) {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     Promise.resolve(localStorage.getItem("info"))
   //  RouterTracking(routering.route)
   // console.log(allCats)
@@ -92,7 +92,7 @@ export default function App({ Component, pageProps, config, router, allCats }) {
                     <div>
                       <ToastContainer />
                       <Component key={router.route} allCats={postsCategory} config={localStorageData} connect={userConnected()} {...pageProps} />
-                      </div>
+                    </div>
                     // </AnimatePresence>
                 )}
             </themeContextUser.Consumer>

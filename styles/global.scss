@@ -3002,7 +3002,7 @@ html .breadCategory {
   min-height: inherit !important;
 }
 
-.navigationPostFixed {
+html .navigationPostFixed {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -3010,6 +3010,11 @@ html .breadCategory {
   z-index: 1000;
   background: #fff;
   border-top: 1px solid #090909;
+  height: 58px;
+
+  .linkSee {
+    padding: 14px;
+  }
   // &:before {
   //   content:"";
   //   height: 132px;

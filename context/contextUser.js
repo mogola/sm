@@ -17,7 +17,7 @@ export function connected() {
         console.log('ready', typeof (localStorage.getItem('userIsConnected')))
         if (localStorage.getItem('userIsConnected') === null) {
             console.log('user not connect')
-            return false
+            return 'false'
         } else {
             // console.log(decode(localStorage.getItem('token')))
             console.log('user connect')

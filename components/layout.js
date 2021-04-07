@@ -40,11 +40,15 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
     try {
       const getData = await fetch(`${baseUrl}/api/info`, {method:"GET"})
       const data = await getData.json()
+
+      console.log(data, typeof data)
       setOnLoadingPage(false)
       
       await new Promise((resolve) => {
           resolve(dataStorage(JSON.parse(JSON.stringify(data))))
       }).then(result => {
+
+         console.log("result", result)
         const { menuCategoryLink } = result
 
         setMenu(menuCategoryLink)

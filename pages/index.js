@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
 import {FacebookScript} from './../components/scripting'
@@ -136,18 +136,21 @@ export default function Home({config, posts, connect, categories}) {
     setIsAnim(true)
   }
 
-  useEffect(() => {
-    if(window){
-      setValueScreen(window.innerWidth)
-    }
-
-    if(compareStorage(localStorage.getItem("info"), config)) {
-      setConfigs(JSON.parse(localStorage.getItem('info')))
-    }else {
-      return ''
-    }
-
-    console.log("config index", config)
+  React.useEffect(() => {
+    (async () => {
+      if(window){
+        setValueScreen(window.innerWidth)
+      }
+  
+      if(compareStorage(localStorage.getItem("info"), config)) {
+        console.log('INFO FROM LOCALSTORAGE');
+        setConfigs(JSON.parse(localStorage.getItem('info')))
+      }else {
+        return ''
+      }
+  
+      console.log("config index", config)
+    })();
   }, [])
 
   return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate={isAnim === true ? "exit": "enter"} exit="exit">
