@@ -430,7 +430,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                               </li>
                               <li key="izeoifdrefre">
                               <Link href="/">
-                                <a onClick={(e) => { disconnect(e)}} className="menuLink">logout</a>
+                                <a onClick={(e) => { disconnect(e, setIsToggle)}} className="menuLink">logout</a>
                               </Link>
                               </li>
                             </React.Fragment>

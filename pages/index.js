@@ -119,7 +119,7 @@ const backVariants = {
   }
 };
 
-export default function Home({config, posts, connect, categories}) {
+export default function Home({config, posts, connect, categories, datafromlocalstorage}) {
   const [configs, setConfigs] = useState(config)
   const [valueScreen, setValueScreen] = useState()
   const [isAnim, setIsAnim] = useState(false)
@@ -139,11 +139,14 @@ export default function Home({config, posts, connect, categories}) {
   React.useEffect(() => {
     (async () => {
       if(window){
+        console.log('datafromlocalstorage', datafromlocalstorage)
+        console.log('dataFromConfigState', config)
         setValueScreen(window.innerWidth)
       }
-  
+      
+      // Compare data from data base and localstora data json
+      console.log("compare data", compareStorage(localStorage.getItem("info"), config))
       if(compareStorage(localStorage.getItem("info"), config)) {
-        console.log('INFO FROM LOCALSTORAGE');
         setConfigs(JSON.parse(localStorage.getItem('info')))
       }else {
         return ''

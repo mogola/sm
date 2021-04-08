@@ -2,6 +2,8 @@
 import React from 'react'
 const { sign, verify, decode } = require('../helpers/jwt')
 
+const ISSERVER = typeof window === "undefined";
+
 export function config(data){
     return data
 }
@@ -11,13 +13,24 @@ export function configData(data){
     return data
 }
 
-export function connected() {
-    const ISSERVER = typeof window === "undefined";
+export function getDataFromLocalStorage(){
     if (!ISSERVER) {
-        console.log('ready', typeof (localStorage.getItem('userIsConnected')))
+        if(localStorage.getItem("info") === null || localStorage.getItem("info") === undefined){
+            console.log('notdata user')
+            return false;
+        } else {
+            let dataFromStorage = localStorage.getItem("info")
+            return dataFromStorage
+        }
+    }
+}
+
+export function connected() {
+    if (!ISSERVER) {
+        console.log('ready', localStorage.getItem("info"), typeof (localStorage.getItem('userIsConnected')))
         if (localStorage.getItem('userIsConnected') === null) {
             console.log('user not connect')
-            return 'false'
+            return false
         } else {
             // console.log(decode(localStorage.getItem('token')))
             console.log('user connect')
@@ -69,7 +82,8 @@ export const themeContextUser = React.createContext({
     isConnected: userIsConnected,
     userConnected: connected,
     dataConfig: config,
-    postsCategory: getAllCategory, 
+    postsCategory: getAllCategory,
+    getDataFromLocal : getDataFromLocalStorage,
     toggleTheme: () => {
         console.log('default click')
     }

@@ -96,8 +96,8 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
     const [filterToggle, setFilterToggle] = useState(false)
     const [categoriesDefault, setCategoriesDefault] = useState([])
 
+    // function for selection id category on array catSelected
     const selectedCategories = (itemid) => {
-        console.log(catSelected)
         if(catSelected.some(value => value === itemid)){
             return true
         }else{
