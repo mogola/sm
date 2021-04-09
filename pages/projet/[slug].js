@@ -33,7 +33,8 @@ const imageVariants = {
         transition: {
             type: "spring",
             duration: 1,
-            staggerChildren: 0.05} },
+            staggerChildren: 0.05} 
+        },
     enter: {
      scale: 1.5,
       opacity: 0.8,
@@ -87,8 +88,8 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
     const [isAnim, setIsAnim] = useState(false)
     const [fixedMenu, setFixedMenu] = useState(false)
     const router = useRouter()
-    const {id} = router.query
-
+    const {id } = router.query
+    const {prefetch} = router
     if(router.isFallback){
         return(
             <h3>loading...</h3>
@@ -97,6 +98,8 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
 
     useEffect(() => {
        // RouterTracking(router)
+       if (prefetch) router.prefetch(window.location.href)
+       setIsAnim(false)
        document.addEventListener('scroll', function(event){
         let headerDoc = document.querySelector('.section-footer')
         //console.log(headerDoc)
@@ -201,7 +204,15 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
                     </li>
                 }
                 <li key="peiroi">
-                    <motion.img variants={imageMainVariants} className="imgMainPost" src={post.imageMainPrincipal} width="auto" height="auto" />
+                    <motion.img 
+                        variants={imageMainVariants} 
+                        initial="exit" 
+                        animate={isAnim ? "enter" :"exit"} 
+                        exit="exit"
+                        className="imgMainPost" 
+                        src={post.imageMainPrincipal} 
+                        width="auto" 
+                        height="auto" />
                 </li>
                 <li key="eiopzieop">
                     <Container className="descriptionPost">
@@ -214,7 +225,9 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
             {post.imageArray.length !== 0 && <Container className="listImagesPost" fluid>
                 <Container>
                     <Columns>
-                    <Masonry children={post.imageArray} />
+                    <Masonry
+                    booleanlist="false"
+                    children={post.imageArray} />
                         {/* {
                             post.imageArray.map((image, i) => (
                                 <Columns.Column key={i} size="half">

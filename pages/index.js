@@ -152,6 +152,7 @@ export default function Home({config, error, posts, connect, categories, datafro
         console.log('datafromlocalstorage', datafromlocalstorage)
         console.log('dataFromConfigState', config)
         console.log('dataFromCategories', categories)
+        localStorage.setItem("info", JSON.stringify(config))
         setValueScreen(window.innerWidth)
       }
       

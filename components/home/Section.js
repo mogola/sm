@@ -174,22 +174,18 @@ const backVariants = {
 }
 
 useEffect(() => {
- console.log('filterToggle', filterToggle, device)
+  console.log('filterToggle', filterToggle, device);
+  
+  (async () => {
+       const fetchCat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+       const getCats = await fetchCat.json()
+       
+       let getFetch = JSON.parse(JSON.stringify(getCats))
+       setCategoriesDefault(getFetch)
+       console.log("getcat", getFetch)
+   })();
+ }, [animBool])
  
- async function getsCategories() {
-    const fetchCat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
-    const getCats = await fetchCat.json()
-    
-    let getFetch = JSON.parse(JSON.stringify(getCats))
-    console.log("getcat", getFetch)
-    
-    setCategoriesDefault(getFetch)
- }
-
- getsCategories()
-
-}, [])
-
 
 const filterData = async (itemid, nameCat, i) => {
     console.log(itemid)
@@ -416,7 +412,8 @@ const filterData = async (itemid, nameCat, i) => {
                             href={'/projet/[slug]'}
                             as={`/projet/${encodeURIComponent(post.title)}`}
                         >
-                            <a className="linkSee" onClick={() => {
+                            <a className="linkSee"
+                             onClick={() => {
                                 setAnimBool(false)
                             }}>Voir le projet <span className="icoRight" width={26}></span></a>
                         </Link>

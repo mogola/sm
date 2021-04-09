@@ -84,12 +84,12 @@ return (
     }}>
         <themeContextUser.Consumer>
             {({userConnected, postsCategory, getDataFromLocal , dataConfig}) => (
-                // <AnimatePresence>
+              <AnimatePresence exitBeforeEnter>
                 <div>
                   <ToastContainer />
                   <Component key={router.route} allCats={postsCategory} datafromlocalstorage={getDataFromLocal()} config={getDataFromLocal() !== false ? getDataFromLocal() : config} connect={userConnected()} {...pageProps} />
                 </div>
-                // </AnimatePresence>
+              </AnimatePresence>
             )}
         </themeContextUser.Consumer>
     </themeContextUser.Provider>)
