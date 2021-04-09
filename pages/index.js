@@ -35,12 +35,22 @@ try {
      props: {
        config: JSON.parse(JSON.stringify(promiseConfig[0])),
        posts: JSON.parse(JSON.stringify(promisePosts)),
-       categories: JSON.parse(JSON.stringify(promiseCat))
+       categories: JSON.parse(JSON.stringify(promiseCat)),
+       error: {
+         status : []
+       }
      }
    }
 }
 catch(err){
   console.log("err", err)
+  return {
+    props: {
+      error: {  
+        status: "error page"
+      }
+    }
+  }
 }
 
 }
@@ -119,7 +129,7 @@ const backVariants = {
   }
 };
 
-export default function Home({config, posts, connect, categories, datafromlocalstorage}) {
+export default function Home({config, error, posts, connect, categories, datafromlocalstorage}) {
   const [configs, setConfigs] = useState(config)
   const [valueScreen, setValueScreen] = useState()
   const [isAnim, setIsAnim] = useState(false)
@@ -156,6 +166,9 @@ export default function Home({config, posts, connect, categories, datafromlocals
     })();
   }, [])
 
+  if(error.status.length){
+    return (<>error application index : {error.status}</>)
+  }
   return (<motion.div variants={imageVariants} className="motionWrapper" initial="exit" animate={isAnim === true ? "exit": "enter"} exit="exit">
     <Layout none homepage>
       <Head>

@@ -87,8 +87,9 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
           <ul className="listBreadCategory">
           {categories.map((cat, i) => (
               <li key={i}>
-                  <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
-                      <a onClick={() => {
+                  <Link key={i} href={`/category/${encodeURIComponent(cat.nameCategory)}`} as={`/category/${cat._id}`}>
+                      <a onClick={(e) => {
+                          e.preventDefault()
                           animatePage()
                           console.log('refresh page');
                           console.log("click on category");
@@ -96,6 +97,7 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
                           const filterPost = allPost.find(post => post._id === cat._id)
                           console.log(filterPost.posts)
                           setGetPost(filterPost.posts)
+                          router.push(`/category/${cat._id}`)
                       }}
                       className="linkToCategories">{cat.nameCategory}</a>
                   </Link>
@@ -120,7 +122,7 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
       //     console.log("======posts======", postsId);
       // setGetPost(getPost)
       //setGetPost(postId)
-    }, [])
+    }, [id])
 
   
 

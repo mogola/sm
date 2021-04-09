@@ -28,8 +28,10 @@ export async function getServerSideProps() {
     return {
       props: {
         config: JSON.parse(JSON.stringify(promiseConfigs[0])),
-        allCats: JSON.parse(JSON.stringify(promiseCats))
-      }
+        allCats: JSON.parse(JSON.stringify(promiseCats)),
+        error: [],
+      },
+      revalidate: 1
     } 
   }
   catch(err){
@@ -50,11 +52,13 @@ export default function App({ Component, pageProps, config, router, allCats }) {
         const allCategoriesRes = await allCategories.json()
         localStorage.setItem("categories", JSON.stringify(allCategoriesRes))
         getDataCategories = allCategoriesRes
+        console.log('get categories server', getDataCategories, typeof getDataCategories)
+        setAllCatsGetting(getAllCategory(getDataCategories, id))
       }else {
-        getDataCategories = localStorage.getItem('categories')
+        getDataCategories = JSON.parse(localStorage.getItem('categories'))
+        console.log('get categories localstorage',getDataCategories, typeof getDataCategories)
+        setAllCatsGetting(getAllCategory(getDataCategories, id))
       }
-
-      setAllCatsGetting(getAllCategory(getDataCategories, id))
     }
     catch(err){
       console.log(err)

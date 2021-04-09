@@ -67,7 +67,9 @@ export function userIsConnected(userIsConnect) {
 }
 
 export function getAllCategory(allPost, idParam){
+    console.log(allPost, idParam);
     if(idParam !== undefined || idParam === ''){
+        console.log('getpost')
         console.log(idParam, allPost, Array.isArray(allPost))
         const postId = allPost.filter(post => post._id === idParam)
         console.log(postId, typeof postId );
