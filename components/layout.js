@@ -36,43 +36,45 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
     : callback
   }
 
-  const getData = async () => {
-    try {
-      const getData = await fetch(`${baseUrl}/api/info`, {method:"GET"})
-      const data = await getData.json()
+  // const getData = async () => {
+  //   try {
+  //     const getData = await fetch(`${baseUrl}/api/info`, {method:"GET"})
+  //     const data = await getData.json()
 
-      console.log(data, typeof data)
-      setOnLoadingPage(false)
+  //     console.log(data, typeof data)
+  //     setOnLoadingPage(false)
       
-      await new Promise((resolve) => {
-          resolve(dataStorage(JSON.parse(JSON.stringify(data))))
-      }).then(result => {
+  //     await new Promise((resolve) => {
+  //         resolve(dataStorage(JSON.parse(JSON.stringify(data))))
+  //     }).then(result => {
 
-         console.log("result", result)
-        const { menuCategoryLink } = result
+  //        console.log("result", result)
+  //       const { menuCategoryLink } = result
 
-        setMenu(menuCategoryLink)
+  //       setMenu(menuCategoryLink)
 
-        if(compareStorage(localStorage.getItem("info"),result)) {
-          setDataConfig(localStorage.getItem("info"))
-        } else {
-          localStorage.setItem("info", JSON.stringify(result))
-          setDataConfig(JSON.parse(JSON.stringify(result)))
-        }
+  //       if(compareStorage(localStorage.getItem("info"),result)) {
+  //         setDataConfig(localStorage.getItem("info"))
+  //       } else {
+  //         localStorage.setItem("info", JSON.stringify(result))
+  //         setDataConfig(JSON.parse(JSON.stringify(result)))
+  //       }
 
-        setOnLoadingPage(true)
-      })
-    }
-    catch(err){
-      console.log("layout err", err)
-    }
-  }
+  //       setOnLoadingPage(true)
+  //     })
+  //   }
+  //   catch(err){
+  //     console.log("layout err", err)
+  //   }
+  // }
 
   React.useEffect(() => {
     let isPromised = true
     setSeoUrl(window.location.href)
     if(isPromised !== false){
-      getData()
+     // getData()
+     setOnLoadingPage(true)
+     console.log('layout init');
     }
 
       document.addEventListener('scroll', function(event){
