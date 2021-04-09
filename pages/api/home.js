@@ -65,7 +65,7 @@ export async function getAllCategories() {
   .collection("categories")
   .find({})
   .sort({ "_id":-1 })
-  .limit()
+  .limit(30)
   .toArray();
 
   return categories
