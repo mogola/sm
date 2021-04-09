@@ -151,6 +151,7 @@ export default function Home({config, error, posts, connect, categories, datafro
       if(window){
         console.log('datafromlocalstorage', datafromlocalstorage)
         console.log('dataFromConfigState', config)
+        console.log('dataFromCategories', categories)
         setValueScreen(window.innerWidth)
       }
       

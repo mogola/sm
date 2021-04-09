@@ -58,15 +58,11 @@ export async function getAllPosts(number) {
   return posts
 }
 
-export async function getAllCategories(number) {
-  if(number === "" || number === undefined){
-    number = 40
-  }
+export async function getAllCategories() {
   const { db } = await connectToDatabase();
 
   const categories = await db
   .collection("categories")
-
   .find({})
   .sort({ "_id":-1 })
   .limit(number)
