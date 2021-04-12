@@ -330,7 +330,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                             {state.menuCategoryLink.map((item, i) => (
                               <motion.li
                               variants={variantsItem} key={i}>
-                                <Link href={item.url}>
+                                <Link href={item.url} prefetch={true}>
                                   <a className="menuLink"
                                     onClick={isMobileMenu ? setIsToggle : ''}
                                   >{item.name}</a>

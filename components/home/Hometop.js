@@ -186,16 +186,12 @@ const scaleVariants = {
                     </motion.div>
                     <div>
                     <motion.div variants={backVariants} className="pastilleAvailable">
-                      {
-                      <Link href="/contact"><a onClick={() => {
-                        onClick()
-                      }}><img src={state.topImageUrl} rel="preload" /></a></Link>
-                      /* {textAvailable.map((letter, i) => (
-                        <span key={i} className={`char${i + 1}`}>
-                          {letter}
-                        </span>
-                      ))}
-                       */}
+                      <Link href="/contact" prefetch={true}>
+                        <a onClick={() => {
+                          onClick()
+                        }}>
+                        <img src={state.topImageUrl} rel="prefetch" /></a>
+                      </Link>
                     </motion.div>
                     </div>
                     <a
@@ -213,8 +209,9 @@ const scaleVariants = {
                         layout="fill"
                         priority={true}
                         rel="preload"
+                        loading='eager'
                         sizes="100vw"
-                        quality={100}
+                        quality={80}
                       />
                       </MainImageHome>
                     

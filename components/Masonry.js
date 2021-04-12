@@ -1,7 +1,7 @@
 import {useEffect} from 'react'
 import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
 
-const Masonry = ({children = [], booleanlist = false, content, classnameplus= ''}) => {
+const Masonry = ({children = [], booleanlist = "false", content, classnameplus= ''}) => {
 
     const gridMasonry = () => {
         let grids = [...document.querySelectorAll('.containerMas')];
@@ -58,7 +58,8 @@ const Masonry = ({children = [], booleanlist = false, content, classnameplus= ''
     if(children.length === 0){
         return (<></>)
     }
-    if(booleanlist === false && booleanlist === false.toString()){
+
+    if(booleanlist.toString() === false || booleanlist.toString() === "false"){
         return (
             <>
             <Container className="containerMas" rest>

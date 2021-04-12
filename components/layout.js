@@ -278,7 +278,7 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
                     <a className="scrollTopLink">{state.textScrollTop}</a>
                     </div>
                   <div className="homeImage">
-                    <img data-img={state.menuCategoryLink} rel="preload" src={state.logoSiteUrl} width="100%" height="auto"/>
+                    <img data-img={state.menuCategoryLink} rel="prefetch" src={state.logoSiteUrl} width="100%" height="auto"/>
                   </div>
                 </div>
                 </>

@@ -520,7 +520,7 @@ img {
   letter-spacing: 1.5px;
   line-height: 24px;
   text-align: center;
-  bottom:63px;
+  bottom: 63px;
   left: 50px;
   text-transform: uppercase;
   position: absolute;
@@ -2827,6 +2827,15 @@ html {
   right: 0;
   // transform: translateY(-50%);
   top: 50%;
+  
+  .section-home & {
+    position: absolute;
+
+    @include mobileView{
+      position: static;
+    }
+  }
+
   @include mobileView{
     position: static;
   }
