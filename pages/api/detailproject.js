@@ -17,11 +17,20 @@ export default async (req,res)=>{
 }
 
 
-const getAllProjects = async (req,res)=>{
+const getAllProjects = async (req,res) => {
+  const {post} = req.query
+  console.log(post, typeof post, typeof parseFloat(post))
+  let number
+  if(post === undefined || !post.length){
+    number = 40
+  }else {
+    number = parseFloat(post)
+  }
     try{
        const posts =  await ProjectsSchema
                 .find()
-                .sort({"_id": 1})
+                .sort({"_id": -1})
+                .limit(number)
                 .populate({path:'categoryArray'})
                 .exec();
 

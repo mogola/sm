@@ -48,16 +48,12 @@ export async function getAllPosts(number) {
   }
   const { db } = await connectToDatabase();
 
-  const posts = await ProjectsSchema
-  .find()
-  .populate({path:'categoryArray'})
+  const posts = await db
+  .collection("projects")
+  .find({})
   .sort({ "_id":-1 })
   .limit(number)
-
-  console.log('posts', posts);
-  // .sort({ "_id":-1 })
-  // .limit(number)
-  // .toArray();
+  .toArray();
 
   return posts
 }
@@ -65,11 +61,12 @@ export async function getAllPosts(number) {
 export async function getAllCategories() {
   const { db } = await connectToDatabase();
 
-  const categories = await CategorySchema
+  const categories = await db
+  .collection("categories")
   .find({})
-  .populate({path:'posts'})
   .sort({ "_id":-1 })
   .limit(30)
+  .toArray();
 
   return categories
 }

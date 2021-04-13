@@ -93,7 +93,6 @@ return (
                     datafromlocalstorage={getDataFromLocal()} 
                     config={getDataFromLocal() !== false ? getDataFromLocal() : config} 
                     connect={userConnected()} 
-                    datacategories={allCats}
                     {...pageProps} />
                 </div>
               </AnimatePresence>

@@ -19,16 +19,20 @@ export async function getServerSideProps() {
   // const config = await getPostConfig()
   // const posts = await getAllPosts(4)
   // const getCategoryList = []
+
 try {
-  let promiseCat, promiseConfig, promisePosts;
+  let promiseCat, promiseConfig, promisePosts, promiseNew;
   // const allCategory = await getCategoryList.json()
-  await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(4)])
+  const getnewpost = await fetch(`${baseUrl}/api/detailproject?post=4`, {method: "GET"})
+
+  await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(4), getnewpost.json()])
   .then((values) => {
    promiseConfig = values[0]
    promiseCat = values[1]
    promisePosts = values[2]
+   promiseNew = values[3]
  
-   console.log("promise all Index",promisePosts)
+   console.log("promise all Index",promiseNew)
  })
  
    return {
@@ -36,6 +40,7 @@ try {
        config: JSON.parse(JSON.stringify(promiseConfig[0])),
        posts: JSON.parse(JSON.stringify(promisePosts)),
        categories: JSON.parse(JSON.stringify(promiseCat)),
+       newpost: JSON.parse(JSON.stringify(promiseNew)),
        error: {
          status : []
        }
@@ -129,7 +134,7 @@ const backVariants = {
   }
 };
 
-export default function Home({config, error, posts, connect, categories, datafromlocalstorage}) {
+export default function Home({config, error, newpost, posts, connect, categories, datafromlocalstorage}) {
   const [configs, setConfigs] = useState(config)
   const [valueScreen, setValueScreen] = useState()
   const [isAnim, setIsAnim] = useState(false)
@@ -184,7 +189,7 @@ export default function Home({config, error, posts, connect, categories, datafro
       />
       <motion.div variants={backVariants}>
           <Sections
-            data={posts}
+            data={newpost}
             title={config.titleCategoryRecent}
             className="section-home"
             getcategories={categories}
