@@ -340,7 +340,7 @@ export async function getStaticPaths() {
     }
     catch(err){
       console.log(err)
-    }
   }
+}
 
 export default Post

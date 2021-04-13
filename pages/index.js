@@ -21,16 +21,17 @@ export async function getServerSideProps() {
   // const getCategoryList = []
 
 try {
-  let promiseCat, promiseConfig, promisePosts, promiseNew;
+  let promiseCat, promiseConfig, promisePosts, promiseNew, promiseNewCat;
   // const allCategory = await getCategoryList.json()
   const getnewpost = await fetch(`${baseUrl}/api/detailproject?post=4`, {method: "GET"})
-
-  await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(4), getnewpost.json()])
+  const getnewcat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+  await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(4), getnewpost.json(), getnewcat.json()])
   .then((values) => {
    promiseConfig = values[0]
    promiseCat = values[1]
    promisePosts = values[2]
    promiseNew = values[3]
+   promiseNewCat = values[4]
  
    console.log("promise all Index",promiseNew)
  })
@@ -39,7 +40,7 @@ try {
      props: {
        config: JSON.parse(JSON.stringify(promiseConfig[0])),
        posts: JSON.parse(JSON.stringify(promisePosts)),
-       categories: JSON.parse(JSON.stringify(promiseCat)),
+       categories: JSON.parse(JSON.stringify(promiseNewCat)),
        newpost: JSON.parse(JSON.stringify(promiseNew)),
        error: {
          status : []
