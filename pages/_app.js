@@ -87,7 +87,14 @@ return (
               <AnimatePresence exitBeforeEnter>
                 <div>
                   <ToastContainer />
-                  <Component key={router.route} allCats={postsCategory} datafromlocalstorage={getDataFromLocal()} config={getDataFromLocal() !== false ? getDataFromLocal() : config} connect={userConnected()} {...pageProps} />
+                  <Component 
+                    key={router.route} 
+                    allCats={postsCategory} 
+                    datafromlocalstorage={getDataFromLocal()} 
+                    config={getDataFromLocal() !== false ? getDataFromLocal() : config} 
+                    connect={userConnected()} 
+                    datacategories={allCats}
+                    {...pageProps} />
                 </div>
               </AnimatePresence>
             )}

@@ -287,8 +287,8 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
                                         {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
                                         <span className="nbItem">{`0${i+1}`}</span>
                                     </Tag>
-                                    {post && post.listCategory.map((tag, j) => (
-                                        <Tag  key={`${j}${post._id}`}>{tag}</Tag>
+                                    {post.categoryArray && post.categoryArray.map((tag, j) => (
+                                        <Tag  key={`${j}${post._id}`}>{tag.nameCategory}</Tag>
                                     ))}
                                 </Tag.Group>
                             <motion.div  variants={backVariants} className="center-category">
@@ -338,8 +338,8 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
                                         {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
                                         <span className="nbItem">{i+1 > 9 ? `${i+1}` : `0${i+1}`}</span>
                                     </Tag>
-                                    {post.listCategory.map((tag, j) => (
-                                        <Tag key={`${j}${post._id}`}>{tag}</Tag>
+                                    {post.categoryArray && post.categoryArray.map((tag, j) => (
+                                        <Tag key={`${j}${post._id}`}>{tag.nameCategory}</Tag>
                                     ))}
                                 </Tag.Group>
                                     <motion.div className="center-category">

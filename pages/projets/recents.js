@@ -31,7 +31,7 @@ import {
 export async function getStaticProps() {
   let promiseCatRecent, promiseConfigRecent, promisePostsRecent;
  // const allCategory = await getCategoryList.json()
- await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(4)])
+ await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(20)])
  .then((values) => {
   promiseConfigRecent = values[0]
   promiseCatRecent = values[1]
