@@ -21,7 +21,7 @@ const getAllProjects = async (req,res) => {
   const {post} = req.query
   console.log(post, typeof post, typeof parseFloat(post))
   let number
-  if(post === undefined || !post.length){
+  if(post === undefined){
     number = 40
   }else {
     number = parseFloat(post)
