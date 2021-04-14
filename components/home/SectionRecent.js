@@ -108,7 +108,7 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
     const filterData = (itemid, nameCat, i) => {
         console.log(itemid, nameCat, i, categoriesDefault)
         const findCategoryPost = categoriesDefault.filter(value => value._id === itemid)
-        console.log(categoriesDefault)
+        console.log(categoriesDefault, "cat selected", catSelected)
         let lengthCat = [...catSelected, itemid]
 
         if(findCategoryPost[0].posts.length === 0){
@@ -117,6 +117,7 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
         }else {
             console.log(findCategoryPost[0].posts)
             if(catSelected.some(value => value === itemid)){
+                console.log('filter 1')
                 let cloneCatSelected = [...catSelected]
                 let itemidcat = cloneCatSelected.filter(value => value !== itemid)
                 if(cloneCatSelected.length === 0) {

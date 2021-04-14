@@ -16,7 +16,7 @@ import {RouterTracking}from './../../components/router/ngprogress'
 import {useRouter} from 'next/router'
 import {motion} from 'framer-motion'
 
-import { getPostConfig, getAllPosts, getAllCategories} from './../api/home'
+import { getPostConfig, getAllPosts, gettingCategories} from './../api/home'
 import {
   Container,
   Columns,
@@ -31,7 +31,7 @@ import {
 export async function getStaticProps() {
   let promiseCatRecent, promiseConfigRecent, promisePostsRecent;
  // const allCategory = await getCategoryList.json()
- await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(20)])
+ await Promise.all([getPostConfig(), gettingCategories(), getAllPosts(20)])
  .then((values) => {
   promiseConfigRecent = values[0]
   promiseCatRecent = values[1]
