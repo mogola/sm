@@ -3,7 +3,6 @@ import Head from 'next/head'
 import Layout, { siteTitle } from './../../components/layout'
 import utilStyles from './../../styles/utils.module.css'
 import Link from 'next/link'
-import { getSortedPostsData, getPostFromDataBase} from './../../lib/posts'
 import SectionsRecent from './../../components/home/SectionRecent'
 import About from './../../components/home/About'
 import Prestation from './../../components/home/Prestation'
@@ -16,7 +15,7 @@ import {RouterTracking}from './../../components/router/ngprogress'
 import {useRouter} from 'next/router'
 import {motion} from 'framer-motion'
 
-import { getPostConfig, getAllPosts, gettingCategories} from './../api/home'
+import { getPostConfig, getAllPosts} from './../api/home'
 import {
   Container,
   Columns,
@@ -28,10 +27,12 @@ import {
   Tag,
   Content
 } from 'react-bulma-components';
-export async function getStaticProps() {
+
+export async function getServerSideProps() {
   let promiseCatRecent, promiseConfigRecent, promisePostsRecent;
+  const getnewcat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
  // const allCategory = await getCategoryList.json()
- await Promise.all([getPostConfig(), gettingCategories(), getAllPosts(20)])
+ await Promise.all([getPostConfig(), getnewcat.json(), getAllPosts(20)])
  .then((values) => {
   promiseConfigRecent = values[0]
   promiseCatRecent = values[1]
