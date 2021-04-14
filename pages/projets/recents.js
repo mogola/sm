@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Layout, { siteTitle } from './../../components/layout'
-import utilStyles from './../../styles/utils.module.css'
 import Link from 'next/link'
 import SectionsRecent from './../../components/home/SectionRecent'
-import About from './../../components/home/About'
-import Prestation from './../../components/home/Prestation'
 import Menu from './../../components/home/Menu'
 import Footer from './../../components/home/Footer'
 import baseUrl from './../../helpers/baseUrl'
@@ -16,36 +13,42 @@ import {useRouter} from 'next/router'
 import {motion} from 'framer-motion'
 
 import { getPostConfig, getAllPosts} from './../api/home'
+
 import {
   Container,
-  Columns,
-  Section,
   Heading,
-  Image,
-  Box,
-  Loader,
-  Tag,
-  Content
 } from 'react-bulma-components';
 
 export async function getServerSideProps() {
-  let promiseCatRecent, promiseConfigRecent, promisePostsRecent;
-  const getnewcat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
- // const allCategory = await getCategoryList.json()
- await Promise.all([getPostConfig(), getnewcat.json(), getAllPosts(20)])
- .then((values) => {
-  promiseConfigRecent = values[0]
-  promiseCatRecent = values[1]
-  promisePostsRecent = values[2]
-
-  console.log("promise all recents",promisePostsRecent)
-})
-
-  return {
-    props: {
-      config: JSON.parse(JSON.stringify(promiseConfigRecent[0])),
-      posts: JSON.parse(JSON.stringify(promisePostsRecent)),
-      categories: JSON.parse(JSON.stringify(promiseCatRecent))
+  try{
+    let promiseCatRecent, promiseConfigRecent, promisePostsRecent;
+    const getnewcat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+   // const allCategory = await getCategoryList.json()
+   await Promise.all([getPostConfig(), getnewcat.json(), getAllPosts(20)])
+   .then((values) => {
+    promiseConfigRecent = values[0]
+    promiseCatRecent = values[1]
+    promisePostsRecent = values[2]
+  
+    console.log("promise all recents",promisePostsRecent)
+  })
+  
+    return {
+      props: {
+        config: JSON.parse(JSON.stringify(promiseConfigRecent[0])),
+        posts: JSON.parse(JSON.stringify(promisePostsRecent)),
+        categories: JSON.parse(JSON.stringify(promiseCatRecent))
+      }
+    }
+  }
+  catch(err){
+    console.log("err", err)
+    return {
+      props: {
+        error: {  
+          status: "error page"
+        }
+      }
     }
   }
 }
