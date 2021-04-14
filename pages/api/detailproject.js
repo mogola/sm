@@ -21,9 +21,9 @@ const getAllProjects = async (req,res) => {
   const {post} = req.query
   console.log(post, typeof post, typeof parseFloat(post))
   let number
-  if(post === undefined){
+  if(post === undefined || post === ''){
     number = 40
-  }else {
+  } else {
     number = parseFloat(post)
   }
     try{
@@ -32,7 +32,6 @@ const getAllProjects = async (req,res) => {
                 .sort({"_id": -1})
                 .limit(number)
                 .populate({path:'categoryArray'})
-                .exec();
 
       if(posts){
           res.json(JSON.stringify(posts))
