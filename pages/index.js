@@ -25,6 +25,7 @@ try {
   // const allCategory = await getCategoryList.json()
   const getnewpost = await fetch(`${baseUrl}/api/detailproject?post=4`, {method: "GET"})
   const getnewcat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+
   await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(4), getnewpost.json(), getnewcat.json()])
   .then((values) => {
    promiseConfig = values[0]

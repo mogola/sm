@@ -34,7 +34,6 @@ const getAllProjects = async (req,res) => {
                 .sort({"_id": -1})
                 .limit(number)
                 .populate({path:'categoryArray'})
-                .exec()
 
       if(posts){
           res.json(JSON.stringify(posts))
