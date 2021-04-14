@@ -276,7 +276,7 @@ export async function getStaticProps({params:{slug}}) {
     const config = await getPostConfig()
     // const postData = await getAllPosts()
     // const posts = JSON.parse(JSON.stringify(postData))
-    const postData = await fetch(`${baseUrl}/api/detailproject?post=40`, {method:"GET"})
+    const postData = await fetch(`${baseUrl}/api/detailproject`, {method:"GET"})
       const posts = await postData.json()
 
     console.log("posts", posts);

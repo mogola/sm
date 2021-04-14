@@ -23,8 +23,10 @@ const getAllProjects = async (req,res) => {
   let number
   if(post === undefined || post === ''){
     number = 40
+    console.log("no param", number, typeof number)
   } else {
     number = parseFloat(post)
+    console.log("width param", number, typeof number)
   }
     try{
        const posts =  await ProjectsSchema
@@ -32,6 +34,7 @@ const getAllProjects = async (req,res) => {
                 .sort({"_id": -1})
                 .limit(number)
                 .populate({path:'categoryArray'})
+                .exec()
 
       if(posts){
           res.json(JSON.stringify(posts))
