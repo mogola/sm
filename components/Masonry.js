@@ -71,7 +71,7 @@ const Masonry = ({children = [], booleanlist = "false", content, classnameplus= 
         )
     } else {
         return (
-        <Container className={`containerMas ${classnameplus}`}>
+        <Container className={`containerMasThree ${classnameplus}`}>
             {content}
         </Container>)
     }

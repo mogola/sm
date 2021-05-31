@@ -208,7 +208,6 @@ const scaleVariants = {
                         src={state.logoSiteUrl}
                         layout="fill"
                         priority={true}
-                        rel="preload"
                         loading='eager'
                         sizes="100vw"
                         quality={80}
