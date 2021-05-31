@@ -440,15 +440,15 @@ export default function Updateproject({ dataProjects, posts, currentPost, catego
     allCategoryList.map((items, i) => {
       allCat.push(items._id)
     })
+
     let exclude = allCat.diff(arrayCat, 1)
+    console.log("exclude id diff", exclude)
 
     if (defaultCategory.some(element => element === item._id)) {
       console.log("exiiiiisssssssssssssssssssssss", true)
       console.log("arrayCat", arrayCat, allCat)
-
-
-
       console.log("exclude before concatenation", exclude)
+
       exclude = [...exclude, item._id]
       console.log("exclude", exclude)
       setExcludeCategory(exclude)
@@ -518,6 +518,7 @@ export default function Updateproject({ dataProjects, posts, currentPost, catego
   }
 
   useEffect(() => {
+    console.log('get current post', postToUpdate)
     console.log("update state", state, imageDownloaded)
     // async function getCatAll() {
     //   const getCategoryList = await fetch(`${baseUrl}/api/category`, {
@@ -613,7 +614,7 @@ export default function Updateproject({ dataProjects, posts, currentPost, catego
                           state[item["name"]]
                         )
                       }
-                    />
+                    />                  
                     {item["name"] === 'listCategory' && <Field>
                       {post[item["name"]].map((tag, i) => (
                         <Tag

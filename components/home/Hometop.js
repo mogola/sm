@@ -65,7 +65,7 @@ const MainImageHome = forwardRef((props, ref) => (
   </div>
 ))
 
-const Hometop = ({onClick, state = '', connect}) => {
+const Hometop = ({onClick, config, state = '', connect}) => {
     const [textAvailable, setTextAvailable] = useState([])
     const [isUserAdmin, setIsUserAdmin] = useState()
     const [isMobile, setIsMobile] = useState(768)
@@ -76,11 +76,12 @@ const Hometop = ({onClick, state = '', connect}) => {
     const [isDevice, setIsDevice] = useState()
     const [isHomeImage, setIsHomeImage] = useState()
 
+    console.log('state configuration', state, config)
     const scale = useMotionValue(isHomeImage < isDevice ? 1.4 : 1.2)
 
     const refImageHome = useRef(null)
+
     const viewPortDetection = () => {
-        console.log(window.innerWidth)
         if(window.innerWidth < isMobile){
           setIsMobileMenu(true)
       }else{
@@ -117,22 +118,6 @@ const Hometop = ({onClick, state = '', connect}) => {
     }
     useEffect(() => {
       setIsInnerWidth(window.innerWidth)
-        const available = state.textAvailable.split(' ')
-        let arrayAvailable = []
-        let arrayConcat = [];
-
-        available.forEach(key => {
-            let keyLetter = key.split('')
-            keyLetter.push(' ')
-            arrayAvailable.push(keyLetter)
-        })
-
-        arrayAvailable.map((item, i) => {
-            let accItem = item
-            arrayConcat = [...arrayConcat, ...accItem]
-        })
-
-        setTextAvailable(arrayConcat)
 
         setIsUserAdmin(connect)
         window.addEventListener('resize',viewPortDetection)
@@ -140,7 +125,6 @@ const Hometop = ({onClick, state = '', connect}) => {
 
         setIsDevice(window.innerWidth)
         if(refImageHome){
-          console.log(refImageHome)
           if(refImageHome.current !== null) {
             setIsHomeImage(refImageHome.current.clientWidth)
           }
@@ -202,16 +186,12 @@ const scaleVariants = {
                     </motion.div>
                     <div>
                     <motion.div variants={backVariants} className="pastilleAvailable">
-                      {
-                      <Link href="/contact"><a onClick={() => {
-                        onClick()
-                      }}><img src={state.topImageUrl} rel="preload" /></a></Link>
-                      /* {textAvailable.map((letter, i) => (
-                        <span key={i} className={`char${i + 1}`}>
-                          {letter}
-                        </span>
-                      ))}
-                       */}
+                      <Link href="/contact" prefetch={true}>
+                        <a onClick={() => {
+                          onClick()
+                        }}>
+                        <img src={state.topImageUrl} rel="prefetch" /></a>
+                      </Link>
                     </motion.div>
                     </div>
                     <a
@@ -228,9 +208,9 @@ const scaleVariants = {
                         src={state.logoSiteUrl}
                         layout="fill"
                         priority={true}
-                        rel="preload"
+                        loading='eager'
                         sizes="100vw"
-                        quality={100}
+                        quality={80}
                       />
                       </MainImageHome>
                     

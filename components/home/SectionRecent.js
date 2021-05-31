@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import baseUrl from "./../../helpers/baseUrl"
 import Link from 'next/link'
 import moment from 'moment'
 import arrowRight from './../../public/images/right-arrow.svg'
@@ -90,13 +91,13 @@ const variantsUl = {
   };
 
 const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories = [], filter = true, ...rest}) => {
-    const [categoriesDefault, setCategoriesDefault] = useState(getcategories)
     const [postsFilter, setPostsFilter] = useState(data)
     const [catSelected, setCatSelected] = useState([])
     const [filterToggle, setFilterToggle] = useState(false)
+    const [categoriesDefault, setCategoriesDefault] = useState([])
 
+    // function for selection id category on array catSelected
     const selectedCategories = (itemid) => {
-        console.log(catSelected)
         if(catSelected.some(value => value === itemid)){
             return true
         }else{
@@ -105,7 +106,9 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
     }
 
     const filterData = (itemid, nameCat, i) => {
-        const findCategoryPost = getcategories.filter(value => value._id === itemid)
+        console.log(itemid, nameCat, i, categoriesDefault)
+        const findCategoryPost = categoriesDefault.filter(value => value._id === itemid)
+        console.log(categoriesDefault, "cat selected", catSelected)
         let lengthCat = [...catSelected, itemid]
 
         if(findCategoryPost[0].posts.length === 0){
@@ -114,6 +117,7 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
         }else {
             console.log(findCategoryPost[0].posts)
             if(catSelected.some(value => value === itemid)){
+                console.log('filter 1')
                 let cloneCatSelected = [...catSelected]
                 let itemidcat = cloneCatSelected.filter(value => value !== itemid)
                 if(cloneCatSelected.length === 0) {
@@ -168,6 +172,8 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
                     setPostsFilter(findCategoryPost[0].posts)
                     setCatSelected([...catSelected, itemid])
                 }
+
+                console.log("post findcategory", findCategoryPost[0].posts)
             }
 
         }
@@ -191,10 +197,22 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
         })
       }
 
-      useEffect(() => {
-        console.log("update posts", postsFilter)
-
-    }, [])
+    useEffect(() => {
+        console.log('filterToggle', filterToggle)
+        
+        async function getsCategories() {
+            const fetchCat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+            const getCats = await fetchCat.json()
+            
+            let getFetch = JSON.parse(JSON.stringify(getCats))
+            console.log("getcat", getFetch)
+            
+            setCategoriesDefault(getFetch)
+        }
+        
+        getsCategories()
+        
+        }, [])
     
     
     return(<motion.div variants={backVariants} className="motionWrapper" initial="exit" animate="enter" exit="exit">
@@ -270,8 +288,8 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
                                         {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
                                         <span className="nbItem">{`0${i+1}`}</span>
                                     </Tag>
-                                    {post.listCategory.map((tag, j) => (
-                                        <Tag  key={`${j}${post._id}`}>{tag}</Tag>
+                                    {post.categoryArray && post.categoryArray.map((tag, j) => (
+                                        <Tag  key={`${j}${post._id}`}>{tag.nameCategory}</Tag>
                                     ))}
                                 </Tag.Group>
                             <motion.div  variants={backVariants} className="center-category">
@@ -321,8 +339,8 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
                                         {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
                                         <span className="nbItem">{i+1 > 9 ? `${i+1}` : `0${i+1}`}</span>
                                     </Tag>
-                                    {post.listCategory.map((tag, j) => (
-                                        <Tag key={`${j}${post._id}`}>{tag}</Tag>
+                                    {post.categoryArray && post.categoryArray.map((tag, j) => (
+                                        <Tag key={`${j}${post._id}`}>{tag.nameCategory}</Tag>
                                     ))}
                                 </Tag.Group>
                                     <motion.div className="center-category">

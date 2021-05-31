@@ -1,5 +1,8 @@
 const MongoClient = require('mongodb').MongoClient;
 import { db,database } from '../../../helpers/connectToMongo'
+
+let uri = process.env.MONGODB_URI
+let dbName = process.env.MONGODB_DB
 //import 'mongoose' from mongoose
 export default async (req,res)=>{
   switch (req.method)
@@ -29,7 +32,7 @@ const getAllCollection = async (req, res) => {
             useUnifiedTopology: true,
         },
         async function(err, db) {
-        var dbo = db.db("Portfolio");
+        var dbo = db.db(dbName);
             const dataCollections = await dbo.collections()
             let collectionList = []
             dataCollections.forEach((cols) => {

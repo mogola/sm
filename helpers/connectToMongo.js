@@ -12,7 +12,7 @@ function database(obj, collection){
          useUnifiedTopology: true,
        },
        async function(err, db) {
-            const dbo = db.db("Portfolio");
+            const dbo = db.db(dbName);
             dbo.collection(collection).insertOne(obj, function(err, res){
                 if (err) throw err;
                     console.log("1 document inserted");
@@ -36,7 +36,7 @@ function db(name, dbreq, dbres){
        async function(err, db) {
          if(name !== undefined && name !== ''){
              if (err) throw err;
-             var dbo = db.db("Portfolio");
+             var dbo = db.db(dbName);
              await dbo.createCollection(name, async function(err, res) {
                  if (err) console.log("err",err);
                  if(err && err.code === 48) {
@@ -94,7 +94,7 @@ function getCollectionCreated(dbres){
          useUnifiedTopology: true,
        },
        async function(err, db) {
-        var dbo = db.db("Portfolio");
+        var dbo = db.db(dbName);
             const dataCollections = await dbo.collections()
             let collectionList = []
             dataCollections.forEach((cols) => {
@@ -125,7 +125,7 @@ function getCollectionData(collection, res){
          useUnifiedTopology: true,
        },
        async function(err, db) {
-            const dbo = db.db("Portfolio");
+            const dbo = db.db(dbName);
             const data = await dbo.collection(collection).findOne()
             res.json({
                 data

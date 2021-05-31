@@ -196,7 +196,7 @@ const refCategoryName = useRef(null)
       })
     }
     catch(err){
-      console.log(err, "not connected")
+      console.log(err, "not connecteds")
     }
   }
   useEffect(() => {

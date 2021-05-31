@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import {useRouter} from 'next/router'
 import baseUrl from '../../helpers/baseUrl'
-// import { getAllPosts, getPostConfig } from '../api/home'
+import { getAllCategories, getPostConfig } from '../api/home'
 import {useRef,useEffect,useState} from 'react'
 import Layout, { siteTitle } from '../../components/layout'
 import Menu from './../../components/home/Menu'
@@ -87,8 +87,9 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
           <ul className="listBreadCategory">
           {categories.map((cat, i) => (
               <li key={i}>
-                  <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
-                      <a onClick={() => {
+                  <Link key={i} href={`/category/${encodeURIComponent(cat.nameCategory)}`} as={`/category/${cat._id}`}>
+                      <a onClick={(e) => {
+                          e.preventDefault()
                           animatePage()
                           console.log('refresh page');
                           console.log("click on category");
@@ -96,6 +97,7 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
                           const filterPost = allPost.find(post => post._id === cat._id)
                           console.log(filterPost.posts)
                           setGetPost(filterPost.posts)
+                          router.push(`/category/${cat._id}`)
                       }}
                       className="linkToCategories">{cat.nameCategory}</a>
                   </Link>
@@ -120,7 +122,7 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
       //     console.log("======posts======", postsId);
       // setGetPost(getPost)
       //setGetPost(postId)
-    }, [])
+    }, [id])
 
   
 
@@ -322,57 +324,52 @@ const Category = ({post, config, filter = false, isadmin= false, connect, catego
 }
 
 export async function getStaticProps({params:{id}}) {
-  let config, allConfig, getCategory, categoriesPost, posts, getPostData, getCategoryList, allCategory;
+  try {
+      const config = await getPostConfig()
+     // const allConfig = await config.json()
 
-    try{
-     config = await fetch(`${baseUrl}/api/info`, {method: 'GET'})
-     allConfig = await config.json()
+      const getCategory = await getAllCategories()
+      // const categoriesPost = await getCategory.json()
+      const posts = JSON.parse(JSON.stringify(getCategory))
 
-     getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
-     categoriesPost = await getCategory.json()
-     posts = JSON.parse(JSON.stringify(categoriesPost))
+      const getPostData = await posts.find(post => post._id === id)
+      const getCategoryList = await getAllCategories()
 
-     getPostData = await posts.find(post => post._id === id)
-     getCategoryList = await fetch(`${baseUrl}/api/categories`, {
-        method: "GET",
-      })
+       // const allCategory = await getCategoryList.json()
 
-       allCategory = await getCategoryList.json()
+        return {
+          props: {
+              allPost: posts,
+              post:JSON.parse(JSON.stringify(getPostData)),
+              config: JSON.parse(JSON.stringify(config[0])),
+              categories: JSON.parse(JSON.stringify(getCategoryList))
+          }
+      }
     }
     catch(err){
-        console.log(err)
+      console.log("error lors de la dynamisation", err)
     }
 
-    return {
-        props: {
-            allPost: posts,
-            post:JSON.parse(JSON.stringify(getPostData)),
-            config: JSON.parse(JSON.stringify(allConfig)),
-            categories: allCategory
-        }
-    }
+   
 }
 
 // This function gets called at build time
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
-    let getCategory, categoriesPost, posts, paths;
-
-    try{
-        getCategory = await fetch(`${baseUrl}/api/categories`, {method: 'GET'})
-        categoriesPost = await getCategory.json()
-        posts = JSON.parse(JSON.stringify(categoriesPost))
+   try{
+       const getCategory = await getAllCategories()
+        const posts = JSON.parse(JSON.stringify(getCategory))
       // Get the paths we want to pre-render based on posts
-      paths = posts.map((category) => ({
+      const paths = posts.map((category) => ({
         params: { id: category._id },
       }))
 
       // We'll pre-render only these paths at build time.
       // { fallback: false } means other routes should 404.
       return { paths, fallback: false }
-    }
+   }
     catch(err){
-      console.log(err)
+      console.log("err", err)
     }
   }
 

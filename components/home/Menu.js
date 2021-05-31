@@ -330,7 +330,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                             {state.menuCategoryLink.map((item, i) => (
                               <motion.li
                               variants={variantsItem} key={i}>
-                                <Link href={item.url}>
+                                <Link href={item.url} prefetch={true}>
                                   <a className="menuLink"
                                     onClick={isMobileMenu ? setIsToggle : ''}
                                   >{item.name}</a>
@@ -430,7 +430,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                               </li>
                               <li key="izeoifdrefre">
                               <Link href="/">
-                                <a onClick={(e) => { disconnect(e)}} className="menuLink">logout</a>
+                                <a onClick={(e) => { disconnect(e, setIsToggle)}} className="menuLink">logout</a>
                               </Link>
                               </li>
                             </React.Fragment>

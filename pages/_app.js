@@ -1,102 +1,102 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import '../styles/global.scss'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import 'react-toastify/dist/ReactToastify.css'
-import { themeContextUser, tokenStorage, userIsConnected, connected, getAllCategory} from './../context/contextUser'
-import { getPostConfig } from './api/home'
+import { themeContextUser, tokenStorage, userIsConnected, connected, configData, getAllCategory, getDataFromLocalStorage} from './../context/contextUser'
+import { getPostConfig, getAllCategories } from './api/home'
 import baseUrl from './../helpers/baseUrl'
 import fetch from 'isomorphic-unfetch'
 import { useRouter } from 'next/router'
 import { AnimatePresence } from 'framer-motion';
 import {RouterTracking} from './../components/router/ngprogress'
 import { ToastContainer } from 'react-toastify';
+
 export async function getServerSideProps() {
-
-  const [configRes, categoryRes] = await Promise.all([
-    getPostConfig(),
-    fetch(`${baseUrl}/api/categories`, {
-      method: "GET",
+  try {
+      let promiseCats, promiseConfigs;
+      // const allCategory = await getCategoryList.json()
+      await Promise.all([getPostConfig(), getAllCategories()])
+      .then((values) => {
+      promiseConfigs = values[0]
+      promiseCats = values[1]
+    
+      console.log("promise all_apps ",promiseCats )
     })
-  ])
+  console.log("get site info", promiseConfigs, promiseCats)
+  console.log("state config ====================>", promiseConfigs);
 
-  const [configs, categories] = await Promise.all([
-    configRes.json(),
-    categoryRes.json()
-  ])
-
-  console.log(configs, categories)
-  // try{
-  //   config = await getPostConfig()
-  // }
-  // catch(err){
-  //   console.log('error', err)
-  // }
-  
-  console.log("state config ====================>", config); 
     return {
       props: {
-        config: JSON.parse(JSON.stringify(configs[0])),
-        allCats: categories
+        config: JSON.parse(JSON.stringify(promiseConfigs[0])),
+        allCats: JSON.parse(JSON.stringify(promiseCats)),
+        error: [],
+      },
+      revalidate: 1
+    } 
+  }
+  catch(err){
+    console.log(err)
+  }
+}
+
+export default function App({ Component, pageProps, config, router, allCats }) {
+  const {id} = router.query
+  const [localStorageData , setLocalStorageData] = useState(config)
+  const [allCatsGetting, setAllCatsGetting] = useState([]);
+
+  const getCats = async () => {
+    let getDataCategories; 
+    try{
+      if(localStorage.getItem('categories') === null || localStorage.getItem('categories') === undefined ) {
+        let allCategories = await fetch(`${baseUrl}/api/categories`, { method: "GET"})
+        const allCategoriesRes = await allCategories.json()
+        localStorage.setItem("categories", JSON.stringify(allCategoriesRes))
+        getDataCategories = allCategoriesRes
+        console.log('get categories server', getDataCategories, typeof getDataCategories)
+        setAllCatsGetting(getAllCategory(getDataCategories, id))
+      }else {
+        getDataCategories = JSON.parse(localStorage.getItem('categories'))
+        console.log('get categories localstorage',getDataCategories, typeof getDataCategories)
+        setAllCatsGetting(getAllCategory(getDataCategories, id))
       }
+    }
+    catch(err){
+      console.log(err)
     }
   }
 
-export default function App({ Component, pageProps, config, router, allCats }) {
-    const {id} = router.query
-  const [localStorageData , setLocalStorageData] = useState(config)
-  const [allCatsGetting, setAllCatsGetting] = useState([])
-
-  console.log(allCatsGetting)
-
-  let compareStorage = (initialStorage, newStorage) => {
-    if(initialStorage === JSON.stringify(newStorage))
-    return true
-    else
-    return false
-  }
-
-  let dataStorage = (callback) => {
-    return localStorage.getItem("info") !== null && compareStorage(localStorage.getItem("info"),callback) === true
-    ? JSON.parse(localStorage.getItem("info"))
-    : callback
-  }
-  let allCategories;
-
-  useEffect(() => {
-    Promise.resolve(localStorage.getItem("info"))
-  
-    async function getCats() {
-        try{
-          allCategories = await fetch(`${baseUrl}/api/categories`, { method: "GET"})
-          const allCategoriesRes = await allCategories.json()
-          setAllCatsGetting(getAllCategory(allCategoriesRes, id))
-        }
-        catch(err){
-          console.log(err)
-        }
-      }
-
-      getCats();
-  //  RouterTracking(routering.route)
-  // console.log(allCats)
-  console.log("all Getting", allCatsGetting, id)
+  React.useEffect(() => {
+    (async () => {
+      Promise.resolve(localStorage.getItem("info"))
+      getCats()
+      console.log("all Getting", config, allCats, id)
+    })();
   }, [id])
 
-    return (
-        <themeContextUser.Provider value={{
-            getToken: tokenStorage,
-            userIsConnected: userIsConnected,
-            userConnected: connected,
-            postsCategory: allCatsGetting,
-            dataConfig: localStorageData
-        }}>
-            <themeContextUser.Consumer>
-                {({userConnected, postsCategory}) => (
-                    <AnimatePresence exitBeforeEnter={false}>
-                      <ToastContainer />
-                      <Component key={router.route} allCats={postsCategory} config={localStorageData} connect={userConnected()} {...pageProps} />
-                    </AnimatePresence>
-                )}
-            </themeContextUser.Consumer>
-        </themeContextUser.Provider>)
+return (
+    <themeContextUser.Provider value={{
+        getToken: tokenStorage,
+        userIsConnected: userIsConnected,
+        userConnected: connected,
+        postsCategory: allCatsGetting,
+        dataConfig: configData(localStorageData),
+        getDataFromLocal: getDataFromLocalStorage
+    }}>
+        <themeContextUser.Consumer>
+            {({userConnected, postsCategory, getDataFromLocal , dataConfig}) => (
+              <AnimatePresence exitBeforeEnter>
+                <div>
+                  <ToastContainer />
+                  <Component 
+                    key={router.route} 
+                    allCats={postsCategory} 
+                    datafromlocalstorage={getDataFromLocal()} 
+                    config={getDataFromLocal() !== false ? getDataFromLocal() : config} 
+                    connect={userConnected()} 
+                    {...pageProps} />
+                </div>
+              </AnimatePresence>
+            )}
+        </themeContextUser.Consumer>
+    </themeContextUser.Provider>)
 }

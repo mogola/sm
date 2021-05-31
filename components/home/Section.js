@@ -4,6 +4,7 @@ import moment from 'moment'
 import arrowRight from './../../public/images/right-arrow.svg'
 import { motion } from 'framer-motion';
 import Image from 'next/image'
+import baseUrl from './../../helpers/baseUrl'
 import {
     Container,
     Columns,
@@ -121,12 +122,12 @@ const variantsItem = {
 
 const Sections = ({title = "", data = [], getcategories = [], device, ...rest}) => {
   const [animBool, setAnimBool] = useState(true)
-  const [categoriesDefault, setCategoriesDefault] = useState(getcategories)
+  const [categoriesDefault, setCategoriesDefault] = useState([])
   const [postsFilter, setPostsFilter] = useState(data)
   const [catSelected, setCatSelected] = useState([])
   const [filterToggle, setFilterToggle] = useState(false)
+
   const selectedCategories = (itemid) => {
-    console.log(catSelected)
     if(catSelected.some(value => value === itemid)){
         return true
     }else{
@@ -173,11 +174,30 @@ const backVariants = {
 }
 
 useEffect(() => {
- console.log('filterToggle', filterToggle, device)
-}, [])
-const filterData = (itemid, nameCat, i) => {
+  console.log('filterToggle', filterToggle, device);
+
+  (async () => {
+      //  const fetchCat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+      //  const getCats = await fetchCat.json()
+       
+       let getFetch = JSON.parse(JSON.stringify(getcategories))
+       setCategoriesDefault(getFetch)
+       console.log("getcat", getFetch)
+   })();
+ }, [animBool])
+ 
+
+const filterData = async (itemid, nameCat, i) => {
     console.log(itemid)
-    const findCategoryPost = getcategories.filter(value => value._id === itemid)
+
+   // const fetchCat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+  // const getCats = await fetchCat.json()
+    
+    const getCats = JSON.parse(JSON.stringify(getcategories))
+    console.log('getCats', getCats)
+
+    console.log("getCats filter", getCats);
+    const findCategoryPost = getCats.filter(value => value._id === itemid)
 
     console.log(findCategoryPost.length, findCategoryPost[0].posts.length)
 
@@ -202,7 +222,7 @@ const filterData = (itemid, nameCat, i) => {
                 let concatPosts = []
 
                 for(let i = 0; i < multipleCatSelected.length; i++){
-                    let filterCats = getcategories.filter(value => value._id === multipleCatSelected[i])
+                    let filterCats = getCats.filter(value => value._id === multipleCatSelected[i])
                     console.log("get post array", filterCats[0].posts)
                      concatPosts.push(filterCats[0].posts)
                     console.log("concatpost", concatPosts)
@@ -223,10 +243,8 @@ const filterData = (itemid, nameCat, i) => {
                 console.log("rest", lengthCat)
                 let concatPostsMultiple = []
 
-
-
                 for(let i = 0; i < lengthCat.length; i++){
-                    let filterCats = getcategories.filter(value => value._id === lengthCat[i])
+                    let filterCats = getCats.filter(value => value._id === lengthCat[i])
                     console.log("get post array multiple", filterCats[0].posts)
                     concatPostsMultiple.push(filterCats[0].posts)
                     console.log("concatpost multiple", concatPostsMultiple.flat())
@@ -238,7 +256,6 @@ const filterData = (itemid, nameCat, i) => {
                   console.log('value filter', filterValueDuplicate.some(value => value !== concatPostsMultiple[i]._id))
                   filterValueDuplicate.push(concatPostsMultiple[i]._id)
                 }
-
 
                 let arrayCloneNotDuplicate = filterValueDuplicate.filter((v, i, a) => a.indexOf(v) === i)
 
@@ -260,7 +277,6 @@ const filterData = (itemid, nameCat, i) => {
             } else {
                 setPostsFilter(findCategoryPost[0].posts)
                 setCatSelected([...catSelected, itemid])
-                console.log(selectedCategories(itemid))
             }
         }
 
@@ -276,36 +292,36 @@ const filterData = (itemid, nameCat, i) => {
       data-id={filterToggle}
     >
       <motion.ul variants={variantsUl}>
-        {getcategories.map((item, i) => (
+        {categoriesDefault.map((item, i) => (
           <motion.li
-          variants={variantsItem}
-          key={i}>
-              <Tag
-                data-id={item._id}
-                className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
-                name={item.nameCategory}
-                style={{opacity:`${selectedCategories(item._id) ? 1 : 0.7 }`}}
-                onClick={(e) => {
-                e.preventDefault()
-                filterData(item._id, item.nameCategory, i)
-                toggleFilter()
-                }}>
-                {item.nameCategory}
-              </Tag>
-          </motion.li>
+            variants={variantsItem}
+            key={i}>
+                <Tag
+                  data-id={item._id}
+                  className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
+                  name={item.nameCategory}
+                  style={{opacity:`${selectedCategories(item._id) ? 1 : 0.7 }`}}
+                  onClick={(e) => {
+                  e.preventDefault()
+                  filterData(item._id, item.nameCategory, i)
+                  toggleFilter()
+                  }}>
+                  {item.nameCategory}
+                </Tag>
+            </motion.li>
           ))}
-          <motion.li
-          variants={variantsItem} key="rzerez" className="returnLink">
-          <a
-            className="returnLinkDefault"
-            onClick={() => {
-              toggleFilter()
-            }}
-          >
-            Retour
-            <span className="icoRight" width={26}></span>
-          </a>
-        </motion.li>
+            <motion.li
+            variants={variantsItem} key="rzerez" className="returnLink">
+            <a
+              className="returnLinkDefault"
+              onClick={() => {
+                toggleFilter()
+              }}
+            >
+              Retour
+              <span className="icoRight" width={26}></span>
+            </a>
+          </motion.li>
         </motion.ul>
       </motion.div>
     <motion.div variant={variants} className="motionWrapper" initial="exit" animate={animBool ? "enter" : "exit"} exit="exit">
@@ -332,7 +348,7 @@ const filterData = (itemid, nameCat, i) => {
       data-id={filterToggle}
     >
       <motion.ul variants={variantsUl}>
-        {getcategories.map((item, i) => (
+        {categoriesDefault.map((item, i) => (
           <motion.li
           variants={variantsItem}
           key={i}>
@@ -378,8 +394,8 @@ const filterData = (itemid, nameCat, i) => {
                         <Tag className="recentDate">
                             {moment(post.date).locale('fr').format('LL', 'fr')}
                         </Tag>
-                        {post.listCategory.map((tag, i) => (
-                            <Tag key={i}>{tag}</Tag>
+                        {post.categoryArray && post.categoryArray.map((tag, i) => (
+                            <Tag key={i}>{tag.nameCategory}</Tag>
                         ))}
                     </Tag.Group>
                     <Heading subtitle className="subTitleProjects">
@@ -396,7 +412,8 @@ const filterData = (itemid, nameCat, i) => {
                             href={'/projet/[slug]'}
                             as={`/projet/${encodeURIComponent(post.title)}`}
                         >
-                            <a className="linkSee" onClick={() => {
+                            <a className="linkSee"
+                             onClick={() => {
                                 setAnimBool(false)
                             }}>Voir le projet <span className="icoRight" width={26}></span></a>
                         </Link>

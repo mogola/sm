@@ -5,6 +5,7 @@ import baseUrl from '../../helpers/baseUrl'
 import { getAllPosts } from '../api/home'
 import {useRef,useEffect,useState} from 'react'
 import Layout, { siteTitle } from '../../components/layout'
+
 const Post = ({post})=>{
     const router = useRouter()
     console.log(router)
