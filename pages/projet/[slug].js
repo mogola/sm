@@ -1,87 +1,67 @@
+import {useEffect,useState} from 'react'
 import fetch from 'isomorphic-unfetch'
 import Head from 'next/head'
 import Link from 'next/link'
 import {useRouter} from 'next/router'
 import baseUrl from '../../helpers/baseUrl'
 import { getAllPosts, getPostConfig } from '../api/home'
-import {useRef,useEffect,useState} from 'react'
 import Layout, { siteTitle } from '../../components/layout'
 import Menu from './../../components/home/Menu'
 import Footer from './../../components/home/Footer'
 import Masonry from './../../components/Masonry'
 import moment from 'moment'
-import {RouterTracking} from './../../components/router/ngprogress'
-import {motion, useViewportScroll } from 'framer-motion'
+import {motion } from 'framer-motion'
 import { NextSeo } from 'next-seo';
 
 import {
     Container,
     Columns,
-    Section,
     Heading,
-    Image,
-    Box,
-    Loader,
     Tag,
     Content
 } from 'react-bulma-components';
 
 const imageVariants = {
     exit: {
+            scale: 1,
+            opacity: 1,
+            transition: {
+            type: "spring",
+            duration: 1,
+            staggerChildren: 0.05
+        } 
+    },
+    enter: {
+        scale: 1.5,
+        opacity: 0.8,
+        transition: {
+            type: "spring",
+            duration: 1,
+            staggerChildren: 0.05
+        }
+    }
+};
+
+const imageMainVariants = {
+    exit: { 
+        scale: 0.6, 
+        opacity: 0.8,
+        transition: {
+            type: "spring",
+            duration: 1,
+            staggerChildren: 0.05
+        } 
+    },
+    enter: {
         scale: 1,
         opacity: 1,
-        transition: {
-            type: "spring",
-            duration: 1,
-            staggerChildren: 0.05} 
-        },
-    enter: {
-     scale: 1.5,
-      opacity: 0.8,
-      transition: {
-          type: "spring",
-            duration: 1,
-            staggerChildren: 0.05
-      }
+            transition: {
+                type: "spring",
+                duration: 1,
+                staggerChildren: 0.05
+            }
     }
-  };
-
-  const imageMainVariants = {
-    exit: { scale: 0.6, opacity: 0.8,
-        transition: {
-            type: "spring",
-            duration: 1,
-            staggerChildren: 0.05} },
-    enter: {
-     scale: 1,
-      opacity: 1,
-      transition: {
-          type: "spring",
-            duration: 1,
-            staggerChildren: 0.05
-      }
-    }
-  };
-
-  const slideVariants = {
-    exit: { x: [-90, 0], opacity: [0.9, 1],
-      transition: {
-        duration: 0.5,
-        type: "tween",
-        stiffness:100,
-        bounce: 0.5,
-      } },
-    enter: {
-      x: [0, 0],
-      opacity: [1, 1],
-      transition: {
-        duration: 0.5,
-        type: "tween",
-        stiffness: 100,
-        bounce: 0.5
-      }
-    }
-  }
+};
 
 const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
     const [configs, setConfigs] = useState(config)
@@ -97,176 +77,166 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
     }
 
     useEffect(() => {
-       // RouterTracking(router)
-       console.log("details", post)
-       if (prefetch) router.prefetch(window.location.href)
-       setIsAnim(false)
-       document.addEventListener('scroll', function(event){
+    if (prefetch) router.prefetch(window.location.href)
+    setIsAnim(false)
+    document.addEventListener('scroll', function(event){
         let headerDoc = document.querySelector('.section-footer')
-        //console.log(headerDoc)
         if(headerDoc !== null) {
-            if((headerDoc.offsetTop - window.scrollY) > window.innerHeight && (headerDoc.offsetTop - window.scrollY) > 0 && (fixedMenu !== true)) {
-            //console.log("scroll")
-            setFixedMenu(true)
-          }else {
-            setFixedMenu(false)
-          }
-      }
-       })
+            if((headerDoc.offsetTop - window.scrollY) > window.innerHeight && 
+                (headerDoc.offsetTop - window.scrollY) > 0 && 
+                (fixedMenu !== true)) {
+                setFixedMenu(true)
+            } else {
+                setFixedMenu(false)
+            }
+        }
+    })
        toggleAnim()
     }, [])
 
     const toggleAnim = () => {
-        //console.log("animPage")
         setIsAnim(true)
     }
+
     return(
         <>
-        <Menu
-        state={config}
-        connect={connect}
-        classMenu="singleMenuNoHome"
-    />
-    <motion.div className="motionWrapper" initial="exit" animate={isAnim ? "exit" :"enter"} exit="exit">
-        <NextSeo
-            facebook={{
-                appId: `${3587318871321107}`,
-            }}
-                title={post.title}
-                description={`${post.description.replace(/<[^>]+>/g, '')}`}
-                canonical={`${baseUrl}/projet/${post.title}`}
-                openGraph={{
-                url: `${baseUrl}/projet/${post.title}`,
-                title: `${post.title}`,
-                description: `${post.description.replace(/<[^>]+>/g, '')}`,
-                type: "article",
-                images: [
-                    {
-                    url: `${post.imageMainPrincipal}`,
-                    width: 800,
-                    height: 600,
-                    alt: 'Og Image Alt',
-                    },
-                    {
-                    url: `${post.imageMainPrincipal}`,
-                    width: 900,
-                    height: 800,
-                    alt: 'Og Image Alt Second',
-                    }
-                ],
-                site_name: `${config.nameSite}`,
-                }}
-                twitter={{
-                handle: '@handle',
-                site: '@site',
-                cardType: 'summary_large_image',
-                }}
+            <Menu
+                state={config}
+                connect={connect}
+                classMenu="singleMenuNoHome"
             />
-        <Layout
-            post
-            slug={`${post.title}`}
-            metaImage={post.imageMainPrincipal}
-            postTitle={`${post.title}`}
-            postDescription={`${post.description}`}
-        >
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      <motion.div variants={imageVariants} animate={isAnim === true ? "exit" : "enter"} className="postBgSingle"
-        style={{backgroundImage: `url("${post.imageMainPrincipal}")`, backgroundColor:config.backgroudPost}}>
-    </motion.div>
-        <Container data-id={post._id} className="mainProject" fluid>
-            <Columns.Column className="columnProject" size={12}>
-                <Content className="info postProjectDetails">
-                    <Tag.Group className="tagGroupPost">
-                        <Tag className="recentDate">
-                            {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
-                        </Tag>
-                        {post.categoryArray && post.categoryArray.map((tag, i) => (
-                            <Tag key={i}>{tag.nameCategory}</Tag>
-                        ))}
-                    </Tag.Group>
-                    <div className="center-category">
-                        <Heading className="subTitleMainProject" size={1}>
-                        {post.title}
-                        </Heading>
-                        <Content className="contentText" dangerouslySetInnerHTML={{__html:post.description}}>
-                        </Content>
-                    </div>
-                </Content>
-                </Columns.Column>
-                </Container>
-        <Container className="center-align" fluid>
-            <Container>
-           <ul>
-                {post.linkImage &&
-                   <li key="oier">
-                       <img loading="lazy" rel="preload" src={post.linkImage} width={200} />
-                    </li>
-                }
-                <li key="peiroi">
-                    <motion.img 
-                        variants={imageMainVariants} 
-                        initial="exit" 
-                        animate={isAnim ? "enter" :"exit"} 
-                        exit="exit"
-                        className="imgMainPost" 
-                        src={post.imageMainPrincipal} 
-                        width="auto" 
-                        height="auto" />
-                </li>
-                <li key="eiopzieop">
-                    <Container className="descriptionPost">
-                        <Content className="contentText" dangerouslySetInnerHTML={{__html:post.subTextDescription}}>
-                        </Content>
-                    </Container>
-                </li>
-            </ul>
-            </Container>
-            {post.imageArray.length !== 0 && <Container className="listImagesPost" fluid>
-                <Container>
-                    <Columns>
-                    <Masonry
-                    booleanlist="false"
-                    children={post.imageArray} />
-                        {/* {
-                            post.imageArray.map((image, i) => (
-                                <Columns.Column key={i} size="half">
-                                    <Image src={image} height="auto" />
-                                </Columns.Column>
-                            ))
-                        } */}
-                    </Columns>
-                </Container>
-            </Container>
-            }
-            <div className={`${fixedMenu ? "navigationPostFixed navigationPost" : "navigationPost" } `}>
-                <Link href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(nextPost)}`}>
-                    <a onClick={(e) => {
-                        e.preventDefault()
-                        toggleAnim(true)
-                        router.push(`/projet/${encodeURIComponent(nextPost)}`)
+        <motion.div className="motionWrapper" initial="exit" animate={isAnim ? "exit" :"enter"} exit="exit">
+            <NextSeo
+                facebook={{
+                    appId: `${3587318871321107}`,
+                }}
+                    title={post.title}
+                    description={`${post.description.replace(/<[^>]+>/g, '')}`}
+                    canonical={`${baseUrl}/projet/${post.title}`}
+                    openGraph={{
+                    url: `${baseUrl}/projet/${post.title}`,
+                    title: `${post.title}`,
+                    description: `${post.description.replace(/<[^>]+>/g, '')}`,
+                    type: "article",
+                    images: [
+                        {
+                        url: `${post.imageMainPrincipal}`,
+                        width: 800,
+                        height: 600,
+                        alt: 'Og Image Alt',
+                        },
+                        {
+                        url: `${post.imageMainPrincipal}`,
+                        width: 900,
+                        height: 800,
+                        alt: 'Og Image Alt Second',
+                        }
+                    ],
+                    site_name: `${config.nameSite}`,
                     }}
-                    className="linkSee nextProjectLink"><span className="txtLinkNav">Voir le projet suivant</span><span className="icoRight" width={26}></span></a>
-                </Link>
-                <Link href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(prevPost)}`}>
-                    <a
-                        onClick={(e) => {
-                            e.preventDefault()
-                            toggleAnim(true)
-                            router.push(`/projet/${encodeURIComponent(prevPost)}`)
-                        }}
-                        className="linkSee prevProjectLink"><span className="icoRight" width={26}></span> <span className="txtLinkNav">Voir le projet précédent</span></a>
-                </Link>
-            </div>
-        </Container>
-        <Footer
-          menu={configs.menuCategoryLink}
-          data={configs}
-          className={`${fixedMenu ? "section-footer-fixed section-footer" : "section-footer"  }`}
-        />
-        </Layout>
-        </motion.div>
+                    twitter={{
+                    handle: '@handle',
+                    site: '@site',
+                    cardType: 'summary_large_image',
+                    }}
+                />
+            <Layout
+                post
+                slug={`${post.title}`}
+                metaImage={post.imageMainPrincipal}
+                postTitle={`${post.title}`}
+                postDescription={`${post.description}`}
+            >
+                    <Head>
+                        <title>{siteTitle}</title>
+                    </Head>
+                    <motion.div variants={imageVariants} animate={isAnim === true ? "exit" : "enter"} className="postBgSingle"
+                        style={{backgroundImage: `url("${post.imageMainPrincipal}")`, backgroundColor:config.backgroudPost}}>
+                    </motion.div>
+                    <Container data-id={post._id} className="mainProject" fluid>
+                        <Columns.Column className="columnProject" size={12}>
+                            <Content className="info postProjectDetails">
+                                <Tag.Group className="tagGroupPost">
+                                    <Tag className="recentDate">
+                                        {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
+                                    </Tag>
+                                    {post.categoryArray && post.categoryArray.map((tag, i) => (
+                                        <Tag key={i}>{tag.nameCategory}</Tag>
+                                    ))}
+                                </Tag.Group>
+                                <div className="center-category">
+                                    <Heading className="subTitleMainProject" size={1}>
+                                    {post.title}
+                                    </Heading>
+                                    <Content className="contentText" dangerouslySetInnerHTML={{__html:post.description}}>
+                                    </Content>
+                                </div>
+                            </Content>
+                        </Columns.Column>
+                    </Container>
+                    <Container className="center-align" fluid><Container>
+                        <ul>
+                            {post.linkImage &&
+                            <li key="oier">
+                                <img loading="lazy" rel="preload" src={post.linkImage} width={200} />
+                                </li>
+                            }
+                            <li key="peiroi">
+                                <motion.img 
+                                    variants={imageMainVariants} 
+                                    initial="exit" 
+                                    animate={isAnim ? "enter" :"exit"} 
+                                    exit="exit"
+                                    className="imgMainPost" 
+                                    src={post.imageMainPrincipal} 
+                                    width="auto" 
+                                    height="auto" />
+                            </li>
+                            <li key="eiopzieop">
+                                <Container className="descriptionPost">
+                                    <Content className="contentText" dangerouslySetInnerHTML={{__html:post.subTextDescription}}>
+                                    </Content>
+                                </Container>
+                            </li>
+                        </ul>
+                    </Container>
+                        {post.imageArray.length !== 0 && <Container className="listImagesPost" fluid>
+                            <Container>
+                                    <Columns>
+                                    <Masonry
+                                        booleanlist="false"
+                                        children={post.imageArray} />
+                                    </Columns>
+                                </Container>
+                            </Container>
+                        }
+                        <div className={`${fixedMenu ? "navigationPostFixed navigationPost" : "navigationPost" } `}>
+                            <Link href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(nextPost)}`}>
+                                <a onClick={(e) => {
+                                    e.preventDefault()
+                                    toggleAnim(true)
+                                    router.push(`/projet/${encodeURIComponent(nextPost)}`)
+                                }}
+                                className="linkSee nextProjectLink"><span className="txtLinkNav">Voir le projet suivant</span><span className="icoRight" width={26}></span></a>
+                            </Link>
+                            <Link href={'/projet/[slug]'} as={`/projet/${encodeURIComponent(prevPost)}`}>
+                                <a
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        toggleAnim(true)
+                                        router.push(`/projet/${encodeURIComponent(prevPost)}`)
+                                    }}
+                                    className="linkSee prevProjectLink"><span className="icoRight" width={26}></span> <span className="txtLinkNav">Voir le projet précédent</span></a>
+                            </Link>
+                        </div>
+                    </Container>
+                    <Footer
+                    menu={configs.menuCategoryLink}
+                    data={configs}
+                    className={`${fixedMenu ? "section-footer-fixed section-footer" : "section-footer"  }`}
+                    />
+                    </Layout>
+            </motion.div>
         </>
     )
 }
@@ -274,16 +244,9 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
 export async function getStaticProps({params:{slug}}) {
     try{
     const config = await getPostConfig()
-    // const postData = await getAllPosts()
-    // const posts = JSON.parse(JSON.stringify(postData))
     const postData = await fetch(`${baseUrl}/api/detailproject`, {method:"GET"})
     const posts = await postData.json()
-
-    console.log("posts", posts);
     const getPostData = posts.find(post => post.title == slug)
-
-    console.log('slug post', getPostData);
-
     const findindex = posts.findIndex(post => {
         console.log(post.title === slug)
         return post.title === slug
@@ -303,11 +266,11 @@ export async function getStaticProps({params:{slug}}) {
 
     if(getPrev === undefined) {
         getPrev = posts[findindex]
-
         idprev = getPrev.title
     }else {
         idprev = getPrev.title
     }
+    
     return {
             props: {
                 post:JSON.parse(JSON.stringify(getPostData)),

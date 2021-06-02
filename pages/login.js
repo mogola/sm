@@ -10,11 +10,11 @@ import Menu from './../components/home/Menu'
 import Footer from './../components/home/Footer'
 import Prestation from './../components/home/Prestation'
 import { motion } from 'framer-motion';
+import { Form } from 'react-bulma-components';
 
 var CryptoJS = require("crypto-js");
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
-
 import { Container, Heading} from 'react-bulma-components';
 
 const { sign, decode } = require('../helpers/jwt')
