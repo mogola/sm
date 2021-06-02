@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState} from 'react'
 import '../styles/global.scss'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import 'react-toastify/dist/ReactToastify.css'
@@ -6,9 +6,7 @@ import { themeContextUser, tokenStorage, userIsConnected, connected, configData,
 import { getPostConfig, getAllCategories } from './api/home'
 import baseUrl from './../helpers/baseUrl'
 import fetch from 'isomorphic-unfetch'
-import { useRouter } from 'next/router'
 import { AnimatePresence } from 'framer-motion';
-import {RouterTracking} from './../components/router/ngprogress'
 import { ToastContainer } from 'react-toastify';
 
 export async function getServerSideProps() {
@@ -19,11 +17,7 @@ export async function getServerSideProps() {
       .then((values) => {
       promiseConfigs = values[0]
       promiseCats = values[1]
-    
-      console.log("promise all_apps ",promiseCats )
     })
-  console.log("get site info", promiseConfigs, promiseCats)
-  console.log("state config ====================>", promiseConfigs);
 
     return {
       props: {
@@ -52,11 +46,9 @@ export default function App({ Component, pageProps, config, router, allCats }) {
         const allCategoriesRes = await allCategories.json()
         localStorage.setItem("categories", JSON.stringify(allCategoriesRes))
         getDataCategories = allCategoriesRes
-        console.log('get categories server', getDataCategories, typeof getDataCategories)
         setAllCatsGetting(getAllCategory(getDataCategories, id))
       }else {
         getDataCategories = JSON.parse(localStorage.getItem('categories'))
-        console.log('get categories localstorage',getDataCategories, typeof getDataCategories)
         setAllCatsGetting(getAllCategory(getDataCategories, id))
       }
     }

@@ -8,8 +8,6 @@ import Footer from './../../components/home/Footer'
 import baseUrl from './../../helpers/baseUrl'
 import fetch from 'node-fetch'
 import PropTypes from 'prop-types';
-import {RouterTracking}from './../../components/router/ngprogress'
-import {useRouter} from 'next/router'
 import {motion} from 'framer-motion'
 
 import { getPostConfig, getAllPosts} from './../api/home'
@@ -79,52 +77,51 @@ export default function Home({config, posts, connect, categories}) {
     setIsAnim(!isAnim)
 }
 
-console.log("posts", posts)
-
 const Filtercomponent = () => {
   return(
   <Container className="breadCategory">
       <Heading className="titleBreadCategory" size={3}>Filtrer par : </Heading>
       <ul className="listBreadCategory">
-      {categories.map((cat, i) => (
-          <li key={i}>
-              <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
-                  <a onClick={() => {
-                      animatePage()
-                  }}
-                  className="linkToCategories">{cat.nameCategory}</a>
-              </Link>
-          </li>
-      ))}
+        {categories.map((cat, i) => (
+            <li key={i}>
+                <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
+                    <a onClick={() => {
+                        animatePage()
+                    }}
+                    className="linkToCategories">{cat.nameCategory}</a>
+                </Link>
+            </li>
+        ))}
       </ul>
   </Container>)
 }
-  return (<>
+
+return (<>
     <Menu
-      state={config}
-      connect={connect}
-      classMenu="singleMenuNoHome"
-  />
-<motion.div variants={imageVariants} className="motionWrapper" initial={isAnim === true ? "exit": "enter"} animate="enter" exit="exit">
-      <Layout none>
-        <Head>
-          <title>{siteTitle}</title>
-        </Head>
-          <SectionsRecent
-            title="Mes Projets"
-            data={getPost}
-            className="section-category"
-            isadmin={isAdmin === true ? true : false}
-            getcategories={categories}
-            component={<Filtercomponent />}
-          />
-          <Footer
-            menu={configs.menuCategoryLink}
-            data={configs}
-            className="section-footer"
-          />
-      </Layout>
-    </motion.div>
+        state={config}
+        connect={connect}
+        classMenu="singleMenuNoHome"
+    />
+    <motion.div variants={imageVariants} className="motionWrapper" initial={isAnim === true ? "exit": "enter"} animate="enter" exit="exit">
+          <Layout none>
+            <Head>
+              <title>{siteTitle}</title>
+            </Head>
+              <SectionsRecent
+                title="Mes Projets"
+                data={getPost}
+                className="section-category"
+                isadmin={isAdmin === true ? true : false}
+                getcategories={categories}
+                component={<Filtercomponent />}
+              />
+              <Footer
+                menu={configs.menuCategoryLink}
+                data={configs}
+                className="section-footer"
+              />
+          </Layout>
+      </motion.div>
     </>
   )
 }

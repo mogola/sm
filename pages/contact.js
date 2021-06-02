@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect  } from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
 import baseUrl from '../helpers/baseUrl'
@@ -7,15 +7,13 @@ import fetch from 'isomorphic-unfetch'
 import Menu from './../components/home/Menu'
 import Footer from './../components/home/Footer'
 import Prestation from './../components/home/Prestation'
-import {RouterTracking} from './../components/router/ngprogress'
 import {getPostConfig, getAllPosts } from './api/home'
-import Masonry from './../components/Masonry'
-import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
-const {Field, Control, Label} = Form;
+import { Button, Container, Content, Heading, Form, Columns } from 'react-bulma-components';
 import { ToastContainer } from 'react-toastify';
-import { toast } from 'react-toastify';
 import {useRouter} from 'next/router'
 import { motion} from 'framer-motion'
+
+const {Field, Label} = Form;
 
 export async function getServerSideProps() {
     const getData = await fetch(`${baseUrl}/api/about`, {method:"GET"})
@@ -32,10 +30,8 @@ export async function getServerSideProps() {
       }
     }
 
-export default function Contact({post, data, config, allPost, connect}) {
-    const [getData, setGetData] = useState(data)
+export default function Contact({config, connect}) {
     const [configs, setConfigs] = useState(config)
-    const [posts, setPosts] = useState(allPost)
     const [regexEmail, setRegexEmail] = useState(new RegExp('^[a-z0-9.-]+@[a-z.]{2,}\.[a-z]$'))
     const [state, changeState] = useState({})
     const [btndisabled, setBtnDisabled] = useState(true)
@@ -49,28 +45,27 @@ export default function Contact({post, data, config, allPost, connect}) {
     let refMessage = useRef()
     let refPhone = useRef()
 
-    const router = useRouter()
-
     const imageVariants = {
         exit: { x: -300, opacity: 0.9,
-          transition: {
+            transition: {
             duration: 0.5,
             type: "tween",
             stiffness:100,
             bounce: 0.5,
             when: "afterChildren"
-          } },
+            } },
         enter: {
-          x: 0,
-          opacity: 1,
-          transition: {
+            x: 0,
+            opacity: 1,
+            transition: {
             duration: 0.5,
             type: "tween",
             stiffness: 100,
             bounce: 0.5
-          }
+            }
         }
-      };
+    };
+
     const errorsForm = () => {
         let getErrors = document.querySelectorAll('.error')
 
@@ -101,17 +96,17 @@ export default function Contact({post, data, config, allPost, connect}) {
         }
     }
 
-  useEffect(() =>{
-    //  RouterTracking(router)
-      if(refLastname.current && !firstFocus){
+    useEffect(() =>{
+        if(refLastname.current && !firstFocus){
             refLastname.current.focus()
         }
 
         setErrorsField(document.querySelectorAll('.error'))
-  }, [state])
+    }, [state])
 
   const onChange = ({target}) => {
-      setFirstFocus(true)
+    setFirstFocus(true)
+    
     const {name, value} = target
     const indexInput = parseInt(document.querySelectorAll(`[name="${name}"]`)[0].getAttribute("index"))
 
@@ -121,7 +116,8 @@ export default function Contact({post, data, config, allPost, connect}) {
   }
 
   const displayError = (targetIndex, refValue) => {
-      let arrayO = validError
+    let arrayO = validError
+    
     if(refValue === "") {
         arrayO[targetIndex] = "error"
         setValidError(arrayO)
@@ -133,165 +129,165 @@ export default function Contact({post, data, config, allPost, connect}) {
 
   return (
     <motion.div
-    variants={imageVariants}
-    initial="exit"
-    animate="enter"
-    exit="exit">
-    <Layout post>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      <ToastContainer />
-      <Menu
-            state={config}
-            connect={connect}
-            classMenu="singleMenuNoHome contactMenu"
-        />
-        <Container className="wrapperContact" fluid>
+        variants={imageVariants}
+        initial="exit"
+        animate="enter"
+        exit="exit">
+        <Layout post>
+            <Head>
+                <title>{siteTitle}</title>
+            </Head>
+            <ToastContainer />
+            <Menu
+                state={config}
+                connect={connect}
+                classMenu="singleMenuNoHome contactMenu"
+            />
+            <Container className="wrapperContact" fluid>
 
-        <Columns className="ContactMain">
-            <Columns.Column className="contentContact">
-                <Heading>
-                    Contact
-                </Heading>
-                <Content className="subTextContact">
-                    <p>
-                        Vous avez un projet et vous recherchez un illustrateur / designer textile freelance ? Contactez-moi, je suis disponible pour en discuter avec vous.
-                    </p>
-                </Content>
-                <form className="formContactMs" onSubmit={submitForm}>
-                    <div className="columnField">
-                        <Field>
-                            <Label>Prénom</Label>
-                            <input ref={refLastname}
-                            className={`input required ${validError[0]}`}
-                            type="text"
-                            index={0}
-                            onChange={onChange}
-                            defaultValue={refLastname.current === undefined ? "" : refLastname.current.value} name="lastname" />
-                            {validError[0] === "error" && <Content className="errorsText">
-                                <p> Veuillez remplir le champs</p>
-                            </Content>}
-                        </Field>
-                        <Field>
-                            <Label>Nom</Label>
-                            <input ref={refName}
-                            className={`input required ${validError[1]}`}
-                            type="text"
-                            index={1}
-                            onChange={onChange}
-                            defaultValue={refName.current === undefined ? "" : refName.current.value} name="name" />
-                            {validError[1] === "error" && <Content className="errorsText">
-                                <p> Veuillez remplir le champs</p>
-                            </Content>}
-                        </Field>
-                    </div>
-                    <div className="columnField">
-                        <Field>
-                            <Label>Email</Label>
-                            <input ref={refEmail}
-                            className={`input required ${!regexEmail.test(state["email"]) ? "error" : "valid"}`}
-                            type="email"
-                            index={2}
-                            onChange={onChange}
-                            defaultValue={refEmail.current === undefined ? "" : refEmail.current.value} name="email" />
-                            {(refEmail.current && !state[refEmail.current["name"]])  && <Content className="errorsText">
-                                <p> Veuillez remplir le champs</p>
-                            </Content>}
-                        </Field>
-                        <Field>
-                            <Label>Téléphone</Label>
-                            <input ref={refPhone}
-                            className={`input required ${validError[3]}`}
-                            type="phone"
-                            index={3}
-                            onChange={onChange}
-                            defaultValue={refPhone.current === undefined ? "" : refPhone.current.value} name="phone" />
-                            {validError[3] === "error"  && <Content className="errorsText">
-                                <p> Veuillez remplir le champs</p>
-                            </Content>}
-                        </Field>
-                    </div>
-                    <div className="columnField">
-                        <Field>
-                            <Label>Message</Label>
-                            <textarea ref={refMessage}
-                            className={`textarea input required ${validError[4]}`}
-                            onChange={onChange}
-                            index={4}
-                            defaultValue={refMessage.current === undefined ? "" : refMessage.current.value } name="message" />
-                            {validError[4] === "error" && <Content className="errorsText">
-                                <p> Veuillez remplir le champs</p>
-                            </Content>}
-                        </Field>
-                    </div>
-                    <div className="columnField submitting">
-                        <Field>
-                            <Button
-                                disabled={btndisabled}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    submitForm(e)
-                                }}>
-                                Envoyer le message <span className="icoRight"></span>
-                            </Button>
-                        </Field>
-                    </div>
-                </form>
-            </Columns.Column>
-            <Columns.Column className="infoContactPage">
-                <div className="ContainerInfo">
-                <Columns className="contactsSection">
-                <Columns.Column className="partContacts">
-                    <Heading className="titleSubContacts" size={4}>{configs.textCategoryServices}</Heading>
-                    <ul>
-                        {configs.textContentServices.map((item, i) =>(
-                            <li key={i}>
-                            <Link href={item.name}>
-                                <a>{item.name}</a>
-                            </Link>
-                        </li>
-                        ))}
-                    </ul>
+            <Columns className="ContactMain">
+                <Columns.Column className="contentContact">
+                    <Heading>
+                        Contact
+                    </Heading>
+                    <Content className="subTextContact">
+                        <p>
+                            Vous avez un projet et vous recherchez un illustrateur / designer textile freelance ? Contactez-moi, je suis disponible pour en discuter avec vous.
+                        </p>
+                    </Content>
+                    <form className="formContactMs" onSubmit={submitForm}>
+                        <div className="columnField">
+                            <Field>
+                                <Label>Prénom</Label>
+                                <input ref={refLastname}
+                                className={`input required ${validError[0]}`}
+                                type="text"
+                                index={0}
+                                onChange={onChange}
+                                defaultValue={refLastname.current === undefined ? "" : refLastname.current.value} name="lastname" />
+                                {validError[0] === "error" && <Content className="errorsText">
+                                    <p> Veuillez remplir le champs</p>
+                                </Content>}
+                            </Field>
+                            <Field>
+                                <Label>Nom</Label>
+                                <input ref={refName}
+                                className={`input required ${validError[1]}`}
+                                type="text"
+                                index={1}
+                                onChange={onChange}
+                                defaultValue={refName.current === undefined ? "" : refName.current.value} name="name" />
+                                {validError[1] === "error" && <Content className="errorsText">
+                                    <p> Veuillez remplir le champs</p>
+                                </Content>}
+                            </Field>
+                        </div>
+                        <div className="columnField">
+                            <Field>
+                                <Label>Email</Label>
+                                <input ref={refEmail}
+                                className={`input required ${!regexEmail.test(state["email"]) ? "error" : "valid"}`}
+                                type="email"
+                                index={2}
+                                onChange={onChange}
+                                defaultValue={refEmail.current === undefined ? "" : refEmail.current.value} name="email" />
+                                {(refEmail.current && !state[refEmail.current["name"]])  && <Content className="errorsText">
+                                    <p> Veuillez remplir le champs</p>
+                                </Content>}
+                            </Field>
+                            <Field>
+                                <Label>Téléphone</Label>
+                                <input ref={refPhone}
+                                className={`input required ${validError[3]}`}
+                                type="phone"
+                                index={3}
+                                onChange={onChange}
+                                defaultValue={refPhone.current === undefined ? "" : refPhone.current.value} name="phone" />
+                                {validError[3] === "error"  && <Content className="errorsText">
+                                    <p> Veuillez remplir le champs</p>
+                                </Content>}
+                            </Field>
+                        </div>
+                        <div className="columnField">
+                            <Field>
+                                <Label>Message</Label>
+                                <textarea ref={refMessage}
+                                className={`textarea input required ${validError[4]}`}
+                                onChange={onChange}
+                                index={4}
+                                defaultValue={refMessage.current === undefined ? "" : refMessage.current.value } name="message" />
+                                {validError[4] === "error" && <Content className="errorsText">
+                                    <p> Veuillez remplir le champs</p>
+                                </Content>}
+                            </Field>
+                        </div>
+                        <div className="columnField submitting">
+                            <Field>
+                                <Button
+                                    disabled={btndisabled}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        submitForm(e)
+                                    }}>
+                                    Envoyer le message <span className="icoRight"></span>
+                                </Button>
+                            </Field>
+                        </div>
+                    </form>
                 </Columns.Column>
-                <Columns.Column className="partContacts">
-                    <Heading className="titleSubContacts" size={4}>{configs.textFollowMe}</Heading>
-                    <ul>
-                        {configs.socialLink.map((item, i) =>(
-                            <li key={i}>
-                            <Link href={item.url}>
-                                <a>{item.name}</a>
-                            </Link>
-                        </li>
-                        ))}
-                    </ul>
-                </Columns.Column>
-                <Columns.Column className="partContacts">
-                    <Heading className="titleSubContacts" size={4}>{configs.titleLocalisation}</Heading>
-                    <ul>
-                        <li>
-                            <Link href="">
-                                <a>{configs.textLocalisation}</a>
-                            </Link>
-                        </li>
-                    </ul>
+                <Columns.Column className="infoContactPage">
+                    <div className="ContainerInfo">
+                    <Columns className="contactsSection">
+                    <Columns.Column className="partContacts">
+                        <Heading className="titleSubContacts" size={4}>{configs.textCategoryServices}</Heading>
+                        <ul>
+                            {configs.textContentServices.map((item, i) =>(
+                                <li key={i}>
+                                <Link href={item.name}>
+                                    <a>{item.name}</a>
+                                </Link>
+                            </li>
+                            ))}
+                        </ul>
+                    </Columns.Column>
+                    <Columns.Column className="partContacts">
+                        <Heading className="titleSubContacts" size={4}>{configs.textFollowMe}</Heading>
+                        <ul>
+                            {configs.socialLink.map((item, i) =>(
+                                <li key={i}>
+                                <Link href={item.url}>
+                                    <a>{item.name}</a>
+                                </Link>
+                            </li>
+                            ))}
+                        </ul>
+                    </Columns.Column>
+                    <Columns.Column className="partContacts">
+                        <Heading className="titleSubContacts" size={4}>{configs.titleLocalisation}</Heading>
+                        <ul>
+                            <li>
+                                <Link href="">
+                                    <a>{configs.textLocalisation}</a>
+                                </Link>
+                            </li>
+                        </ul>
+                    </Columns.Column>
+                </Columns>
+                    </div>
                 </Columns.Column>
             </Columns>
-                </div>
-            </Columns.Column>
-          </Columns>
-        </Container>
-      <Prestation
-          data={configs.textContentServices}
-          title={configs.textCategoryServices}
-          className="section-prestation"
-        />
-        <Footer
-          menu={configs.menuCategoryLink}
-          data={configs}
-          className="section-footer"
-        />
-    </Layout>
+            </Container>
+            <Prestation
+                data={configs.textContentServices}
+                title={configs.textCategoryServices}
+                className="section-prestation"
+            />
+            <Footer
+            menu={configs.menuCategoryLink}
+            data={configs}
+            className="section-footer"
+            />
+        </Layout>
     </motion.div>
   )
 }

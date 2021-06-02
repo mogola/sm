@@ -1,25 +1,20 @@
 import { useState, useEffect } from 'react'
-import {useRouter} from 'next/router'
 import Head from 'next/head'
-import Link from 'next/link'
 import InputField from '../components/InputField'
 import Layout, { siteTitle } from '../components/layout'
-import {RouterTracking} from '../components/router/ngprogress'
 import baseUrl from '../helpers/baseUrl'
 import {getPostConfig } from './api/home'
 import Menu from './../components/home/Menu'
 import Footer from './../components/home/Footer'
 import Prestation from './../components/home/Prestation'
 import { motion } from 'framer-motion';
-import utilStyles from '../styles/utils.module.css'
 
-import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
-const {Field, Control, Label, Help} = Form;
+import {Container, Heading, Form} from 'react-bulma-components';
+const {Field, Control, Help} = Form;
 
 var CryptoJS = require("crypto-js");
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
-const {sign, verify, decode } = require('../helpers/jwt')
 
 
 export async function getStaticProps() {
@@ -76,15 +71,14 @@ const loginVariants = {
 
 export default function Register({ connect, config}) {
 
-const [emailValue, setEmailValue] = useState();
-const [obj, setObj] = useState({});
-const [regexEmail, setRegexEmail] = useState(new RegExp('^[a-z0-9.-]+@[a-z.]{2,}\.[a-z]$'))
-const [regexPwd, setRegexPwd] = useState(new RegExp('^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$'))
-const [validator, setValidator] = useState(true)
-const [validatorPwd, setValidatorPwd] = useState(true)
-const [errorMessage, setErrorMessage] = useState(false)
-const [matchPwd, setMatchPwd] = useState(false)
-const [emailExisting, setEmailExisting] = useState(false)
+    const [obj, setObj] = useState({});
+    const [regexEmail, setRegexEmail] = useState(new RegExp('^[a-z0-9.-]+@[a-z.]{2,}\.[a-z]$'))
+    const [regexPwd, setRegexPwd] = useState(new RegExp('^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$'))
+    const [validator, setValidator] = useState(true)
+    const [validatorPwd, setValidatorPwd] = useState(true)
+    const [errorMessage, setErrorMessage] = useState(false)
+    const [matchPwd, setMatchPwd] = useState(false)
+    const [emailExisting, setEmailExisting] = useState(false)
 
     useEffect(() => {
     }, [])
@@ -146,8 +140,6 @@ const [emailExisting, setEmailExisting] = useState(false)
     }
 
     const formVerify = () => {
-        let addObj = obj
-
         //verify match password
         let email = obj.email
         let password = obj.password
@@ -223,83 +215,85 @@ const notifySuccess = () => {
         initial="exit"
         animate="enter"
         exit="exit">
-    <Layout post>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      <ToastContainer />
-      <Menu
-            state={config}
-            connect={connect}
-        />
-        <motion.div
-        variants={loginVariants}
-        initial="enter"
-        animate="enter"
-        exit="exit">
-    <Container className="contentLogin" fluid>
-            <div className="innerWrapperLogin">
-        <Heading className="titleMainLogin" size={3}>
-            Register
-        </Heading>
-        <Container className="contentLogin" fluid>
-            <Control className="innerLoginContent">
-      <form>
-      {emailExisting &&
-      <Field kind="group"><Help style={{fontSize: "19px", fontWeight: "bold"}} className={"is-danger"}>Email déjà utilisé</Help></Field>}
-          <InputField
-            onChange={onChange}
-            labelName="email"
-            name="email"
-            type="email"
-            placeholder="email"
-            classValidator={validator ? "is-success" : "is-danger" }
-        />
-        <InputField
-            onChange={onChange}
-            labelName="New Password"
-            name="password"
-            type="password"
-            placeholder="password"
-            booleanerror={errorMessage}
-            classValidator={validatorPwd ? "is-success" : "is-danger"}
-        />
-        <InputField
-            onChange={onChange}
-            labelName="Password"
-            name="newpassword"
-            type="password"
-            placeholder="password"
-        />
-        {matchPwd && <Field kind="group"><Help className={"is-success"}>Les mots de passes sont identiques</Help></Field>}
-        {!matchPwd && <Field kind="group"><Help className={"is-danger"}>Les mots de passes ne sont pas identiques</Help></Field>}
-        <Field kind="group">
-            <Control>
-                <button onClick={(e) => {
-                    submitForm(e)
-                }} disabled={matchPwd ? false : true} className="button" tabIndex="0" type="primary">Envoyer</button>
-            </Control>
-            <Control>
-                <button className="is-link button" tabIndex="0" type="primary">Cancel</button>
-            </Control>
-        </Field>
-      </form>
-      </Control>
-      </Container>
-      </div>
-      </Container>
-      </motion.div>
-      <Prestation
-            data={config.textContentServices}
-            title={config.textCategoryServices}
-            className="section-prestation"
-        />
-        <Footer
-            menu={config.menuCategoryLink}
-            data={config}
-            className="section-footer"
-        />
-    </Layout>
+            <Layout post>
+                <Head>
+                    <title>{siteTitle}</title>
+                </Head>
+                <ToastContainer />
+                <Menu
+                    state={config}
+                    connect={connect}
+                />
+                <motion.div
+                    variants={loginVariants}
+                    initial="enter"
+                    animate="enter"
+                    exit="exit">
+                    <Container className="contentLogin" fluid>
+                            <div className="innerWrapperLogin">
+                                <Heading className="titleMainLogin" size={3}>
+                                    Register
+                                </Heading>
+                                    <Container className="contentLogin" fluid>
+                                        <Control className="innerLoginContent">
+                                            <form>
+                                                {emailExisting &&
+                                                    <Field kind="group">
+                                                        <Help style={{fontSize: "19px", fontWeight: "bold"}} className={"is-danger"}>Email déjà utilisé</Help>
+                                                    </Field>}
+                                                    <InputField
+                                                        onChange={onChange}
+                                                        labelName="email"
+                                                        name="email"
+                                                        type="email"
+                                                        placeholder="email"
+                                                        classValidator={validator ? "is-success" : "is-danger" }
+                                                    />
+                                                    <InputField
+                                                        onChange={onChange}
+                                                        labelName="New Password"
+                                                        name="password"
+                                                        type="password"
+                                                        placeholder="password"
+                                                        booleanerror={errorMessage}
+                                                        classValidator={validatorPwd ? "is-success" : "is-danger"}
+                                                    />
+                                                    <InputField
+                                                        onChange={onChange}
+                                                        labelName="Password"
+                                                        name="newpassword"
+                                                        type="password"
+                                                        placeholder="password"
+                                                    />
+                                                    {matchPwd && <Field kind="group"><Help className={"is-success"}>Les mots de passes sont identiques</Help></Field>}
+                                                    {!matchPwd && <Field kind="group"><Help className={"is-danger"}>Les mots de passes ne sont pas identiques</Help></Field>}
+                                                    <Field kind="group">
+                                                        <Control>
+                                                            <button onClick={(e) => {
+                                                                submitForm(e)
+                                                            }} disabled={matchPwd ? false : true} className="button" tabIndex="0" type="primary">Envoyer</button>
+                                                        </Control>
+                                                        <Control>
+                                                            <button className="is-link button" tabIndex="0" type="primary">Cancel</button>
+                                                        </Control>
+                                                    </Field>
+                                            </form>
+                                    </Control>
+                                </Container>
+                            </div>
+                    </Container>
+                </motion.div>
+                <Prestation
+                    data={config.textContentServices}
+                    title={config.textCategoryServices}
+                    className="section-prestation"
+                />
+                <Footer
+                    menu={config.menuCategoryLink}
+                    data={config}
+                    className="section-footer"
+                />
+            </Layout>
     </motion.div>
   )
 }

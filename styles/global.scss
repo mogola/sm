@@ -803,7 +803,7 @@ html .homeCategory {
 html .homeCategory {
  &.columns{
     margin :0;
-  } 
+  }
 }
 html .section-category {
   .column {
@@ -2859,7 +2859,7 @@ html {
   right: 0;
   // transform: translateY(-50%);
   top: 50%;
-  
+
   .section-home & {
     position: absolute;
 
@@ -3016,7 +3016,6 @@ html .breadCategory {
       font-family: overpass;
       font-weight: 500;
       text-decoration: none;
-      // color:#090909;
       color: #090909;
     }
   }
@@ -3056,11 +3055,6 @@ html .navigationPostFixed {
   .linkSee {
     padding: 14px;
   }
-  // &:before {
-  //   content:"";
-  //   height: 132px;
-  //   display: block;
-  // }
 }
 
 
@@ -3070,23 +3064,24 @@ html .navigationPostFixed {
 
 .classgrid {
   position: relative;
+
   .textfo {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 4;
+
     span {
       display: block;
       text-align: center;
       color: #fff;
       font-size: 24px;
       margin-top: -4px;
-      + span {
-      }
     }
+
     button {
-      background: transparent; 
+      background: transparent;
       width: 100%;
       text-align: center;
       color: #fff;
@@ -3097,10 +3092,10 @@ html .navigationPostFixed {
 
   &.imglookbook {
     .textfo {
-      bottom: 40px; 
+      bottom: 40px;
       right: 40px;
-      top: initial; 
-      left: initial; 
+      top: initial;
+      left: initial;
       transform: initial;
 
       > * {

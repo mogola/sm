@@ -1,27 +1,23 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
 import InputField from '../components/InputField'
 import Layout, { siteTitle } from '../components/layout'
-import {RouterTracking} from '../components/router/ngprogress'
 import baseUrl from '../helpers/baseUrl'
 import { themeContextUser } from './../context/contextUser'
 import { useRouter } from 'next/router'
-import {getPostConfig } from './api/home'
+import { getPostConfig } from './api/home'
 import Menu from './../components/home/Menu'
 import Footer from './../components/home/Footer'
 import Prestation from './../components/home/Prestation'
-import cookies from 'next-cookies'
 import { motion } from 'framer-motion';
 
 var CryptoJS = require("crypto-js");
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
-import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
-const {Field, Control, Label} = Form;
+import { Container, Heading} from 'react-bulma-components';
 
-const { sign, verify, decode } = require('../helpers/jwt')
+const { sign, decode } = require('../helpers/jwt')
 
 export async function getStaticProps() {
     let config;
@@ -42,27 +38,6 @@ export async function getStaticProps() {
 }
 
 let easing = [0.175, 0.85, 0.42, 0.96];
-
-const imageVariants = {
-    exit: { x: -300, opacity: 0.9,
-      transition: {
-        duration: 0.5,
-        type: "tween",
-        stiffness:100,
-        bounce: 0.5,
-        when: "afterChildren"
-      } },
-    enter: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        type: "tween",
-        stiffness: 100,
-        bounce: 0.5
-      }
-    }
-  };
 
 const loginVariants = {
     exit: { x: -150, opacity: 0.8, transition: { duration: 0.5, ease: easing } },
@@ -103,8 +78,10 @@ export default function Login({ connect, config}) {
         try {
             let body = formVerify();
             let userToken = sign({ email: body.email }, body)
+            
             setTokenUser(userToken)
             setUserBody(body)
+
             await
             apiUpload(`${baseUrl}/api/login/account`, 'POST', body, callback)
         }
