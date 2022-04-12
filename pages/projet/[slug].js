@@ -199,7 +199,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
         <Container className="center-align" fluid>
             <Container>
            <ul>
-                {post.linkImage.length &&
+                {post.linkImage !== undefined &&
                    <li key="oier">
                        <img loading="lazy" rel="preload" src={post.linkImage} width={200} />
                     </li>
