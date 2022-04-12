@@ -15,11 +15,10 @@ import { motion } from 'framer-motion';
 
 import { getPostConfig, getAllPosts, getAllCategories} from './api/home'
 
-export async function getServerSideProps() {
+export async function getStaticProps () {
   // const config = await getPostConfig()
   // const posts = await getAllPosts(4)
   // const getCategoryList = []
-
 try {
   let promiseCat, promiseConfig, promisePosts, promiseNew, promiseNewCat;
   // const allCategory = await getCategoryList.json()
