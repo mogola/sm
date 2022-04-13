@@ -11,7 +11,7 @@ import { AnimatePresence } from 'framer-motion';
 import {RouterTracking} from './../components/router/ngprogress'
 import { ToastContainer } from 'react-toastify';
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
       let promiseCats, promiseConfigs;
       // const allCategory = await getCategoryList.json()

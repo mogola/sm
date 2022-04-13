@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 import {useRouter} from 'next/router'
 import { motion} from 'framer-motion'
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const getData = await fetch(`${baseUrl}/api/about`, {method:"GET"})
     const data = await getData.json()
     const config = await getPostConfig()

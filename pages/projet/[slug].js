@@ -222,8 +222,8 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
                     </Container>
                 </li>
             </ul>
-            </Container>7
-            {post.imageArray.length && <Container className="listImagesPost" fluid>
+            </Container>
+            {post.imageArray && <Container className="listImagesPost" fluid>
                 <Container>
                     <Columns>
                     <Masonry
