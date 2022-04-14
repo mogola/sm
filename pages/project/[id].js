@@ -76,7 +76,8 @@ console.log('data', getPostData)
         return {
             props: {
                 post:JSON.parse(JSON.stringify(getPostData))
-            }
+            },
+            revalidate: 1
         }
     }
     catch(err){

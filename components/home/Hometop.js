@@ -203,15 +203,17 @@ const scaleVariants = {
                     style={{ scale }}
                     className="homeImage">
                       <MainImageHome ref={refImageHome}>
-                      <Image
-                        className="mainHomeGlobal"
-                        src={state.logoSiteUrl}
-                        layout="fill"
-                        priority={true}
-                        loading='eager'
-                        sizes="100vw"
-                        quality={80}
-                      />
+                      {state.length && 
+                        <Image
+                          className="mainHomeGlobal"
+                          src={state.logoSiteUrl}
+                          layout="fill"
+                          priority={true}
+                          loading='eager'
+                          sizes="100vw"
+                          quality={80}
+                        />
+                      }
                       </MainImageHome>
                     
                     {/* style={{transform:`${isHomeImage < isDevice ? "transform: scale(1.4)": "transform: scale(1)"}`}} */}

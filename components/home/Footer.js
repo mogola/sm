@@ -29,7 +29,7 @@ const Footer = ({onClick, title = "", menu='', data = '', ...rest}) => {
         <Container className="contentSection">
             <Columns className="footerSection">
                 <ul className="listMenuFooter">
-                    {menu.map((item, i) => (
+                    {menu && menu.map((item, i) => (
                         <li key={i}>
                             <Link href={item.url}>
                                 <a>{item.name}</a>
@@ -43,7 +43,7 @@ const Footer = ({onClick, title = "", menu='', data = '', ...rest}) => {
             <Columns className="footerSection">
                 <Columns.Column className="partFooter">
                     <Heading className="titleSubFooter" size={4}>{data.textCategoryServices}</Heading>
-                    {data.textContentServices.map((item, i) =>(
+                    {data &&  data.textContentServices && data.textContentServices.map((item, i) =>(
                         <li key={i}>
                         <Link href={item.name}>
                             <a>{item.name}</a>
@@ -53,7 +53,7 @@ const Footer = ({onClick, title = "", menu='', data = '', ...rest}) => {
                 </Columns.Column>
                 <Columns.Column className="partFooter">
                     <Heading className="titleSubFooter" size={4}>{data.textFollowMe}</Heading>
-                    {data.socialLink.map((item, i) =>(
+                    {data && data.socialLink && data.socialLink.map((item, i) =>(
                         <li key={i}>
                         <Link href={item.url}>
                             <a>{item.name}</a>

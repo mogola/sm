@@ -38,7 +38,8 @@ export async function getStaticProps() {
         config: JSON.parse(JSON.stringify(promiseConfigRecent[0])),
         posts: JSON.parse(JSON.stringify(promisePostsRecent)),
         categories: JSON.parse(JSON.stringify(promiseCatRecent))
-      }
+      },
+      revalidate: 1
     }
   }
   catch(err){

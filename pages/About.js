@@ -30,7 +30,8 @@ return {
       data: JSON.parse(JSON.stringify(data.data)),
       allPost:JSON.parse(JSON.stringify(getPostData)),
       config: JSON.parse(JSON.stringify(config[0])),
-    }
+    },
+    revalidate: 1
   }
 }
 
