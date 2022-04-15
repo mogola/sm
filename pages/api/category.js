@@ -19,7 +19,7 @@ handler.get(async (req, res) => {
         if (posts) {
             res.json(JSON.stringify(posts))
         } else {
-            res.status(200).json(JSON.stringify([]]))
+            res.status(200).json(JSON.stringify([]))
         }
     }
     catch (err) {
