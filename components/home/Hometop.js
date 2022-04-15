@@ -204,17 +204,15 @@ const scaleVariants = {
                     style={{ scale }}
                     className="homeImage">
                       <MainImageHome ref={refImageHome}>
-                      {typeof state === 'object' && 
                         <Image
                           className="mainHomeGlobal"
-                          src={state.logoSiteUrl}
+                          src={ Object.keys(state).length === 0 ? 'https://mogosangare.com/_next/image?url=https%3A%2F%2Ftestbucketcreateds3.s3.amazonaws.com%2FhomeMain.jpeg&w=1920&q=75' : state.logoSiteUrl}
                           layout="fill"
                           priority={true}
                           loading='eager'
                           sizes="100vw"
                           quality={80}
                         />
-                      }
                       </MainImageHome>
                     
                     {/* style={{transform:`${isHomeImage < isDevice ? "transform: scale(1.4)": "transform: scale(1)"}`}} */}

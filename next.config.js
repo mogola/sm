@@ -1,12 +1,10 @@
 const fs = require('fs')
 const privateKEY = fs.readFileSync('private.key', 'utf8');
 const publicKEY = fs.readFileSync('public.key', 'utf8');
-const withFonts = require('next-fonts');
 
-module.exports = withFonts({
+const nextConfig = {
   // Target must be serverless
   enableSvg: true,
-  target: 'serverless',
   env: {
     production: process.env.NEXT_PUBLIC_URL_PRODUCTION,
     development: "http://localhost:9000/",
@@ -14,34 +12,8 @@ module.exports = withFonts({
     keyPublic: publicKEY,
     apikeysendinblue: process.env.APIKEY_SENDINBLUE
   },
-  webpack: (config, { isServer }) => {
-    // Fixes npm packages that depend on `fs` module
-    config.module.rules.push({ parser: { amd: false } })
-    if (!isServer) {
-      config.node = {
-        fs: 'empty',
-        dgram: 'empty',
-        module: 'empty',
-        net: 'empty',
-        tls: 'empty',
-        express: 'empty',
-        child_process: 'empty'
-      }
-    }
-    return config
-  },
   async headers() {
     return [
-      {
-        source: '/:all*(svg|jpg|png)',
-        locale: false,
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=9999999999, must-revalidate',
-          }
-        ],
-      },
       {
         source: '/admin/dashboard',
         headers: [
@@ -78,7 +50,8 @@ module.exports = withFonts({
   images: {
     domains: [
       'testbucketcreateds3.s3.eu-west-3.amazonaws.com',
-      'testbucketcreateds3.s3.amazonaws.com']
+      'testbucketcreateds3.s3.amazonaws.com',
+      'mogosangare.com']
   },
   // i18n: {
   //   locales: ['en', 'fr'],
@@ -91,4 +64,6 @@ module.exports = withFonts({
   //     { source: "/api/posts/:id", destination: "/posts/:id" }
   //   ];
   // }
-})
+}
+
+module.exports = nextConfig
