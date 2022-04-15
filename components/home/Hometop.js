@@ -130,6 +130,7 @@ const Hometop = ({onClick, config, state = '', connect}) => {
           }
 
         }
+        console.log('state', state);
     }, [])
 
 
@@ -203,7 +204,7 @@ const scaleVariants = {
                     style={{ scale }}
                     className="homeImage">
                       <MainImageHome ref={refImageHome}>
-                      {state.length > 0 && 
+                      {typeof state === 'object' && 
                         <Image
                           className="mainHomeGlobal"
                           src={state.logoSiteUrl}
