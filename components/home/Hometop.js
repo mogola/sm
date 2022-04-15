@@ -203,7 +203,7 @@ const scaleVariants = {
                     style={{ scale }}
                     className="homeImage">
                       <MainImageHome ref={refImageHome}>
-                      {state.length && 
+                      {state.length > 0 && 
                         <Image
                           className="mainHomeGlobal"
                           src={state.logoSiteUrl}
