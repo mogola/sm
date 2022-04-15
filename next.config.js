@@ -1,9 +1,16 @@
 const fs = require('fs')
 const privateKEY = fs.readFileSync('private.key', 'utf8');
 const publicKEY = fs.readFileSync('public.key', 'utf8');
+const withFonts = require('next-fonts');
 
 const nextConfig = {
   // Target must be serverless
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback.fs = false;
+    }
+    return config;
+  },
   enableSvg: true,
   env: {
     production: process.env.NEXT_PUBLIC_URL_PRODUCTION,
