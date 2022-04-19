@@ -7,7 +7,7 @@ const nextConfig = {
   // Target must be serverless
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      config.resolve.fallback.fs = false;
+      config.resolve.fallback.fs = 'empty';
     }
     return config;
   },
