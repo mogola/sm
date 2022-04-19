@@ -54,7 +54,7 @@ catch(err){
   return {
     props: {
       error: {  
-        status: "error page"
+        status: "error page" + ':' + err
       }
     }
   }
