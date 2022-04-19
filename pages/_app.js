@@ -47,18 +47,24 @@ export default function App({ Component, pageProps, config, router, allCats }) {
   const getCats = async () => {
     let getDataCategories; 
     try{
-      if(localStorage.getItem('categories') === null || localStorage.getItem('categories') === undefined ) {
+      if(localStorage.getItem('categories') === null || localStorage.getItem('categories') === undefined || localStorage.getItem('categories').length === 0 ) {
         let allCategories = await fetch(`${baseUrl}/api/categories`, { method: "GET"})
         const allCategoriesRes = await allCategories.json()
         localStorage.setItem("categories", allCategoriesRes)
         getDataCategories = allCategoriesRes
         console.log('get categories server', getDataCategories, typeof getDataCategories)
         setAllCatsGetting(getAllCategory(getDataCategories, id))
+        console.log('getDataCategories', getDataCategories)
       }else {
-        getDataCategories =localStorage.getItem('categories')
+        // getDataCategories =localStorage.getItem('categories')
+        let allCategories = await fetch(`${baseUrl}/api/categories`, { method: "GET"})
+        const getDataCategories = await allCategories.json()
         console.log('get categories localstorage',getDataCategories, typeof getDataCategories)
         setAllCatsGetting(getAllCategory(getDataCategories, id))
+        console.log('getDataCategories', getDataCategories)
       }
+
+      
     }
     catch(err){
       console.log(err)
