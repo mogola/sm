@@ -1,4 +1,4 @@
-import * as fs from 'fs/promises';
+import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import fetch from 'node-fetch'

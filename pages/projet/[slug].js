@@ -308,6 +308,7 @@ export async function getStaticProps({params:{slug}}) {
     }else {
         idprev = getPrev.title
     }
+    
     return {
             props: {
                 post:JSON.parse(JSON.stringify(getPostData)),
