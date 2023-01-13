@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs');
 const privateKEY = fs.readFileSync('private.key', 'utf8');
 const publicKEY = fs.readFileSync('public.key', 'utf8');
 const withFonts = require('next-fonts');
@@ -7,9 +7,7 @@ const nextConfig = {
   // Target must be serverless
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      config.node = {
-        fs: 'empty'
-      }
+      config.resolve.fallback.fs = false;
     }
     return config;
   },

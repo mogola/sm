@@ -1,5 +1,5 @@
-import fs from 'fs'
-import path from 'path'
+const fs = require('fs');
+const path = require('fs');
 import matter from 'gray-matter'
 import fetch from 'node-fetch'
 import useSWR from 'swr'
