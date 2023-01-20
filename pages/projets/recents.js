@@ -19,7 +19,7 @@ import {
   Heading,
 } from 'react-bulma-components';
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try{
     let promiseCatRecent, promiseConfigRecent, promisePostsRecent;
     const getnewcat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
@@ -38,7 +38,8 @@ export async function getServerSideProps() {
         config: JSON.parse(JSON.stringify(promiseConfigRecent[0])),
         posts: JSON.parse(JSON.stringify(promisePostsRecent)),
         categories: JSON.parse(JSON.stringify(promiseCatRecent))
-      }
+      },
+      revalidate: 1
     }
   }
   catch(err){

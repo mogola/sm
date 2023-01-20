@@ -28,7 +28,7 @@ const Prestation = ({title = "", data = '', ...rest}) => {
         </Container>
         <Container className="contentSection">
             <Columns className="serviceSection">
-                {data.map((service, i) => (
+                {data && data.map((service, i) => (
                     <Columns.Column key={i}>
                         {i === 1 &&
                             <span className="icon">

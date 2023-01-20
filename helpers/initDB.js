@@ -10,7 +10,8 @@ function initDB(){
     }
     mongoose.connect(`${uri}${dbName}?retryWrites=true&w=majority`,{
         useNewUrlParser:true,
-        useUnifiedTopology:true
+        useUnifiedTopology:true,
+        useCreateIndex:true
     })
     mongoose.connection.on('connected',()=>{
         console.log("connected to mongo")

@@ -35,7 +35,7 @@ const getAllCategorie = async (req,res)=>{
         if (posts) {
             res.json(JSON.stringify(posts))
         } else {
-            res.status(200).json([])
+            res.status(200).json(JSON.stringify([]))
         }
     }
     catch (err) {

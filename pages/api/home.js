@@ -1,6 +1,7 @@
 import { connectToDatabase } from "../../utils/mongodb";
 import ProjectsSchema from '../../models/Projects'
 import CategorySchema from '../../models/Category'
+import { faIgloo } from "@fortawesome/free-solid-svg-icons";
 export async function getPost() {
     const { db } = await connectToDatabase();
 
@@ -25,7 +26,13 @@ export async function getPostConfig() {
   .limit(20)
   .toArray();
 
-  return posts
+  console.log("posts",posts.length, typeof JSON.parse(JSON.stringify(posts)));
+  if(posts.length === 0){
+    return JSON.parse(JSON.stringify(posts))
+  }else {
+    return posts
+  }
+  
 }
 
 

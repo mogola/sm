@@ -1702,7 +1702,7 @@ html {
 
   .descriptionPost {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     padding-top: 104px;
     padding-bottom: 104px;
     @include mobileView{

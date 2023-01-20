@@ -21,7 +21,8 @@ const config = await getPostConfig()
 return {
     props: {
       config: JSON.parse(JSON.stringify(config[0]))
-    }
+    },
+    revalidate: 60
   }
 }
 

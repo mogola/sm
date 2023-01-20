@@ -19,7 +19,7 @@ const {Field, Control, Label} = Form;
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
 const getData = await fetch(`${baseUrl}/api/about`, {method:"GET"})
 const data = await getData.json()
 const config = await getPostConfig()
@@ -30,7 +30,8 @@ return {
       data: JSON.parse(JSON.stringify(data.data)),
       allPost:JSON.parse(JSON.stringify(getPostData)),
       config: JSON.parse(JSON.stringify(config[0])),
-    }
+    },
+    revalidate: 1
   }
 }
 

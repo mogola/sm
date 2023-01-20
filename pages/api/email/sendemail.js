@@ -5,8 +5,6 @@ var defaultClient = SibApiV3Sdk.ApiClient.instance;
 var apiKey = defaultClient.authentications['api-key'];
 apiKey.apiKey = process.env.apikeysendinblue;
 
-console.log(process.env.apikeysendinblue)
-
 // Uncomment below two lines to configure authorization using: partner-key
 // var partnerKey = defaultClient.authentications['partner-key'];
 // partnerKey.apiKey = 'YOUR API KEY';
@@ -47,7 +45,7 @@ const sendEmail = async (req, res) => {
             },
             headers: {
                 'X-Mailin-custom': 'custom_header_1:custom_value_1|custom_header_2:custom_value_2',
-                'api-key': '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',
+                'api-key': process.envAPIKEYSENDINBLUE,
                 'accept': 'application/json',
                 'content-type': 'application/json'
             }

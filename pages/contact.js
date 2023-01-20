@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 import {useRouter} from 'next/router'
 import { motion} from 'framer-motion'
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const getData = await fetch(`${baseUrl}/api/about`, {method:"GET"})
     const data = await getData.json()
     const config = await getPostConfig()
@@ -28,7 +28,8 @@ export async function getServerSideProps() {
           data: JSON.parse(JSON.stringify(data.data)),
           allPost:JSON.parse(JSON.stringify(getPostData)),
           config: JSON.parse(JSON.stringify(config[0])),
-        }
+        },
+        revalidate: 1
       }
     }
 

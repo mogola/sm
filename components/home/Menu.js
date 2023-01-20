@@ -217,10 +217,11 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
     }
     useEffect(() => {
       setIsInnerWidth(window.innerWidth)
-        const available = state.textAvailable.split(' ')
+        const available = Object.keys(state).length ? state.textAvailable.split(' ') : []
         let arrayAvailable = []
         let arrayConcat = [];
 
+        if(available.length){
         available.forEach(key => {
             let keyLetter = key.split('')
             keyLetter.push(' ')
@@ -253,6 +254,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
             }
         }
          })
+        }
     }, [isInnerWidth])
 
     const disconnect = async (e, callback) => {

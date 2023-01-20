@@ -15,11 +15,10 @@ import { motion } from 'framer-motion';
 
 import { getPostConfig, getAllPosts, getAllCategories} from './api/home'
 
-export async function getServerSideProps() {
+export async function getStaticProps () {
   // const config = await getPostConfig()
   // const posts = await getAllPosts(4)
   // const getCategoryList = []
-
 try {
   let promiseCat, promiseConfig, promisePosts, promiseNew, promiseNewCat;
   // const allCategory = await getCategoryList.json()
@@ -34,64 +33,34 @@ try {
    promiseNew = values[3]
    promiseNewCat = values[4]
  
-   console.log("promise all Index",promiseNew)
+   console.log("promise all Index",promiseConfig)
  })
  
    return {
      props: {
-       config: JSON.parse(JSON.stringify(promiseConfig[0])),
+       config:promiseConfig[0] === undefined ? JSON.parse(JSON.stringify([])) : JSON.parse(JSON.stringify(promiseConfig[0])),
        posts: JSON.parse(JSON.stringify(promisePosts)),
        categories: JSON.parse(JSON.stringify(promiseNewCat)),
        newpost: JSON.parse(JSON.stringify(promiseNew)),
        error: {
-         status : []
+         status : JSON.parse(JSON.stringify([]))
        }
-     }
+     },
+     revalidate: 1
    }
 }
 catch(err){
-  console.log("err", err)
+  console.log("Une erreur est survenue [index.js]", err)
   return {
     props: {
       error: {  
-        status: "error page"
+        status: "error page" + ':' + err
       }
     }
   }
 }
 
 }
-
-// export async function getStaticProps() {
-//   try {
-//     const [configRes, categoryRes, postRes] = await Promise.all([
-//       getPostConfig(),
-//       getAllCategories(),
-//       getAllPosts(4)
-//     ])
-
-//     const [configs, categories, posts] = await Promise.all([
-//       configRes.json(),
-//       categoryRes.json(),
-//       postRes.json()
-//     ])
-
-
-//     Promise.all([getPostConfig(), getAllCategories(),getAllPosts(4)]).then(value => {console.log(values)})
-
-//     console.log("get site info", configs, categories)
-//       return {
-//         props: {
-//           config: JSON.parse(JSON.stringify(configs[0])),
-//           posts: JSON.parse(JSON.stringify(posts)),
-//           allCats: JSON.parse(JSON.stringify(categories))
-//         }
-//       }
-//   }
-//   catch(err){
-//     console.log(err)
-//   }
-// }
 
 const imageVariants = {
   exit: { x: -90, opacity: 0.9,

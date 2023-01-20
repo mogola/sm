@@ -182,7 +182,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
                         <Tag className="recentDate">
                             {moment(post.date).locale('fr').format('MMMM YYYY', 'fr')}
                         </Tag>
-                        {post.categoryArray && post.categoryArray.map((tag, i) => (
+                        {post.categoryArray.length && post.categoryArray.map((tag, i) => (
                             <Tag key={i}>{tag.nameCategory}</Tag>
                         ))}
                     </Tag.Group>
@@ -199,7 +199,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
         <Container className="center-align" fluid>
             <Container>
            <ul>
-                {post.linkImage &&
+                {post.linkImage !== undefined &&
                    <li key="oier">
                        <img loading="lazy" rel="preload" src={post.linkImage} width={200} />
                     </li>
@@ -223,7 +223,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
                 </li>
             </ul>
             </Container>
-            {post.imageArray.length !== 0 && <Container className="listImagesPost" fluid>
+            {post.imageArray && <Container className="listImagesPost" fluid>
                 <Container>
                     <Columns>
                     <Masonry
@@ -308,6 +308,7 @@ export async function getStaticProps({params:{slug}}) {
     }else {
         idprev = getPrev.title
     }
+    
     return {
             props: {
                 post:JSON.parse(JSON.stringify(getPostData)),
