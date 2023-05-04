@@ -306,6 +306,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
                       <motion.div
                       animate={isToggle ? "enter" : "exit"}
                       variants={isMobileMenu ? backVariants : backVariantsDesktop} className="divHeader">
+                        <Link href={`${baseUrl}/`}><img className="logo_entpr" src={state.topImageUrl} rel="prefetch" /></Link>
                         <h2 className={`
                         ${utilStyles.headingLg}
                         ${isMobileMenu ? "activeMobileMenu": "activeDesktopMenu"}

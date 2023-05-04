@@ -12,146 +12,31 @@ import { NextSeo } from 'next-seo';
 const name = 'Mogola Sangaré'
 export const siteTitle = "Mogola Sangaré website"
 
-export default function Layout({ children, none, home, portfolio, dashboard, post, homepage, slug, metaImage, postTitle, postDescription}) {
-  const [dataConfigs, setDataConfig] = useState([])
+export default function Layout({ children, none, home, portfolio, dashboard, post, homepage}) {
   const [naming, setNaming] = useState()
   const [menu, setMenu] = useState()
-  const [textScrollTop, setTextScrollTop] = useState()
   const [state, changeState] = useState({});
   const [textAvailable, setTextAvailable] = useState([])
   const [onLoadingPage, setOnLoadingPage] = useState(false)
   const [seoUrl, setSeoUrl] = useState()
   const [fixedMenu, setFixedMenu] = useState(false)
 
-  let compareStorage = (initialStorage, newStorage) => {
-    if(initialStorage === JSON.stringify(newStorage))
-    return true
-    else
-    return false
-  }
-
-  let dataStorage = (callback) => {
-    return localStorage.getItem("info") !== null && compareStorage(localStorage.getItem("info"),callback) === true
-    ? JSON.parse(localStorage.getItem("info"))
-    : callback
-  }
-
-  // const getData = async () => {
-  //   try {
-  //     const getData = await fetch(`${baseUrl}/api/info`, {method:"GET"})
-  //     const data = await getData.json()
-
-  //     console.log(data, typeof data)
-  //     setOnLoadingPage(false)
-      
-  //     await new Promise((resolve) => {
-  //         resolve(dataStorage(JSON.parse(JSON.stringify(data))))
-  //     }).then(result => {
-
-  //        console.log("result", result)
-  //       const { menuCategoryLink } = result
-
-  //       setMenu(menuCategoryLink)
-
-  //       if(compareStorage(localStorage.getItem("info"),result)) {
-  //         setDataConfig(localStorage.getItem("info"))
-  //       } else {
-  //         localStorage.setItem("info", JSON.stringify(result))
-  //         setDataConfig(JSON.parse(JSON.stringify(result)))
-  //       }
-
-  //       setOnLoadingPage(true)
-  //     })
-  //   }
-  //   catch(err){
-  //     console.log("layout err", err)
-  //   }
-  // }
-
-  React.useEffect(() => {
-    let isPromised = true
+  useEffect(() => {
     setSeoUrl(window.location.href)
-    if(isPromised !== false){
-     // getData()
-     setOnLoadingPage(true)
-     console.log('layout init');
-    }
 
       document.addEventListener('scroll', function(event){
         let headerDoc = document.querySelector('.mainHeader')
         if(headerDoc !== null) {
-          if(window.scrollY > (headerDoc.offsetTop + headerDoc.offsetHeight)
-          && (fixedMenu !== true)) {
-            setFixedMenu(true)
-          }else {
-            setFixedMenu(false)
-          }
-      }
+         if(window.scrollY > (headerDoc.offsetTop + headerDoc.offsetHeight)
+            && (fixedMenu !== true)) {
+              setFixedMenu(true)
+            }else {
+              setFixedMenu(false)
+            }
+        }   
        })
 
-       return () => isPromised = false
   }, [])
-
-  if(!onLoadingPage){
-    return <div className="loaderPage">
-      {homepage && <NextSeo
-        facebook={{
-            appId: `${3587318871321107}`,
-          }}
-            title={siteTitle}
-            description={siteTitle}
-            canonical={seoUrl}
-            openGraph={{
-              url: `${seoUrl}`,
-              title: `${siteTitle}`,
-              description: `${siteTitle}`,
-              images: [
-                {
-                  url: "/app_visual_dewalgo.jpg",
-                  width: 800,
-                  height: 600,
-                  alt: 'Og Image Alt',
-                },
-                {
-                  url: "/app_visual_dewalgo.jpg",
-                  width: 900,
-                  height: 800,
-                  alt: 'Og Image Alt Second',
-                },
-                { url: "/app_visual_dewalgo.jpg" },
-                { url: "/app_visual_dewalgo.jpg" },
-              ],
-              site_name: `${name}`,
-            }}
-            twitter={{
-              handle: '@handle',
-              site: '@site',
-              cardType: 'summary_large_image',
-            }}
-          />}
-      <motion.div
-        animate={{ y: -25, opacity: 0.4 }}
-        transition={{
-          repeat: Infinity,
-          repeatType: "reverse",
-          duration: 1
-        }}
-        className="visualLoader">
-          M
-        </motion.div>
-        <motion.div
-        animate={{ y: 25, opacity: 0.3 }}
-        transition={{
-          repeat: Infinity,
-          repeatType: "reverse",
-          duration: 1
-        }}
-        className="visualLoader">
-          S
-        </motion.div>
-    </div>
-  }
-
     return (
       <>
       <themeContextUser.Consumer>
@@ -194,7 +79,6 @@ export default function Layout({ children, none, home, portfolio, dashboard, pos
             />}
             <Head>
               <link rel="icon" href="/favicon.ico" />
-
             </Head>
             <header className={`${fixedMenu ? "fixedMain" : ""} header-portfolio ${styles.header}`}>
               {home ? (

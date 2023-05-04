@@ -19,7 +19,7 @@ export function getDataFromLocalStorage(){
             console.log('notdata user')
             return false;
         } else {
-            let dataFromStorage = localStorage.getItem("info")
+            let dataFromStorage = JSON.parse(localStorage.getItem("info"))
             return dataFromStorage
         }
     }

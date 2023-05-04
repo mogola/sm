@@ -23,15 +23,13 @@ export async function getStaticProps() {
   try{
     let promiseCatRecent, promiseConfigRecent, promisePostsRecent;
     const getnewcat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
-   // const allCategory = await getCategoryList.json()
+
    await Promise.all([getPostConfig(), getnewcat.json(), getAllPosts(20)])
    .then((values) => {
     promiseConfigRecent = values[0]
     promiseCatRecent = values[1]
     promisePostsRecent = values[2]
-  
-    console.log("promise all recents",promisePostsRecent)
-  })
+  });
   
     return {
       props: {
@@ -55,7 +53,7 @@ export async function getStaticProps() {
 }
 
 const imageVariants = {
-  exit: { x: -150, opacity: 0.6,
+  exit: { x: 0, opacity: 0.6,
     transition: {
       duration: 0.5,
       type:"spring",
@@ -79,8 +77,6 @@ export default function Home({config, posts, connect, categories}) {
   const animatePage = () => {
     setIsAnim(!isAnim)
 }
-
-console.log("posts", posts)
 
 const Filtercomponent = () => {
   return(

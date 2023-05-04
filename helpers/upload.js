@@ -22,21 +22,25 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
     const [loading, setLoading] = useState(false)
     const [overSize, setOverSize] = useState(false)
     /*end state */
+
     /* useEffect*/
     useEffect(()=> {
       console.log("useEffect Operation")
       console.log('imageExist', imageExist)
     },[])
+
     // const upload file
     const tmpFileUpload = (tmp) => {
-        uploadTempFile(tmp)
-      }
+      uploadTempFile(tmp)
+    }
+
     /* upload function Js */
     const resetImage = () => {
       let nameSrc = nameFile
       document.getElementsByName(`mainLogo${nameSrc}`)[0].setAttribute("src"," ")
       getUrlImage()
     }
+
     const uploadImage = async(fileName) => {
         try{
           if(fileName !== undefined){
@@ -62,11 +66,13 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
                 }
 
                 setOnLoading(true)
+
                 const getFile = fileName.name.split('.')
                 const nameFile = getFile[0]
                 const typeFile = getFile[1].toLowerCase()
 
                 console.log(getFile, nameFile, typeFile, saveTmpFile)
+
                 let imagesDetails = [{
                       data_url: result,
                       filename: nameFile,
@@ -89,7 +95,6 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
                 setOnLoading(false)
                 console.log(result)
                 callBack()
-                getUrlImage()
               })
               console.log("data resfont", data.urlDataList)
               console.log('upload image', data)
@@ -185,14 +190,6 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
         }
 
         fileReader.readAsDataURL(currentFile, "UTF-8"); // fileReader.result -> String.
-        // router.push({
-        //   pathname : router.pathname,
-        //   query : {
-        //     file : URL.createObjectURL(current.files[0])
-        //   }
-        // },
-        // undefined,
-        // { shallow: true })
       }
 
       const getBase64Verification = (currentFile) => {
@@ -200,7 +197,6 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
             // Check for the File API support.
             // init new fileReader for get file
           let fileReader = new FileReader()
-          let file = currentFile
 
           fileReader.onload = function(progressEvent) {
               setOnLoading(false)
@@ -315,9 +311,11 @@ const UploadFile = ({imageExist, nameFile, onGet, callBack, getUrlImage}) => {
       }
       {loading && imgDownloaded &&
             <div>
-            <div><span>Url :</span><span style={{fontWeight:"bold"}}>{imgDownloaded}</span></div>
-            <p>Image téléchargé</p>
+              <div><span>Url :</span><span style={{fontWeight:"bold"}}>{imgDownloaded}</span></div>
+              <p>Image téléchargé</p>
+              {getUrlImage()}
             </div>
+            
         }
       </div>
       <div className="upload_p" style={{display: "flex", marginBottom:15}}>

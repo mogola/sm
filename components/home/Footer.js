@@ -65,12 +65,12 @@ const Footer = ({onClick, title = "", menu='', data = '', ...rest}) => {
                     <Heading className="titleSubFooter" size={4}>{data.textContactMe}</Heading>
                     <ul>
                         <li className="emailContact">
-                            <Link href="">
+                            <Link href="/">
                                 <a mailto={data.email}>{data.email}</a>
                             </Link>
                         </li>
                         <li className="phoneContact">
-                            <Link href="">
+                            <Link href="/">
                                 <a>{data.phone}</a>
                             </Link>
                         </li>

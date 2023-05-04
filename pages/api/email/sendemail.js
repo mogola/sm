@@ -45,7 +45,7 @@ const sendEmail = async (req, res) => {
             },
             headers: {
                 'X-Mailin-custom': 'custom_header_1:custom_value_1|custom_header_2:custom_value_2',
-                'api-key': process.envAPIKEYSENDINBLUE,
+                'api-key': process.env.APIKEYSENDINBLUE,
                 'accept': 'application/json',
                 'content-type': 'application/json'
             }

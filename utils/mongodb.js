@@ -1,8 +1,15 @@
 import { MongoClient } from 'mongodb'
 
-let uri = process.env.MONGODB_URI
-let dbName = process.env.MONGODB_DB
+let uri_prod = process.env.MONGODB_URI
+let dbName_prod = process.env.MONGODB_DB
+let uri_dev = process.env.MONGODB_URI_DEV
+let dbName_dev= process.env.MONGODB_DB_DEV
+let env = process.env.environment;
+let uri = env === "developement" ? uri_dev : uri_prod;
+let dbName = env === "developement" ? dbName_dev : dbName_prod;
 
+
+console.log(process.env.environment);
 let cachedClient = null
 let cachedDb = null
 
@@ -23,6 +30,7 @@ export async function connectToDatabase() {
     return { client: cachedClient, db: cachedDb }
   }
 
+  console.log("connecte into", uri, 'and db name is', dbName);
   const client = await MongoClient.connect(`${uri}${dbName}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

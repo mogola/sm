@@ -25,14 +25,15 @@ const {sign, verify, decode } = require('../helpers/jwt')
 export async function getStaticProps() {
     let config;
     try {
-        config = await getPostConfig()
+        config = await getPostConfig();
+        config = JSON.parse(JSON.stringify(config[0]));
     }
     catch(err){
         console.log(err)
     }
     return {
         props: {
-            config: JSON.parse(JSON.stringify(config[0])),
+            config: config,
         },
         revalidate: 1, // In secondes
     }

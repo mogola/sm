@@ -16,15 +16,29 @@ import Input from '../../components/Input'
 import InputConfig from '../../components/InputConfig'
 import UploadFile from './../../helpers/upload'
 import { Button, Heading, Box, Loader, Tag, Form, Column } from 'react-bulma-components';
+import { fakedata } from '../../data/default';
 
 import { Editor } from '@tinymce/tinymce-react';
-const { Field, InputFile, Control } = Form
-export async function getStaticProps() {
-  const config = await getPostConfig()
+const { Field, InputFile, Control } = Form;
 
+let config; 
+
+export async function getStaticProps() {
+  try{
+    console.log("fakedata",fakedata, typeof fakedata);
+    config = await getPostConfig();
+    config = JSON.parse(JSON.stringify(config));
+    console.log("size", config.length, !config.length);
+    config = !config.length ? JSON.parse(JSON.stringify(fakedata[0])) : config[0];
+
+  }
+  catch(err){
+    console.log(err, 'error on config page')
+  }
+  
   return {
     props: {
-      config: JSON.parse(JSON.stringify(config[0]))
+      config: config
     },
     revalidate: 1, // In secondes
   }
@@ -41,7 +55,7 @@ const addConfig = async (config) => {
       body: JSON.stringify({ config: config })
     })
       .then((res) => {
-        console.log('post is added')
+        console.log('post is added', res)
         const data = res.json()
         data.then(() => {
           if (data.success) {
@@ -61,7 +75,7 @@ const addConfig = async (config) => {
 }
 
 export default function Config({ config, connect }) {
-  console.log(config)
+  console.log("default image",config);
   const [labelInputItem, setInputItemLabel] = useState(Object.keys(config))
   const [dataConfig, setDataConfig] = useState(config)
   const [inputSocial, setInputSocial] = useState(config)
@@ -69,10 +83,11 @@ export default function Config({ config, connect }) {
   const [isUserAdmin, setIsUserAdmin] = useState()
 
   useEffect(() => {
-    localStorage.setItem("formData", dataConfig)
+    localStorage.setItem("formData",dataConfig)
     console.log("connect info User", connect)
+    console.log('dataconfig updating', JSON.parse(JSON.stringify(dataConfig)));
     setIsUserAdmin(connect)
-  }, [dataConfig])
+  }, [])
 
 
   const submitForm = async (event) => {

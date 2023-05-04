@@ -179,22 +179,12 @@ const scaleVariants = {
                       <h3>
                         {state.subTitleImage}
                       </h3>
-                      <span className="categoryTextHome">Portfolio</span>
+                      <span className="categoryTextHome">{state.infohome}</span>
                     </motion.div>
                     <motion.div variants={backVariants} className="infoContact">
                       <span className="emailUser">{state.email}</span>
                       <span className="contactUser">{state.textLocalisation}</span>
                     </motion.div>
-                    <div>
-                    <motion.div variants={backVariants} className="pastilleAvailable">
-                      <Link href="/contact" prefetch={true}>
-                        <a onClick={() => {
-                          onClick()
-                        }}>
-                        <img src={state.topImageUrl} rel="prefetch" /></a>
-                      </Link>
-                    </motion.div>
-                    </div>
                     <a
                       onClick={scrollToTheView}
                       className="scrollTopLink"

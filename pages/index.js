@@ -32,10 +32,11 @@ try {
    promisePosts = values[2]
    promiseNew = values[3]
    promiseNewCat = values[4]
- 
-   console.log("promise all Index",promiseConfig)
  })
  
+ console.log("NNNNNNNNEWWWWWWPOSSSSSSSSSSSSSSSSSSSSSSST");
+ console.log(JSON.parse(JSON.stringify(promiseNew)));
+ console.log("NEWWWWWWWWWWWWWWWWWWPOSSSSSSSSSSSSSST");
    return {
      props: {
        config:promiseConfig[0] === undefined ? JSON.parse(JSON.stringify([])) : JSON.parse(JSON.stringify(promiseConfig[0])),
@@ -63,7 +64,7 @@ catch(err){
 }
 
 const imageVariants = {
-  exit: { x: -90, opacity: 0.9,
+  exit: { x: 0, opacity: 0.9,
     transition: {
       duration: 0.5,
       type: "tween",
@@ -85,8 +86,8 @@ const imageVariants = {
 
 const backVariants = {
   exit: {
-    x: 100,
-    opacity: 0,
+    x: 0,
+    opacity: 1,
     transition: {
       duration: 0.5,
       type: "spring",
@@ -125,22 +126,17 @@ export default function Home({config, error, newpost, posts, connect, categories
   React.useEffect(() => {
     (async () => {
       if(window){
-        console.log('datafromlocalstorage', datafromlocalstorage)
-        console.log('dataFromConfigState', config)
-        console.log('dataFromCategories', categories)
         localStorage.setItem("info", JSON.stringify(config))
         setValueScreen(window.innerWidth)
       }
       
       // Compare data from data base and localstora data json
-      console.log("compare data", compareStorage(localStorage.getItem("info"), config))
       if(compareStorage(localStorage.getItem("info"), config)) {
         setConfigs(JSON.parse(localStorage.getItem('info')))
       }else {
         return ''
       }
-  
-      console.log("config index", config)
+      console.log("valueScreen", valueScreen)
     })();
   }, [])
 
@@ -164,7 +160,7 @@ export default function Home({config, error, newpost, posts, connect, categories
             title={config.titleCategoryRecent}
             className="section-home"
             getcategories={categories}
-            device={valueScreen && valueScreen }
+            device={valueScreen}
           />
         </motion.div>
         <motion.div variants={backVariants}>

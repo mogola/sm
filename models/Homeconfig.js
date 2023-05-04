@@ -133,6 +133,10 @@ let HomeConfigSchema = new Schema({
         type: String,
         default: "default text"
     },
+    infohome: {
+        type: String, 
+        default: "default text"
+    },
     owner: { type: Schema.Types.ObjectId, ref: 'Account' },
     date : {
         type: Date,

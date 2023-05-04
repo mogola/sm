@@ -1,5 +1,6 @@
 
 $tablet: 769px !default;
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
 
 @font-face {
   font-family: 'brotherhoodregular';
@@ -12,7 +13,9 @@ $tablet: 769px !default;
 
 @import url('https://fonts.googleapis.com/css2?family=Overpass:wght@900&display=swap');
 
+@import "iconfont.scss";
 @import "layout.scss";
+@import "variables";
 
 @mixin rotated-text($num-letters:37, $angle-span: 180deg, $angle-offset: 0) {
   $angle-per-char: $angle-span / $num-letters;
@@ -114,36 +117,70 @@ img {
   }
 }
 
+//logo header 
+.logo_entpr {
+  width: auto;
+  height: 55px;
+  margin-right: 25px;
+  max-width: initial;
 
+  @include mobileView {
+    width: auto;
+    height: 40px;
+    margin-right: 8px;
+  }
+}
 // manage header
 .mainHeader {
   padding:29px 40px;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   box-sizing: border-box;
   align-items: center;
   position: relative;
+
+  &:before {
+    position: absolute;
+    height: 100%;
+    display: block;
+    content: "";
+    background-color: rgba(0,0,0,.2);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    transition: .2s cubic-bezier(1,0,0,1);
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
   @include mobileView{
     padding: 0 24px;
     z-index: 20001;
   }
   .divHeader {
     width:30%;
+    display: flex;
+    align-items: center;
+    position: relative;
+
     @include mobileView{
       position: relative;
       z-index: 2000001;
+      justify-content: center;
+      align-items: center;
+      height: 65px;
     }
     .isOpen {
-      position: fixed;
-      z-index:10000;
-      width:100%;
-      top:0;
-      left:0;
+      // position: fixed;
+      // z-index:10000;
+      // width:100%;
+      // top:0;
+      // left:0;
       .txtLogo{
         @include mobileView{
           .mainMenuNoHome &{
             color:#fff;
-            top:16px;
+            top:initial;
           }
         }
       }
@@ -153,7 +190,7 @@ img {
         margin: 0;
         @include mobileView{
           .mainMenuNoHome &{
-            height:65px;
+            height:auto;
           }
         }
       }
@@ -162,12 +199,13 @@ img {
     }
   }
   .txtLogo {
-    font-family: 'brotherhoodregular';
+    font-family: 'Poppins', 'Overpass', sans-serif;
+    font-weight: 700;
     @include mobileView(){
       font-size: 28px;
       top: 18px;
       .mainMenuNoHome &{
-        top:16px;
+        top:initial;
       }
     }
     &:hover {
@@ -179,7 +217,7 @@ img {
 
 .txtLogo {
     color: #FAFAFA;
-    font-family: 'brotherhoodregular';
+    font-family: 'Poppins', 'Overpass', sans-serif;
     font-size: 32px;
     letter-spacing: 1.07px;
     line-height: 45px;
@@ -187,7 +225,8 @@ img {
     @include mobileView{
       font-size: 18px;
       position: relative;
-      top: 7px;
+      top: initial;
+      line-height: normal;
     }
 }
 
@@ -199,11 +238,11 @@ img {
     left: 0;
     width: 100%;
     z-index: 2000000000;
-    background: #fff;
+    background: transparent;
     box-shadow: rgba(0,0,0,.2) 0 0 2.375rem;
 
     .mainHeader {
-      background:#f5f5f5;
+      background:transparent;
     }
 
     &.singleMenuNoHome {
@@ -232,7 +271,6 @@ img {
 
     .txtLogo {
       //color: #000;
-      filter: invert(1);
       @include mobileView {
         filter: unset;
       }
@@ -250,10 +288,6 @@ img {
           background:#000;
         }
       }
-    }
-
-    .activeDesktop {
-      filter: invert(1)
     }
   }
   @include mobileView{
@@ -278,6 +312,7 @@ img {
     align-items: center;
     align-self: flex-end;
     justify-content: flex-end;
+    position: relative;
     @include mobileView{
       //display: none;
       &.activeMobile {
@@ -311,6 +346,8 @@ img {
       ul li {
         a{
           color: #FFF;
+          font-family: $mainFont;
+          font-weight: bold;
         }
       }
     }
@@ -475,10 +512,14 @@ img {
   h3{
     color: #FAFAFA;
     font-family: 'Overpass', sans-serif;
-    font-size: 96px;
+    font-size: 70px;
     font-weight: 900;
     letter-spacing: 0;
-    line-height: 112px;
+    line-height: 70px;
+
+    + h3 {
+      padding-top: 40px;
+    }
 
     @include mobileView {
       color: #F9F9F9;
@@ -582,8 +623,8 @@ img {
   }
   span {
     color: #FAFAFA;
-    font-family: "Source Sans Pro";
-    font-size: 16px;
+    font-family: $mainFont;
+    font-size: 20px;
     letter-spacing: 0;
     line-height: 24px;
     display: block;
@@ -670,7 +711,7 @@ img {
 }
 
 html .titleMainCategory.title.is-1 {
-  color: #090909;
+  color:$white;
   font-family: Overpass;
   font-size: 56px;
   font-weight: 800;
@@ -678,7 +719,7 @@ html .titleMainCategory.title.is-1 {
   line-height: 86px;
   margin-bottom: 30px;
   @include mobileView() {
-    color: #090909;
+    color: $white;
     font-family: Overpass;
     font-size: 34px !important;
     font-weight: 900;
@@ -745,7 +786,7 @@ html .tagGroupPost.tags {
 }
 
 html .subTitleProjects:not(:last-child){
-    color: #090909;
+    color: $white;
     font-family: Overpass;
     font-size: 24px;
     font-weight: 900;
@@ -803,7 +844,24 @@ html .homeCategory {
 html .homeCategory {
  &.columns{
     margin :0;
+    color: $white;
   } 
+
+  .homeImageContent {
+    background: $white;
+    display: block;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+  }
+  .iconArrow {
+    font-size: 30px;
+    padding-left: 13px;
+    position: relative;
+    top: 7px;
+  }
 }
 html .section-category {
   .column {
@@ -921,7 +979,7 @@ html .loadDiv {
 
 html {
   .linkSee {
-    color: #090909;
+    color: $white;
     font-family: "Source Sans Pro";
     font-size: 16px;
     font-weight: 600;
@@ -931,7 +989,7 @@ html {
     text-transform:uppercase;
     &:hover {
       text-decoration:none;
-      color:inherit;
+      color:$white;
     }
     @include mobileView{
       font-weight: 600;
@@ -1386,7 +1444,7 @@ html{
     }
   }
   .section-home {
-    background: #ffffff;
+    background: #00abc3;
     padding:0 24px 88px;
     .titleMainCategory{
       margin-top:48px;
@@ -1620,6 +1678,7 @@ html {
   width: 47px;
   background-image: url('./../public/images/right-arrow.svg');
   background-repeat: no-repeat;
+  filter: invert(1);
   &.orangeSvg{
     filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
   }

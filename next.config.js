@@ -6,6 +6,7 @@ const withFonts = require('next-fonts');
 const nextConfig = {
   // Target must be serverless
   webpack: (config, { isServer }) => {
+    console.log("current environment =====>", isServer);    
     if (!isServer) {
       config.resolve.fallback.fs = false;
     }

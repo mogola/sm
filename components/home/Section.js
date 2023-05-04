@@ -126,6 +126,7 @@ const Sections = ({title = "", data = [], getcategories = [], device, ...rest}) 
   const [postsFilter, setPostsFilter] = useState(data)
   const [catSelected, setCatSelected] = useState([])
   const [filterToggle, setFilterToggle] = useState(false)
+  const [screenDevice, setScreenDevice] = useState(device !== undefined ? device : typeof window !== "undefined" ? window.innerWidth : 10)
 
   const selectedCategories = (itemid) => {
     if(catSelected.some(value => value === itemid)){
@@ -156,7 +157,7 @@ const toggleFilter = () => {
 
 const backVariants = {
   enter: {
-    x: [device, 0],
+    x: [screenDevice, 0],
     opacity: [0, 1],
     transition: {
       duration: 0.8,
@@ -164,8 +165,8 @@ const backVariants = {
     }
   },
   exit: {
-    x: [0, 0, 0, device],
-    opacity: [1, 0.6, 0.3, 0],
+    x: [0, screenDevice],
+    opacity: [1, 0],
     transition: {
       duration: 0.8,
       ease: easing
@@ -176,13 +177,11 @@ const backVariants = {
 useEffect(() => {
   console.log('filterToggle', filterToggle, device);
 
-  (async () => {
-      //  const fetchCat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
-      //  const getCats = await fetchCat.json()
-       
-       let getFetch = JSON.parse(JSON.stringify(getcategories))
-       setCategoriesDefault(getFetch)
-       console.log("getcat", getFetch)
+  (async () => {  
+      let getFetch = JSON.parse(JSON.stringify(getcategories))
+      setCategoriesDefault(getFetch)
+
+      console.log("getcat", getFetch)
    })();
  }, [animBool])
  
@@ -283,48 +282,12 @@ const filterData = async (itemid, nameCat, i) => {
     }
   }
     return(<>
-    <motion.div
-      className={`${filterToggle ? "filterVisible" : "filterHidden"} filterCategory homesFilter`}
-      initial="enter"
-      animate={filterToggle ? "enter" : "exit"}
-      exit="exit"
-      variants={backVariants}
-      data-id={filterToggle}
-    >
-      <motion.ul variants={variantsUl}>
-        {categoriesDefault.map((item, i) => (
-          <motion.li
-            variants={variantsItem}
-            key={i}>
-                <Tag
-                  data-id={item._id}
-                  className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
-                  name={item.nameCategory}
-                  style={{opacity:`${selectedCategories(item._id) ? 1 : 0.7 }`}}
-                  onClick={(e) => {
-                  e.preventDefault()
-                  filterData(item._id, item.nameCategory, i)
-                  toggleFilter()
-                  }}>
-                  {item.nameCategory}
-                </Tag>
-            </motion.li>
-          ))}
-            <motion.li
-            variants={variantsItem} key="rzerez" className="returnLink">
-            <a
-              className="returnLinkDefault"
-              onClick={() => {
-                toggleFilter()
-              }}
-            >
-              Retour
-              <span className="icoRight" width={26}></span>
-            </a>
-          </motion.li>
-        </motion.ul>
-      </motion.div>
-    <motion.div variant={variants} className="motionWrapper" initial="exit" animate={animBool ? "enter" : "exit"} exit="exit">
+    <motion.div 
+      variant={variants} 
+      className="motionWrapper" 
+      initial="exit" 
+      animate={animBool ? "enter" : "exit"} 
+      exit="exit">
       <ToastContainer />
     <Section {...rest}>
         <Container className="containerTitleSection">
@@ -340,32 +303,32 @@ const filterData = async (itemid, nameCat, i) => {
         <span>Filtrer par :</span> <FontAwesomeIcon icon="bars" size="xs" />
         </a>
         <motion.div
-      className={`${filterToggle ? "filterVisible" : "filterHidden"} filterCategoryStatic homesFilter`}
-      initial="enter"
-      animate="enter"
-      exit="exit"
-      variants={backVariants}
-      data-id={filterToggle}
-    >
-      <motion.ul variants={variantsUl}>
-        {categoriesDefault.map((item, i) => (
-          <motion.li
-          variants={variantsItem}
-          key={i}>
-              <Tag
-                data-id={item._id}
-                className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
-                name={item.nameCategory}
-                style={{opacity:`${selectedCategories(item._id) ? 1 : 0.3 }`}}
-                onClick={(e) => {
-                e.preventDefault()
-                filterData(item._id, item.nameCategory, i)
-                }}>
-                {item.nameCategory}
-              </Tag>
-          </motion.li>
-          ))}
-        </motion.ul>
+          className={`${filterToggle ? "filterVisible" : "filterHidden"} filterCategoryStatic homesFilter`}
+          initial="enter"
+          animate="enter"
+          exit="exit"
+          variants={backVariants}
+          data-id={filterToggle}
+        >
+        <motion.ul variants={variantsUl}>
+          {categoriesDefault.map((item, i) => (
+            <motion.li
+            variants={variantsItem}
+            key={i}>
+                <Tag
+                  data-id={item._id}
+                  className={`tagCatAdmin ${selectedCategories(item._id) ? "active" : "inactive" }`}
+                  name={item.nameCategory}
+                  style={{opacity:`${selectedCategories(item._id) ? 1 : 0.3 }`}}
+                  onClick={(e) => {
+                  e.preventDefault()
+                  filterData(item._id, item.nameCategory, i)
+                  }}>
+                  {item.nameCategory}
+                </Tag>
+            </motion.li>
+            ))}
+          </motion.ul>
       </motion.div>
         </Container>
         <Container>
@@ -378,26 +341,19 @@ const filterData = async (itemid, nameCat, i) => {
                         href={'/projet/[slug]'}
                         as={`/projet/${encodeURIComponent(post.title)}`}
                       >
-                      <a>
+                      <a className='homeImageContent'>
                         <Image
                           className="postHomeSectionImg"
-                          layout="responsive"
+                          layout="intrinsic"
                           width={500}
                           height={350}
                           rel="preload"
-                          src={post.imageMainPrincipal}
-                          priority={true}
+                          loading="lazy"
+                          src={ Object.keys(post.imageMainPrincipal).length === 0 ? 'https://mogosangare.com/_next/image?url=https%3A%2F%2Ftestbucketcreateds3.s3.amazonaws.com%2FhomeMain.jpeg&w=1920&q=75' : post.imageMainPrincipal}
+                          priority={false}
                         />
                       </a>
                       </Link>
-                    <Tag.Group className="tagGroupPost">
-                        <Tag className="recentDate">
-                            {moment(post.date).locale('fr').format('LL', 'fr')}
-                        </Tag>
-                        {post.categoryArray && post.categoryArray.map((tag, i) => (
-                            <Tag key={i}>{tag.nameCategory}</Tag>
-                        ))}
-                    </Tag.Group>
                     <Heading subtitle className="subTitleProjects">
                        {post.title}
                     </Heading>
@@ -415,7 +371,7 @@ const filterData = async (itemid, nameCat, i) => {
                             <a className="linkSee"
                              onClick={() => {
                                 setAnimBool(false)
-                            }}>Voir le projet <span className="icoRight" width={26}></span></a>
+                            }}>En savoir plus <span className="iconArrow icon-right-arrow" width={26}></span></a>
                         </Link>
                         </motion.div>
                 </Columns.Column>

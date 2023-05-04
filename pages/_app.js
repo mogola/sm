@@ -19,11 +19,7 @@ export async function getStaticProps() {
       .then((values) => {
       promiseConfigs = values[0]
       promiseCats = values[1]
-    
-      console.log("promise all_apps ",promiseCats )
     })
-  console.log("get site info", promiseConfigs, promiseCats)
-  console.log("state config ====================>", promiseConfigs);
 
     return {
       props: {
@@ -52,16 +48,11 @@ export default function App({ Component, pageProps, config, router, allCats }) {
         const allCategoriesRes = await allCategories.json()
         localStorage.setItem("categories", allCategoriesRes)
         getDataCategories = allCategoriesRes
-        console.log('get categories server', getDataCategories, typeof getDataCategories)
         setAllCatsGetting(getAllCategory(getDataCategories, id))
-        console.log('getDataCategories', getDataCategories)
       }else {
-        // getDataCategories =localStorage.getItem('categories')
         let allCategories = await fetch(`${baseUrl}/api/categories`, { method: "GET"})
         const getDataCategories = await allCategories.json()
-        console.log('get categories localstorage',getDataCategories, typeof getDataCategories)
         setAllCatsGetting(getAllCategory(getDataCategories, id))
-        console.log('getDataCategories', getDataCategories)
       }
 
       
@@ -97,7 +88,7 @@ return (
                     key={router.route} 
                     allCats={postsCategory} 
                     datafromlocalstorage={getDataFromLocal()} 
-                    config={getDataFromLocal() !== false ? getDataFromLocal() : config} 
+                    config={config} 
                     connect={userConnected()} 
                     {...pageProps} />
                 </div>
