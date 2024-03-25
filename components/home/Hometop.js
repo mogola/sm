@@ -206,7 +206,7 @@ const scaleVariants = {
                       <MainImageHome ref={refImageHome}>
                         <Image
                           className="mainHomeGlobal"
-                          src={ Object.keys(state).length === 0 ? 'https://mogosangare.com/_next/image?url=https%3A%2F%2Ftestbucketcreateds3.s3.amazonaws.com%2FhomeMain.jpeg&w=1920&q=75' : state.logoSiteUrl}
+                          src={ Object.keys(state).length === 0 ? 'https://smogola.com/_next/image?url=https%3A%2F%2Ftestbucketcreateds3.s3.amazonaws.com%2FhomeMain.jpeg&w=1920&q=75' : state.logoSiteUrl}
                           layout="fill"
                           priority={true}
                           loading='eager'

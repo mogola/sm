@@ -58,7 +58,7 @@ const nextConfig = {
     domains: [
       'testbucketcreateds3.s3.eu-west-3.amazonaws.com',
       'testbucketcreateds3.s3.amazonaws.com',
-      'mogosangare.com']
+      'smogola.com']
   },
   // i18n: {
   //   locales: ['en', 'fr'],
