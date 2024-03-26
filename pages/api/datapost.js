@@ -1,8 +1,5 @@
 import initDB from '../../helpers/initDB'
 import ProjectsSchema from '../../models/Projects'
-import RegisterModel from '../../models/RegisterModel'
-import Homeconfig from '../../models/Homeconfig'
-import mongoose from 'mongoose'
 
 initDB()
 

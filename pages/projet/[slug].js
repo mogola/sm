@@ -284,7 +284,9 @@ export async function getStaticProps({params:{slug}}) {
     console.error(config);
 
     console.log("posts", slug, posts);
-    let getPostData = posts.find(post => post.title == slug)
+    let getPostData = typeof posts === 'string' ? JSON.parse(posts) : posts;
+
+        getPostData = posts.find(post => post.title == slug)
 
     console.log('slug post', getPostData);
 
@@ -336,9 +338,12 @@ export async function getStaticPaths() {
     try{
       const post = await fetch(`${baseUrl}/api/datapost`, {method:"GET"})
       const posts = await post.json();
-      console.log('pooosssssssssssssssssst', posts);
+      
+      let getPosts = typeof posts === 'string' ? JSON.parse(posts) : posts;
+
+      console.log('pooosssssssssssssssssst', getPosts);
       // Get the paths we want to pre-render based on posts
-      const paths = posts.map((post) => ({
+      const paths = getPosts.map((post) => ({
         params: { slug: post.title },
       }))
 
