@@ -3,7 +3,6 @@ import '../styles/global.scss'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import 'react-toastify/dist/ReactToastify.css'
 import { themeContextUser, tokenStorage, userIsConnected, connected, configData, getAllCategory, getDataFromLocalStorage} from './../context/contextUser'
-import { getPostConfig, getAllCategories } from './api/home'
 import baseUrl from './../helpers/baseUrl'
 import fetch from 'isomorphic-unfetch'
 import { useRouter } from 'next/router'
@@ -14,8 +13,9 @@ import { ToastContainer } from 'react-toastify';
 export async function getStaticProps() {
   try {
       let promiseCats, promiseConfigs;
-      // const allCategory = await getCategoryList.json()
-      await Promise.all([getPostConfig(), getAllCategories()])
+      const getnewcat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+      const getData = await fetch(`${baseUrl}/api/data`, {method: "GET"})
+      await Promise.all([getData.json(), getnewcat.json()])
       .then((values) => {
       promiseConfigs = values[0]
       promiseCats = values[1]
@@ -27,15 +27,16 @@ export async function getStaticProps() {
 
     return {
       props: {
-        config: JSON.parse(JSON.stringify(promiseConfigs[0])),
-        allCats: JSON.parse(JSON.stringify(promiseCats)),
+        config: promiseConfigs[0],
+        allCats: promiseCats,
         error: [],
       },
       revalidate: 1
     } 
   }
   catch(err){
-    console.log(err)
+    console.log("err", err)
+    return { notFound: true };
   }
 }
 
