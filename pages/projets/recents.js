@@ -12,32 +12,33 @@ import {RouterTracking}from './../../components/router/ngprogress'
 import {useRouter} from 'next/router'
 import {motion} from 'framer-motion'
 
-import { getPostConfig, getAllPosts} from './../api/home'
-
 import {
   Container,
   Heading,
 } from 'react-bulma-components';
+import { JsonWebTokenError } from 'jsonwebtoken'
 
 export async function getStaticProps() {
   try{
     let promiseCatRecent, promiseConfigRecent, promisePostsRecent;
     const getnewcat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+    const getData = await fetch(`${baseUrl}/api/data`, {method: "GET"})
+    const getDataPost = await fetch(`${baseUrl}/api/datapost`, {method: "GET"})
    // const allCategory = await getCategoryList.json()
-   await Promise.all([getPostConfig(), getnewcat.json(), getAllPosts(20)])
+   await Promise.all([getData.json(), getnewcat.json(), getDataPost.json()])
    .then((values) => {
     promiseConfigRecent = values[0]
     promiseCatRecent = values[1]
     promisePostsRecent = values[2]
   
-    console.log("promise all recents",promisePostsRecent)
+    console.log("promise all recents",promiseConfigRecent)
   })
   
     return {
       props: {
-        config: JSON.parse(JSON.stringify(promiseConfigRecent[0])),
+        config: promiseConfigRecent[0],
         posts: JSON.parse(JSON.stringify(promisePostsRecent)),
-        categories: JSON.parse(JSON.stringify(promiseCatRecent))
+        categories: typeof promiseCatRecent === 'string' ? JSON.parse(promiseCatRecent) : promiseCatRecent
       },
       revalidate: 1
     }
@@ -76,9 +77,15 @@ export default function Home({config, posts, connect, categories}) {
   const [onLoadingPage, setOnLoadingPage] = useState(false)
   const [isAnim, setIsAnim] = useState(false)
   const [getPost, setGetPost] = useState(posts)
+  const [getcategories, setCategories] = useState([])
   const animatePage = () => {
     setIsAnim(!isAnim)
 }
+
+
+useEffect(() => {
+  setCategories(categories);
+}, []);
 
 console.log("posts", posts)
 
@@ -87,7 +94,7 @@ const Filtercomponent = () => {
   <Container className="breadCategory">
       <Heading className="titleBreadCategory" size={3}>Filtrer par : </Heading>
       <ul className="listBreadCategory">
-      {categories.map((cat, i) => (
+      {getcategories && getcategories.map((cat, i) => (
           <li key={i}>
               <Link key={i} href={`/category/${cat.nameCategory}`} as={`/category/${cat._id}`}>
                   <a onClick={() => {
@@ -116,7 +123,7 @@ const Filtercomponent = () => {
             data={getPost}
             className="section-category"
             isadmin={isAdmin === true ? true : false}
-            getcategories={categories}
+            getcategories={getcategories}
             component={<Filtercomponent />}
           />
           <Footer

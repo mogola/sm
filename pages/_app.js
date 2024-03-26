@@ -45,31 +45,25 @@ export default function App({ Component, pageProps, config, router, allCats }) {
   const [allCatsGetting, setAllCatsGetting] = useState([]);
 
   const getCats = async () => {
-    let getDataCategories; 
-    try{
-      if(localStorage.getItem('categories') === null || localStorage.getItem('categories') === undefined || localStorage.getItem('categories').length === 0 ) {
-        let allCategories = await fetch(`${baseUrl}/api/categories`, { method: "GET"})
-        const allCategoriesRes = await allCategories.json()
-        localStorage.setItem("categories", allCategoriesRes)
-        getDataCategories = allCategoriesRes
-        console.log('get categories server', getDataCategories, typeof getDataCategories)
-        setAllCatsGetting(getAllCategory(getDataCategories, id))
-        console.log('getDataCategories', getDataCategories)
-      }else {
-        // getDataCategories =localStorage.getItem('categories')
-        let allCategories = await fetch(`${baseUrl}/api/categories`, { method: "GET"})
-        const getDataCategories = await allCategories.json()
-        console.log('get categories localstorage',getDataCategories, typeof getDataCategories)
-        setAllCatsGetting(getAllCategory(getDataCategories, id))
-        console.log('getDataCategories', getDataCategories)
+    try {
+      let getDataCategories;
+      const cachedCategories = localStorage.getItem('categories');
+  
+      if (cachedCategories === null || cachedCategories === 'undefined' || cachedCategories.length === 0) {
+        const response = await fetch(`${baseUrl}/api/categories`, { method: "GET" });
+        const allCategoriesRes = await response.json();
+        localStorage.setItem("categories", JSON.stringify(allCategoriesRes)); // Corrected storage
+        getDataCategories = allCategoriesRes;
+      } else {
+        getDataCategories = JSON.parse(cachedCategories); // Corrected retrieval and parsing
       }
-
-      
+  
+      console.log('Categories:', getDataCategories, typeof getDataCategories);
+      setAllCatsGetting(getAllCategory(getDataCategories, id));
+    } catch (err) {
+      console.error(err);
     }
-    catch(err){
-      console.log(err)
-    }
-  }
+  }  
 
   React.useEffect(() => {
     (async () => {

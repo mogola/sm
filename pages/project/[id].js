@@ -70,7 +70,7 @@ const Post = ({post})=>{
 export async function getStaticProps({params:{id}}) {
     try{
     const postData = await getAllPosts()
-    const posts = JSON.parse(JSON.stringify(postData))
+    const posts = JSON.parse(postData)
     const getPostData = posts.find(post => post._id == id)
 console.log('data', getPostData)
         return {

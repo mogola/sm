@@ -31,8 +31,9 @@
     "fs-extra": "^9.0.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
-    "mongodb": "^3.6.1",
-    "mongodb-client-encryption": "^1.1.0",
+    "mongodb": "^6.5.0",
+    "mongodb-client-encryption": "^6.0.0",
+    "mongodb-core": "^3.2.7",
     "mongoose": "^5.10.6",
     "net": "^1.0.2",
     "next": "^12.1.5",
@@ -65,7 +66,6 @@
     "eslint-plugin-react-hooks": "^4.1.2",
     "gray-matter": "^4.0.2",
     "isomorphic-unfetch": "^3.0.0",
-    "mongodb-core": "^3.2.7",
     "next-connect": "^0.9.0"
   }
 }

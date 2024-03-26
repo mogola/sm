@@ -298,7 +298,7 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
                                 </Heading>
                                 <Content className="contentText">
                                     <p>
-                                    {post.subTextDescription.substring(1, 200)}
+                                    {post.subTextDescription && post.subTextDescription.substring(1, 200)}
                                     </p>
                                 </Content>
                                 </motion.div>
@@ -366,7 +366,7 @@ const SectionsRecent = ({title= "", component, data = [], isadmin, getcategories
                                             </Heading>
                                             <Content className="contentText">
                                                 <p>
-                                                {post.subTextDescription.substring(1, 200)}
+                                                {post.subTextDescription && post.subTextDescription.substring(1, 200)}
                                                 </p>
                                             </Content>
                                         </div>

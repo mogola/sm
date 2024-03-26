@@ -3,7 +3,6 @@ import Head from 'next/head'
 import Link from 'next/link'
 import {useRouter} from 'next/router'
 import baseUrl from '../../helpers/baseUrl'
-import { getAllPosts, getPostConfig } from '../api/home'
 import {useRef,useEffect,useState} from 'react'
 import Layout, { siteTitle } from '../../components/layout'
 import Menu from './../../components/home/Menu'
@@ -89,7 +88,9 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
     const [fixedMenu, setFixedMenu] = useState(false)
     const router = useRouter()
     const {id } = router.query
+    
     const {prefetch} = router
+
     if(router.isFallback){
         return(
             <h3>loading...</h3>
@@ -120,6 +121,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
         //console.log("animPage")
         setIsAnim(true)
     }
+
     return(
         <>
         <Menu
@@ -132,7 +134,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
             facebook={{
                 appId: `${3587318871321107}`,
             }}
-                title={post.title}
+                title={post && post.title}
                 description={`${post.description.replace(/<[^>]+>/g, '')}`}
                 canonical={`${baseUrl}/projet/${post.title}`}
                 openGraph={{
@@ -273,14 +275,16 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
 
 export async function getStaticProps({params:{slug}}) {
     try{
-    const config = await getPostConfig()
-    // const postData = await getAllPosts()
-    // const posts = JSON.parse(JSON.stringify(postData))
-    const postData = await fetch(`${baseUrl}/api/detailproject`, {method:"GET"})
-    const posts = await postData.json()
+    const config = await fetch(`${baseUrl}/api/data`, {method:"GET"})
+    const getDataConfig = await config.json();
 
-    console.log("posts", posts);
-    const getPostData = posts.find(post => post.title == slug)
+    const postData = await fetch(`${baseUrl}/api/detailproject`, {method:"GET"})
+    const posts = await postData.json();
+    
+    console.error(config);
+
+    console.log("posts", slug, posts);
+    let getPostData = posts.find(post => post.title == slug)
 
     console.log('slug post', getPostData);
 
@@ -311,16 +315,18 @@ export async function getStaticProps({params:{slug}}) {
     
     return {
             props: {
-                post:JSON.parse(JSON.stringify(getPostData)),
-                config: JSON.parse(JSON.stringify(config[0])),
+                post:getPostData,
+                config: getDataConfig,
                 nextPost: idprev,
                 prevPost: idnext
-            },
-            revalidate: 1
+            }
         }
     }
     catch(err){
-        console.log(err)
+        console.error(err)
+        return {
+            notFound : true
+        }
     }
 }
 
@@ -328,8 +334,9 @@ export async function getStaticProps({params:{slug}}) {
 export async function getStaticPaths() {
     // Call an external API endpoint to get posts
     try{
-      const post = await getAllPosts()
-      const posts = JSON.parse(JSON.stringify(post))
+      const post = await fetch(`${baseUrl}/api/datapost`, {method:"GET"})
+      const posts = await post.json();
+      console.log('pooosssssssssssssssssst', posts);
       // Get the paths we want to pre-render based on posts
       const paths = posts.map((post) => ({
         params: { slug: post.title },
@@ -337,10 +344,16 @@ export async function getStaticPaths() {
 
       // We'll pre-render only these paths at build time.
       // { fallback: false } means other routes should 404.
-      return { paths, fallback: false }
+      return { 
+            paths, 
+            fallback: false 
+        }
     }
     catch(err){
-      console.log(err)
+        console.error("Error fetching data:", err);
+        return {
+          props: {}, // Provide a fallback in case of error
+        };
   }
 }
 

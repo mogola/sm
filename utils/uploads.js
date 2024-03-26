@@ -76,5 +76,5 @@ export function uploadTempFile(fileNameTemp){
 };
 
 export function getCurrentURL(){
-    return "http://localhost:9000/admin/dashboard?file=blob%3Ahttp%3A%2F%2Flocalhost%3A9000%2F12295ec9-f693-4f34-881d-b7f2d64b63b1"
+    return "http://localhost:8500/admin/dashboard?file=blob%3Ahttp%3A%2F%2Flocalhost%3A8500%2F12295ec9-f693-4f34-881d-b7f2d64b63b1"
 }

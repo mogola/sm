@@ -217,7 +217,7 @@ const Menu = ({state = '', connect, classMenu = ''}) => {
     }
     useEffect(() => {
       setIsInnerWidth(window.innerWidth)
-        const available = Object.keys(state).length ? state.textAvailable.split(' ') : []
+        const available = Object.keys(state).length ? state.textAvailable ? state.textAvailable.split(' ') : [] : []
         let arrayAvailable = []
         let arrayConcat = [];
 

@@ -13,35 +13,35 @@ import baseUrl from '../helpers/baseUrl'
 import fetch from 'node-fetch'
 import { motion } from 'framer-motion';
 
-import { getPostConfig, getAllPosts, getAllCategories} from './api/home'
-
 export async function getStaticProps () {
   // const config = await getPostConfig()
   // const posts = await getAllPosts(4)
   // const getCategoryList = []
 try {
-  let promiseCat, promiseConfig, promisePosts, promiseNew, promiseNewCat;
+  let promiseConfig, promisePosts, promiseNew, promiseNewCat;
   // const allCategory = await getCategoryList.json()
   const getnewpost = await fetch(`${baseUrl}/api/detailproject?post=4`, {method: "GET"})
   const getnewcat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
+  const getdata = await fetch(`${baseUrl}/api/data`, {method: "GET"})
 
-  await Promise.all([getPostConfig(), getAllCategories(), getAllPosts(4), getnewpost.json(), getnewcat.json()])
+  await Promise.all([
+    getdata.json(), 
+    getnewcat.json(), 
+    getnewpost.json()
+  ])
   .then((values) => {
-   promiseConfig = values[0]
-   promiseCat = values[1]
-   promisePosts = values[2]
-   promiseNew = values[3]
-   promiseNewCat = values[4]
+    promiseConfig = values[0]
+    promiseNewCat = values[1]
+    promiseNew = values[2]
  
-   console.log("promise all Index",promiseConfig)
+   console.log("promise all Index", typeof promiseNew)
  })
  
    return {
      props: {
-       config:promiseConfig[0] === undefined ? JSON.parse(JSON.stringify([])) : JSON.parse(JSON.stringify(promiseConfig[0])),
-       posts: JSON.parse(JSON.stringify(promisePosts)),
-       categories: JSON.parse(JSON.stringify(promiseNewCat)),
-       newpost: JSON.parse(JSON.stringify(promiseNew)),
+       config: typeof promiseConfig[0] === "string" ? JSON.parse(promiseConfig[0]) : promiseConfig[0],
+       categories: typeof promiseNewCat === "string" ? JSON.parse(promiseNewCat) : promiseNewCat,
+       newpost: typeof promiseNew === "string" ? JSON.parse(promiseNew) : promiseNew,
        error: {
          status : JSON.parse(JSON.stringify([]))
        }
@@ -50,7 +50,7 @@ try {
    }
 }
 catch(err){
-  console.log("Une erreur est survenue [index.js]", err)
+  console.error("Une erreur est survenue [index.js]", err)
   return {
     props: {
       error: {  
@@ -122,18 +122,13 @@ export default function Home({config, error, newpost, posts, connect, categories
     setIsAnim(true)
   }
 
-  React.useEffect(() => {
-    (async () => {
+  useEffect(() => {
       if(window){
-        console.log('datafromlocalstorage', datafromlocalstorage)
-        console.log('dataFromConfigState', config)
-        console.log('dataFromCategories', categories)
         localStorage.setItem("info", JSON.stringify(config))
         setValueScreen(window.innerWidth)
       }
       
       // Compare data from data base and localstora data json
-      console.log("compare data", compareStorage(localStorage.getItem("info"), config))
       if(compareStorage(localStorage.getItem("info"), config)) {
         setConfigs(JSON.parse(localStorage.getItem('info')))
       }else {
@@ -141,7 +136,6 @@ export default function Home({config, error, newpost, posts, connect, categories
       }
   
       console.log("config index", config)
-    })();
   }, [])
 
   if(error.status.length){

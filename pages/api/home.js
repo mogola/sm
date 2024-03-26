@@ -26,12 +26,8 @@ export async function getPostConfig() {
   .limit(20)
   .toArray();
 
-  console.log("posts",posts.length, typeof JSON.parse(JSON.stringify(posts)));
-  if(posts.length === 0){
-    return JSON.parse(JSON.stringify(posts))
-  }else {
-    return posts
-  }
+  console.log("posts==================================================================",posts, posts.length, typeof JSON.parse(JSON.stringify(posts)));
+  return posts;
   
 }
 
@@ -62,6 +58,7 @@ export async function getAllPosts(number) {
   .limit(number)
   .toArray();
 
+  console.log(typeof posts, posts);
   return posts
 }
 

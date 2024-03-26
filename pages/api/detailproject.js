@@ -3,7 +3,8 @@ import ProjectsSchema from '../../models/Projects'
 import RegisterModel from '../../models/RegisterModel'
 import Homeconfig from '../../models/Homeconfig'
 import mongoose from 'mongoose'
-const { decode } = require('../../helpers/jwt')
+import { decode } from '../../helpers/jwt'
+// const { decode } = require('../../helpers/jwt')
 
 initDB()
 
@@ -19,7 +20,7 @@ export default async (req,res)=>{
 
 const getAllProjects = async (req,res) => {
   const {post} = req.query
-  console.log(post, typeof post, typeof parseFloat(post))
+
   let number
   if(post === undefined || post === ''){
     number = 40
@@ -36,7 +37,7 @@ const getAllProjects = async (req,res) => {
                 .populate({path:'categoryArray'})
 
       if(posts){
-          res.json(JSON.stringify(posts))
+          res.json(posts)
       }else{
           res.status(200).json(JSON.stringify([]))
       }

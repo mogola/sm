@@ -1,3 +1,7 @@
+/**
+ * @type {import('next').NextConfig}
+ */
+
 const fs = require('fs');
 const privateKEY = fs.readFileSync('private.key', 'utf8');
 const publicKEY = fs.readFileSync('public.key', 'utf8');
@@ -7,14 +11,24 @@ const nextConfig = {
   // Target must be serverless
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      config.resolve.fallback.fs = false;
+      // config.resolve.fallback.fs = false;
+        // Replace Node.js modules with empty mocks on the client side
+        config.resolve.fallback = { 
+          fs: false,
+          tls: false,
+          dgram: false,
+          module: false,
+          require: false,
+          net: false,
+          child_process: false, 
+          ...config.resolve.fallback };
     }
     return config;
   },
   enableSvg: true,
   env: {
     production: process.env.NEXT_PUBLIC_URL_PRODUCTION,
-    development: "http://localhost:9000/",
+    development: "http://localhost:8500/",
     keyPrivate: privateKEY,
     keyPublic: publicKEY,
     apikeysendinblue: process.env.APIKEY_SENDINBLUE

@@ -180,7 +180,7 @@ useEffect(() => {
       //  const fetchCat = await fetch(`${baseUrl}/api/categories`, {method: "GET"})
       //  const getCats = await fetchCat.json()
        
-       let getFetch = JSON.parse(JSON.stringify(getcategories))
+       let getFetch = typeof getcategories === 'string' ? JSON.parse(getcategories) : getcategories
        setCategoriesDefault(getFetch)
        console.log("getcat", getFetch)
    })();
@@ -292,7 +292,7 @@ const filterData = async (itemid, nameCat, i) => {
       data-id={filterToggle}
     >
       <motion.ul variants={variantsUl}>
-        {categoriesDefault.map((item, i) => (
+        {categoriesDefault && categoriesDefault.map((item, i) => (
           <motion.li
             variants={variantsItem}
             key={i}>
@@ -348,7 +348,7 @@ const filterData = async (itemid, nameCat, i) => {
       data-id={filterToggle}
     >
       <motion.ul variants={variantsUl}>
-        {categoriesDefault.map((item, i) => (
+        {categoriesDefault && categoriesDefault.map((item, i) => (
           <motion.li
           variants={variantsItem}
           key={i}>
