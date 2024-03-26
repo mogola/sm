@@ -100,9 +100,14 @@ export async function getStaticPaths() {
       // { fallback: false } means other routes should 404.
       return { paths, fallback: false }
     }
-    catch(err){
-      console.log(err)
-    }
+    catch(err) {
+        console.error("Error fetching data:", err);
+        // Corrected return value for getStaticPaths in case of error
+        return {
+          paths: [], // An empty paths array
+          fallback: false // Or true or 'blocking', depending on your desired behavior
+        };
+    }    
   }
 
 export default Post

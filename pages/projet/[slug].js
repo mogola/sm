@@ -354,12 +354,14 @@ export async function getStaticPaths() {
             fallback: false 
         }
     }
-    catch(err){
+    catch(err) {
         console.error("Error fetching data:", err);
+        // Corrected return value for getStaticPaths in case of error
         return {
-          props: {}, // Provide a fallback in case of error
+          paths: [], // An empty paths array
+          fallback: false // Or true or 'blocking', depending on your desired behavior
         };
-  }
+    }    
 }
 
 export default Post
