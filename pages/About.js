@@ -1,14 +1,13 @@
+import fetch from 'isomorphic-unfetch'
 import { useState, useEffect, useRef, useLayoutEffect  } from 'react'
 import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
 import baseUrl from '../helpers/baseUrl'
 import Link from 'next/link'
-import fetch from 'isomorphic-unfetch'
 import Menu from './../components/home/Menu'
 import Footer from './../components/home/Footer'
 import Prestation from './../components/home/Prestation'
 import {RouterTracking} from './../components/router/ngprogress'
-import {getPostConfig, getAllPosts } from './api/home'
 import {useRouter} from 'next/router'
 import Masonry from './../components/Masonry'
 import {motion} from 'framer-motion'
@@ -19,19 +18,20 @@ const {Field, Control, Label} = Form;
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
-export async function getStaticProps() {
-const getData = await fetch(`${baseUrl}/api/about`, {method:"GET"})
-const data = await getData.json()
-const config = await getPostConfig()
-const getPostData = await getAllPosts(6)
+export async function getServerSideProps() {
 
+const getData = await fetch(`${baseUrl}/api/updatepost`, {method: "GET"});
+const data = await getData.json();
+
+const config = await fetch(`${baseUrl}/api/data`, {method: "GET"});
+const getconfig = await config.json();
+
+console.log(data.getConfig);
 return {
     props: {
-      data: JSON.parse(JSON.stringify(data.data)),
-      allPost:JSON.parse(JSON.stringify(getPostData)),
-      config: JSON.parse(JSON.stringify(config[0])),
-    },
-    revalidate: 1
+      data: data.getConfig[0],
+      config: getconfig[0]
+    }
   }
 }
 
@@ -61,12 +61,13 @@ const variants = {
   }
 }
 
-export default function About({post, data, config, allPost, connect}) {
+export default function About({ data, config, connect}) {
 const [configs, setConfigs] = useState(config)
 const router = useRouter()
 
     useEffect(()=> {
-    }, [data])
+      console.log(data)
+    }, [])
 
   return (<motion.div
     variants={variants}
@@ -99,7 +100,7 @@ const router = useRouter()
             <Columns>
                 <Columns.Column className="mainListImageProfil">
                     <Content className="listImageProfil">
-                          {data.getImagesPost.map((items, i) => (
+                          {data.getImagesPost && data.getImagesPost.map((items, i) => (
                               <Image key={i} src={items} />
                           ))}
                     </Content>
@@ -121,7 +122,7 @@ const router = useRouter()
                 {data.titleLogiciel}
             </Heading>
             <Content className="listTools">
-                {data.listLogiciel.map((item, i) => (
+                {data.listLogiciel && data.listLogiciel.map((item, i) => (
                     <span key={i}>{item}</span>
                 ))}
             </Content>

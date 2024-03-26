@@ -7,7 +7,6 @@ import {RouterTracking} from '../components/router/ngprogress'
 import baseUrl from '../helpers/baseUrl'
 import { themeContextUser } from './../context/contextUser'
 import { useRouter } from 'next/router'
-import {getPostConfig } from './api/home'
 import Menu from './../components/home/Menu'
 import Footer from './../components/home/Footer'
 import Prestation from './../components/home/Prestation'
@@ -24,20 +23,19 @@ const {Field, Control, Label} = Form;
 const { sign, verify, decode } = require('../helpers/jwt')
 
 export async function getStaticProps() {
-    let config;
     try{
-        config = await getPostConfig()
+        const configs = await fetch(`${baseUrl}/api/data`, {method:"GET"})
+        const getConfigs = await configs.json();
+        
+        return {
+            props: {
+                config: getConfigs[0],
+            },
+            revalidate: 1, // In secondes
+        }
     }
     catch(err){
         console.log('error', err)
-    }
-     
-
-    return {
-        props: {
-            config: JSON.parse(JSON.stringify(config[0])),
-        },
-        revalidate: 1, // In secondes
     }
 }
 

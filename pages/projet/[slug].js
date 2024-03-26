@@ -125,7 +125,7 @@ const Post = ({post, config, connect, nextPost, prevPost, slug}) =>{
     return(
         <>
         <Menu
-        state={config}
+        state={config[0]}
         connect={connect}
         classMenu="singleMenuNoHome"
     />
@@ -280,9 +280,15 @@ export async function getStaticProps({params:{slug}}) {
 
     const postData = await fetch(`${baseUrl}/api/detailproject`, {method:"GET"})
     const posts = await postData.json();
-    
-    console.error(config);
-
+    const getConfig = typeof getDataConfig === 'string' ? JSON.parse(getDataConfig) : getDataConfig;
+    console.log("**********************************************************");
+    console.log("**********************************************************");
+    console.log("**********************************************************");
+    console.log(getConfig);
+    console.log("**********************************************************");
+    console.log("**********************************************************");
+    console.log("**********************************************************");
+    console.log("**********************************************************");
     console.log("posts", slug, posts);
     let getPostData = typeof posts === 'string' ? JSON.parse(posts) : posts;
 
@@ -318,7 +324,7 @@ export async function getStaticProps({params:{slug}}) {
     return {
             props: {
                 post:getPostData,
-                config: getDataConfig,
+                config: getConfig,
                 nextPost: idprev,
                 prevPost: idnext
             }

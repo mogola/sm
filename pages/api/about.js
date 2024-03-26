@@ -21,10 +21,14 @@ export default async (req,res)=>{
 
 const getDataPage = async (req, res) => {
     try{
-      await getCollectionData("abouts",res)
+        const dataAbout =  await getCollectionData("abouts",res);
+        const getContact = dataAbout.json();
+        
+        res.json(getContact);
     }
     catch(err){
         console.log(err)
+        res.json(err)
     }
 }
 

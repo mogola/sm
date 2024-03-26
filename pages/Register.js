@@ -6,7 +6,6 @@ import InputField from '../components/InputField'
 import Layout, { siteTitle } from '../components/layout'
 import {RouterTracking} from '../components/router/ngprogress'
 import baseUrl from '../helpers/baseUrl'
-import {getPostConfig } from './api/home'
 import Menu from './../components/home/Menu'
 import Footer from './../components/home/Footer'
 import Prestation from './../components/home/Prestation'
@@ -23,18 +22,19 @@ const {sign, verify, decode } = require('../helpers/jwt')
 
 
 export async function getStaticProps() {
-    let config;
-    try {
-        config = await getPostConfig()
+    try{
+        const configs = await fetch(`${baseUrl}/api/data`, {method:"GET"})
+        const getConfigs = await configs.json();
+        
+        return {
+            props: {
+                config: getConfigs[0],
+            },
+            revalidate: 1, // In secondes
+        }
     }
     catch(err){
-        console.log(err)
-    }
-    return {
-        props: {
-            config: JSON.parse(JSON.stringify(config[0])),
-        },
-        revalidate: 1, // In secondes
+        console.log('error', err)
     }
 }
 

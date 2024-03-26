@@ -79,9 +79,7 @@ const Footer = ({onClick, title = "", menu='', data = '', ...rest}) => {
                 <Columns.Column className="partFooter pastilleFooter">
                     <Link href="/contact"><a
                         className="pastilleImg"
-                        onClick={(e) => {
-                            onClick()
-                        }}
+                        onClick={onClick}
                     ><img src={data.bottomImageUrl} rel="preload" /></a></Link>
                 </Columns.Column>
             </Columns>

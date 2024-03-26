@@ -8,7 +8,6 @@ import Menu from './../components/home/Menu'
 import Footer from './../components/home/Footer'
 import Prestation from './../components/home/Prestation'
 import {RouterTracking} from './../components/router/ngprogress'
-import {getPostConfig, getAllPosts } from './api/home'
 import Masonry from './../components/Masonry'
 import { Button, Container, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, Columns } from 'react-bulma-components';
 const {Field, Control, Label} = Form;
@@ -18,25 +17,19 @@ import {useRouter} from 'next/router'
 import { motion} from 'framer-motion'
 
 export async function getStaticProps() {
-    const getData = await fetch(`${baseUrl}/api/about`, {method:"GET"})
-    const data = await getData.json()
-    const config = await getPostConfig()
-    const getPostData = await getAllPosts(6)
+    const configs = await fetch(`${baseUrl}/api/data`, {method:"GET"})
+    const getConfigs = await configs.json();
 
     return {
         props: {
-          data: JSON.parse(JSON.stringify(data.data)),
-          allPost:JSON.parse(JSON.stringify(getPostData)),
-          config: JSON.parse(JSON.stringify(config[0])),
+          config: getConfigs[0]
         },
         revalidate: 1
       }
     }
 
-export default function Contact({post, data, config, allPost, connect}) {
-    const [getData, setGetData] = useState(data)
+export default function Contact({config, connect}) {
     const [configs, setConfigs] = useState(config)
-    const [posts, setPosts] = useState(allPost)
     const [regexEmail, setRegexEmail] = useState(new RegExp('^[a-z0-9.-]+@[a-z.]{2,}\.[a-z]$'))
     const [state, changeState] = useState({})
     const [btndisabled, setBtnDisabled] = useState(true)
