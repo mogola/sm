@@ -82,6 +82,7 @@ console.log('data', getPostData)
     }
     catch(err){
         console.log(err)
+        return {notFound : true}
     }
 }
 
