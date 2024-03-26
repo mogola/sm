@@ -19,19 +19,23 @@ import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
 export async function getServerSideProps() {
+  try{
+    const getData = await fetch(`${baseUrl}/api/updatepost`, {method: "GET"});
+    const data = await getData.json();
 
-const getData = await fetch(`${baseUrl}/api/updatepost`, {method: "GET"});
-const data = await getData.json();
+    const config = await fetch(`${baseUrl}/api/data`, {method: "GET"});
+    const getconfig = await config.json();
 
-const config = await fetch(`${baseUrl}/api/data`, {method: "GET"});
-const getconfig = await config.json();
-
-console.log(data.getConfig);
-return {
-    props: {
-      data: data.getConfig[0],
-      config: getconfig[0]
+    console.log(data.getConfig);
+    return {
+        props: {
+          data: data.getConfig[0],
+          config: getconfig[0]
+        }
     }
+  }
+  catch(err){
+    return { notFound: true };
   }
 }
 

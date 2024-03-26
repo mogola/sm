@@ -36,6 +36,7 @@ export async function getStaticProps() {
     }
     catch(err){
         console.log('error', err)
+        return { notFound: true };
     }
 }
 

@@ -8,6 +8,7 @@ const publicKEY = fs.readFileSync('public.key', 'utf8');
 const withFonts = require('next-fonts');
 
 const nextConfig = {
+  output: 'export',
   // Target must be serverless
   webpack: (config, { isServer }) => {
     if (!isServer) {

@@ -12,8 +12,7 @@ import { Button, Content, Image, Media, Card, Heading, Box, Loader, Tag, Form, C
 
 import Files from './../../components/File'
 import ImageUploads from './../../components/ImageUpload'
-import baseUrl from '../../helpers/baseUrl'
-import { getAllPosts } from '../api/home'
+import baseUrl from './../../helpers/baseUrl'
 import utilStyles from '../../styles/utils.module.css'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
@@ -23,14 +22,19 @@ const {Field, Control} = Form
 console.log(projectConfig)
 
 export async function getStaticProps() {
-  const posts = await getAllPosts()
-  console.log("data", posts)
+try {
+    const posts = await fetch(`${baseUrl}/api/datapost`, {method: "GET"})
+    const getPosts = await posts.json();
 
-  return {
-    props: {
-      posts: JSON.parse(JSON.stringify(posts))
-    },
-    revalidate: 1, // In secondes
+    return {
+      props: {
+        posts: getPosts
+      },
+      revalidate: 1, // In secondes
+    }
+  } catch(err){
+    console.log(err);
+    return { notFound: true };
   }
 }
 

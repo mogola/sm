@@ -11,13 +11,19 @@ import utilStyles from '../../styles/utils.module.css'
 import styles from '../../components/layout.module.css'
 
 export async function getStaticProps() {
-  const post = await getPost()
+  try {
+    const post = await getPost()
 
-  return {
-    props: {
-      homes: JSON.parse(JSON.stringify(post))
-    },
-    revalidate: 1, // In secondes
+    return {
+      props: {
+        homes: JSON.parse(JSON.stringify(post))
+      },
+      revalidate: 1, // In secondes
+    }
+  }
+  catch(err){
+    console.log(err);
+    return {notFound: true}
   }
 }
 

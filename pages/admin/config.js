@@ -20,13 +20,18 @@ import { Button, Heading, Box, Loader, Tag, Form, Column } from 'react-bulma-com
 import { Editor } from '@tinymce/tinymce-react';
 const { Field, InputFile, Control } = Form
 export async function getStaticProps() {
-  const config = await getPostConfig()
+  try {
+    const config = await getPostConfig()
 
-  return {
-    props: {
-      config: JSON.parse(JSON.stringify(config[0]))
-    },
-    revalidate: 1, // In secondes
+    return {
+      props: {
+        config: JSON.parse(JSON.stringify(config[0]))
+      },
+      revalidate: 1, // In secondes
+    }
+  }catch(err){
+    console.log(err);
+    return {notFound: true}
   }
 }
 

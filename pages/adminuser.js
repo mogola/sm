@@ -18,14 +18,20 @@ import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
 export async function getStaticProps() {
-  const dataUser = await getAllUserList()
+  try {
+    const dataUser = await getAllUserList()
 
-  return {
-    props: {
-      users: JSON.parse(JSON.stringify(dataUser))
-    },
-    revalidate: 1, // In secondes
+    return {
+      props: {
+        users: JSON.parse(JSON.stringify(dataUser))
+      },
+      revalidate: 1, // In secondes
+    }
   }
+  catch(err){
+    return {notFound: true}
+  }
+  
 }
 
 export default function Adminuser({ users, connect }) {

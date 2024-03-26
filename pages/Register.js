@@ -18,8 +18,6 @@ const {Field, Control, Label, Help} = Form;
 var CryptoJS = require("crypto-js");
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
-const {sign, verify, decode } = require('../helpers/jwt')
-
 
 export async function getStaticProps() {
     try{
@@ -35,6 +33,7 @@ export async function getStaticProps() {
     }
     catch(err){
         console.log('error', err)
+        return { notFound: true };
     }
 }
 

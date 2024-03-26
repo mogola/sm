@@ -17,16 +17,22 @@ import {useRouter} from 'next/router'
 import { motion} from 'framer-motion'
 
 export async function getStaticProps() {
-    const configs = await fetch(`${baseUrl}/api/data`, {method:"GET"})
-    const getConfigs = await configs.json();
+    try {
+        const configs = await fetch(`${baseUrl}/api/data`, {method:"GET"})
+        const getConfigs = await configs.json();
 
-    return {
-        props: {
-          config: getConfigs[0]
-        },
-        revalidate: 1
-      }
+        return {
+            props: {
+                config: getConfigs[0]
+            },
+            revalidate: 1
+        }
+    } 
+    catch(err) {
+        console.log(err);
+        return { notFound: true };
     }
+}
 
 export default function Contact({config, connect}) {
     const [configs, setConfigs] = useState(config)

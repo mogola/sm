@@ -45,13 +45,7 @@ export async function getStaticProps() {
   }
   catch(err){
     console.log("err", err)
-    return {
-      props: {
-        error: {  
-          status: "error page"
-        }
-      }
-    }
+    return { notFound: true };
   }
 }
 

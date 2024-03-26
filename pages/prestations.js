@@ -17,13 +17,19 @@ import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 
 export async function getStaticProps() {
-const config = await getPostConfig()
-return {
-    props: {
-      config: JSON.parse(JSON.stringify(config[0]))
-    },
-    revalidate: 60
-  }
+    try {
+        const config = await getPostConfig()
+        
+        return {
+            props: {
+            config: JSON.parse(JSON.stringify(config[0]))
+            },
+            revalidate: 60
+        }
+    }catch(err){
+        console.log('prestation', err); 
+        return { notFound: true };
+    }
 }
 
 
